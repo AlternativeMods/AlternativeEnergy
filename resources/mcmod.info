@@ -1,0 +1,21 @@
+[
+{
+  "modid" : "PowerBoxes",
+  "name" : "Power Boxes",
+  "version" : "1.0",
+  "url" : "http://www.minecraftforum.net/topic/1953987-",
+  "credits" : "Check the topic :)",
+  "authors": [
+    "Lordmau5"
+  ],
+  "description": "The 'Power Box' - Mod. Go check it out yourself ingame.",
+  "logoFile" : "",
+  "updateUrl" : "",
+  "parent" : "",
+  "screenshots": [
+  ],
+  "dependancies": [
+    "Forge"
+  ]
+}
+]
