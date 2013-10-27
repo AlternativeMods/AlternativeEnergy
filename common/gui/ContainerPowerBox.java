@@ -29,6 +29,7 @@ public class ContainerPowerBox extends Container {
 
         addSlotToContainer(new SlotAdvanced(tileEntity.capacitySlot, 0, 131, 17, 16));
         addSlotToContainer(new SlotAdvanced(tileEntity.outputSpeedSlot, 0, 152, 17, 2));
+
         addSlotToContainer(new SlotAdvanced(tileEntity.chargeSlot, 0, 33, 23, 1));
         addSlotToContainer(new SlotAdvanced(tileEntity.dischargeSlot, 0, 33, 45, 1));
 

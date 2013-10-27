@@ -4,7 +4,6 @@ package core;
 import ic2.api.info.Info;
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
-import ic2.core.Ic2Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import tile.TileEntityPowerBox;
@@ -19,7 +18,7 @@ import tile.TileEntityPowerBox;
 public class InvSlotDisCharge extends InvSlot {
 
     public InvSlotDisCharge(TileEntityPowerBox base, int oldStartIndex) {
-        super(base, "discharge", oldStartIndex, InvSlot.Access.IO, 1, null);
+        super(base, "discharge", oldStartIndex, InvSlot.Access.IO, 1, InvSlot.InvSide.BOTTOM, null);
     }
 
     public boolean accepts(ItemStack itemStack)
@@ -28,7 +27,7 @@ public class InvSlotDisCharge extends InvSlot {
 
         if ((item instanceof IElectricItem))
             return (((IElectricItem)item).canProvideEnergy(itemStack)) && (((IElectricItem)item).getTier(itemStack) <= 3);
-        if ((item.itemID == Ic2Items.suBattery.itemID) || (item.itemID == Item.redstone.itemID))
+        if ((item.itemID == ic2.api.item.Items.getItem("suBattery").itemID) || (item.itemID == Item.redstone.itemID))
         {
             return true;
         }

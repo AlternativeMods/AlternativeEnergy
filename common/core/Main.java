@@ -2,8 +2,8 @@ package core;
 
 import block.BlockPowerBox;
 import block.ItemBlockPowerBox;
-import buildcraft.BuildCraftCore;
-import buildcraft.BuildCraftTransport;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -12,9 +12,8 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import ic2.core.Ic2Items;
-import item.ItemUpgrade_Capacity;
-import item.ItemUpgrade_OutputSpeed;
+import cpw.mods.fml.relauncher.Side;
+import item.ItemUpgrade;
 import item.Items;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -24,6 +23,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import tile.TileEntityPowerBox;
 
+import javax.swing.*;
+
 /**
  * Author: Lordmau5
  * Date: 21.08.13
@@ -31,12 +32,16 @@ import tile.TileEntityPowerBox;
  * You are not allowed to change this code,
  * nor publish it without my permission.
  */
-@Mod(modid = Main.modid, name = "Power Boxes", version = "1.03.1", dependencies = "required-after:IC2;required-after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = Main.modid, name = "Power Boxes", version = "1.03.1", dependencies = "required-after:Forge@[9.11.1.917,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod(channels = {"PBoxes"}, packetHandler = PacketHandler.class)
 public class Main {
 
     public static final String modid = "PowerBoxes";
     public static final String channelName = "PBoxes";
+
+    public static boolean BCSupplied = false;
+    public static boolean ICSupplied = false;
+    public static boolean CCSupplied = false;
 
     @Mod.Instance(modid)
     public static Main instance;
@@ -61,8 +66,7 @@ public class Main {
 
         Config.powerBox_blockId = config.get(Configuration.CATEGORY_BLOCK, "Power Box", Config.powerBox_blockId).getInt(Config.powerBox_blockId);
 
-        Config.capacityUpgrade_itemId = config.get(Configuration.CATEGORY_ITEM, "Capacity Upgrade", Config.capacityUpgrade_itemId).getInt(Config.capacityUpgrade_itemId);
-        Config.outputSpeedUpgrade_itemId = config.get(Configuration.CATEGORY_ITEM, "Output Speed Upgrade", Config.outputSpeedUpgrade_itemId).getInt(Config.outputSpeedUpgrade_itemId);
+        Config.upgrade_ItemId = config.get(Configuration.CATEGORY_ITEM, "Upgrades", Config.upgrade_ItemId).getInt(Config.upgrade_ItemId);
 
         config.save();
     }
@@ -79,8 +83,7 @@ public class Main {
     }
 
     public void createItems() {
-        Items.upgrade_Capacity = new ItemUpgrade_Capacity(Config.capacityUpgrade_itemId);
-        Items.upgrade_OutputSpeed = new ItemUpgrade_OutputSpeed(Config.outputSpeedUpgrade_itemId);
+        Items.upgrade_Item = new ItemUpgrade(Config.upgrade_ItemId);
     }
 
     public void registerBlocks() {
@@ -88,8 +91,7 @@ public class Main {
     }
 
     public void registerItems() {
-        GameRegistry.registerItem(Items.upgrade_Capacity, "Upgrades_Capacity");
-        GameRegistry.registerItem(Items.upgrade_OutputSpeed, "Upgrades_OutputSpeed");
+        GameRegistry.registerItem(Items.upgrade_Item, "Upgrades");
     }
 
     public void registerTiles() {
@@ -99,29 +101,58 @@ public class Main {
     public void addNames() {
         LanguageRegistry.addName(new ItemStack(Blocks.powerBox_block, 1, 0), "Power Box");
 
-        LanguageRegistry.addName(Items.upgrade_Capacity, "Capacity Upgrade");
-        LanguageRegistry.addName(Items.upgrade_OutputSpeed, "Output Speed Upgrade");
+        Items.upgrade_Item.addNames();
 
         LanguageRegistry.instance().addStringLocalization("itemGroup.tabPowerBox", "en_US", "Power Boxes");
     }
 
+    public void checkForMods() {
+        BCSupplied = Loader.isModLoaded("BuildCraft|Transport");
+        ICSupplied = Loader.isModLoaded("IC2");
+        CCSupplied = Loader.isModLoaded("ComputerCraft");
+
+        if(!BCSupplied && !ICSupplied) {
+            if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                JOptionPane optionPane = new JOptionPane();
+                optionPane.setMessage("Power Boxes is useless without one of the corresponding mods (BuildCraft or IndustrialCraft2).\n" +
+                        "Install atleast one of them, and the mod will have features!");
+                optionPane.setMessageType(JOptionPane.WARNING_MESSAGE);
+                JDialog dialog = optionPane.createDialog("Power Boxes needs mods!");
+                dialog.setAlwaysOnTop(true);
+                dialog.setVisible(true);
+            }
+        }
+    }
+
     public void addRecipes() {
-        Item goldPipeId = BuildCraftTransport.pipePowerGold;
-        Item woodPipeId = BuildCraftTransport.pipePowerWood;
-        Item quartzPipeId = BuildCraftTransport.pipePowerQuartz;
-        Item diamondPipeId = BuildCraftTransport.pipePowerDiamond;
-        Item ironGearId = BuildCraftCore.ironGearItem;
-        ItemStack mfeId = Ic2Items.mfeUnit;
-        ItemStack cesuId = Ic2Items.cesuUnit;
-        ItemStack elCircId = Ic2Items.electronicCircuit;
-        ItemStack goldWire = Ic2Items.insulatedGoldCableItem;
-        ItemStack glassFiber = Ic2Items.glassFiberCableItem;
+        //------------------------------------------------------
+        //------- Power Box ------------------------------------
 
-        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerBox_block), new Object[] {"ABA", "CDE", "FFF", 'A', goldPipeId, 'B', woodPipeId, 'C', ironGearId, 'D', mfeId, 'E', elCircId, 'F', goldWire});
+        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
+        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
+        ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);
 
-        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Capacity), new Object[] {" A ", "ABA", " A ", 'A', quartzPipeId, 'B', cesuId});
+        ItemStack hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
+        ItemStack goldCable = ic2.api.item.Items.getItem("insulatedGoldCableItem");
+        ItemStack energyCrystal = ic2.api.item.Items.getItem("energyCrystal");
 
-        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_OutputSpeed), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', diamondPipeId, 'D', Block.blockRedstone});
+        ItemStack glassFiber = ic2.api.item.Items.getItem("glassFiberCableItem");
+
+        if(ICSupplied) {
+            hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
+            goldCable = ic2.api.item.Items.getItem("insulatedGoldCableItem");
+            energyCrystal = ic2.api.item.Items.getItem("energyCrystal");
+
+            glassFiber = ic2.api.item.Items.getItem("glassFiberCableItem");
+        }
+
+        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerBox_block), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
+
+        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 0), new Object[] {" A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal});
+
+        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
+
+        //------------------------------------------------------
     }
 
 
@@ -140,13 +171,16 @@ public class Main {
     }
 
     public void findWrenchIds() {
-        bcWrenchId = GameRegistry.findItem("BuildCraft|Core", "wrenchItem").itemID;
+        if(BCSupplied)
+            bcWrenchId = GameRegistry.findItem("BuildCraft|Core", "wrenchItem").itemID;
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        checkForMods();
+
         findWrenchIds();
 
-        addRecipes();
+        //addRecipes();
     }
 }

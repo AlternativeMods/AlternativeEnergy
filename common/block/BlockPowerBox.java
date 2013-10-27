@@ -69,14 +69,14 @@ public class BlockPowerBox extends BlockContainer {
                 TileEntityPowerBox pBox = new TileEntityPowerBox();
 
                 if(is.getTagCompound().hasKey("capacityUpgrade")) {
-                    pBox.capacitySlot.put(new ItemStack(Items.upgrade_Capacity, is.getTagCompound().getInteger("capacityUpgrade"), 0));
+                    pBox.capacitySlot.put(new ItemStack(Items.upgrade_Item, is.getTagCompound().getInteger("capacityUpgrade"), 0));
 
                     for(int i=1; i<=pBox.capacitySlot.get().stackSize; i++) {
                         pBox.maxPowers += i * Config.powerBox_capacity_multiplier;
                     }
                 }
                 if(is.getTagCompound().hasKey("outputSpeedUpgrade")) {
-                    pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_OutputSpeed, is.getTagCompound().getInteger("outputSpeedUpgrade"), 0));
+                    pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, is.getTagCompound().getInteger("outputSpeedUpgrade"), 1));
 
                     int tmpOutput = 32 * (4 ^ pBox.outputSpeedSlot.get().stackSize);
                     if(tmpOutput > 512) tmpOutput = 512;

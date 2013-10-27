@@ -1,7 +1,5 @@
 package item;
 
-import net.minecraft.item.Item;
-
 /**
  * Author: Lordmau5
  * Date: 23.08.13
@@ -10,6 +8,5 @@ import net.minecraft.item.Item;
  * nor publish it without my permission.
  */
 public class Items {
-    public static Item upgrade_Capacity;
-    public static Item upgrade_OutputSpeed;
+    public static ItemUpgrade upgrade_Item;
 }

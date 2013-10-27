@@ -80,7 +80,7 @@ public class GUI_PowerBox extends GuiContainer {
             func_102021_a(Arrays.asList(new String[] {"This is the Output Speed Slot.", "", "Put Output Speed upgrades in", "to increase the maximum output speed."}),
                 mouseX + guiLeft - (int) (fontRenderer.getStringWidth("to increase the maximum output speed.") * 1.09), mouseY + guiTop - (int) (3.75 * fontRenderer.FONT_HEIGHT));
 
-        else if(mouseX >= 33 && mouseY >= 23 && mouseX <= 51 && mouseY <= 41 && tileEntity.chargeSlot.get() == null) // Charge Slot
+        if(mouseX >= 33 && mouseY >= 23 && mouseX <= 51 && mouseY <= 41 && tileEntity.chargeSlot.get() == null) // Charge Slot
             func_102021_a(Arrays.asList(new String[] {"This is the Charge Slot", "", "Put your electric items in here", "to charge them with energy."}),
                     mouseX + guiLeft - 5, mouseY + guiTop - (int) (3.75 * fontRenderer.FONT_HEIGHT));
         else if(mouseX >= 33 && mouseY >= 45 && mouseX <= 51 && mouseY <= 63 && tileEntity.dischargeSlot.get() == null) // DisCharge Slot

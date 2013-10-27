@@ -1,6 +1,5 @@
 package core;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -15,14 +14,19 @@ public class InvSlot
     protected final Access access;
     public final InvSide preferredSide;
 
-    private final ItemStack acceptIS;
+    private final ItemStack[] acceptIS;
 
     public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, ItemStack allowedIS)
+    {
+        this(base, name, oldStartIndex, access, count, InvSide.ANY, new ItemStack[] {allowedIS});
+    }
+
+    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, ItemStack[] allowedIS)
     {
         this(base, name, oldStartIndex, access, count, InvSide.ANY, allowedIS);
     }
 
-    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, InvSide preferredSide, ItemStack allowedIS) {
+    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, InvSide preferredSide, ItemStack[] allowedIS) {
         contents = new ItemStack[count];
 
         this.base = base;
@@ -95,8 +99,14 @@ public class InvSlot
 
     public boolean accepts(ItemStack itemStack)
     {
-        if(acceptIS == null || acceptIS != null && itemStack.itemID == acceptIS.itemID && itemStack.getItemDamage() == acceptIS.getItemDamage())
+        if(acceptIS == null)
             return true;
+        for(int i=0; i<acceptIS.length; i++) {
+            if(acceptIS[i] == null)
+                return true;
+            if(itemStack.itemID == acceptIS[i].itemID && itemStack.getItemDamage() == acceptIS[i].getItemDamage())
+                return true;
+        }
 
         return false;
     }

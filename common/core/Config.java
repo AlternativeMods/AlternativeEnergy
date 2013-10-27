@@ -20,8 +20,7 @@ public class Config {
     public static int powerBox_capacity = 100000;
     public static int powerBox_capacity_multiplier = 5000;
 
-    public static int capacityUpgrade_itemId = 5760;
-    public static int outputSpeedUpgrade_itemId = 5761;
+    public static int upgrade_ItemId = 5760;
 
     public static boolean unbreakable = false;
 

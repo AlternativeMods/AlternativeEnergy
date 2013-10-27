@@ -33,13 +33,13 @@ public class PacketHandler implements IPacketHandler {
 
         DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
 
-        int ID;
+        int ID = 0;
 
-        int x;
-        int y;
-        int z;
+        int x = 0;
+        int y = 0;
+        int z = 0;
 
-        float var;
+        float var = 0;
 
         float[] additional;
 
@@ -58,6 +58,8 @@ public class PacketHandler implements IPacketHandler {
 
             for(int i=0; i<additional.length; i++)
                 additional[i] = inputStream.readFloat();
+        } catch (EOFException e) {
+            //e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -71,14 +73,14 @@ public class PacketHandler implements IPacketHandler {
                 if(var == 0)
                     pBox.capacitySlot.put(null);
                 else
-                    pBox.capacitySlot.put(new ItemStack(Items.upgrade_Capacity, (int) var, 0));
+                    pBox.capacitySlot.put(new ItemStack(Items.upgrade_Item, (int) var, 0));
             }
 
             else if(ID == OUTPUTSPEED_UPGRADE) {
                 if(var == 0)
                     pBox.outputSpeedSlot.put(null);
                 else
-                    pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_OutputSpeed, (int) var, 0));
+                    pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, (int) var, 1));
             }
         }
     }

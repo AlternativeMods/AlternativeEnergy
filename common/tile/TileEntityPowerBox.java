@@ -4,6 +4,7 @@ import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import core.*;
+import cpw.mods.fml.common.Optional;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
@@ -35,76 +36,46 @@ import java.util.List;
  * You are not allowed to change this code,
  * nor publish it without my permission.
  */
-public class TileEntityPowerBox extends TileEntity implements IInventory, IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IPowerEmitter, IPeripheral {
+@Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 
-    private String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
-    private boolean addedToENet;
-    private boolean hasToUpdateENet;
+        @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
+
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Transport"),
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Transport")})
+
+public class TileEntityPowerBox extends TileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor, IPowerEmitter {
+    public String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
+    public boolean addedToENet;
+    public boolean hasToUpdateENet;
 
     public float storedPower;
     public float maxPowers = Config.powerBox_capacity;
     public int maxOutput;
 
-    private PowerHandler convHandler;
-
-    public final List<InvSlot> invSlots = new ArrayList();
-
-
     int oldEnergy;
     float oldMaxPowers;
     int oldMaxOutput;
 
-    public final InvSlot capacitySlot;
-    public final InvSlot outputSpeedSlot;
-    public final InvSlotCharge chargeSlot;
-    public final InvSlotDisCharge dischargeSlot;
+    public final List<InvSlot> invSlots = new ArrayList();
+
+    PowerHandler convHandler;
+
+    public InvSlot capacitySlot;
+    public InvSlot outputSpeedSlot;
+    public InvSlotCharge chargeSlot;
+    public InvSlotDisCharge dischargeSlot;
+
 
     //--- Basic functions
     public TileEntityPowerBox() {
-        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Capacity));
-        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_OutputSpeed));
+        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Item, 1, 0));
+        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Item, 1, 1));
         chargeSlot = new InvSlotCharge(this, 2);
         dischargeSlot = new InvSlotDisCharge(this, 3);
 
         addedToENet = false;
-
-        convHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-        convHandler.configure(1, 500, 1337, 1000);
-        convHandler.configurePowerPerdition(0, 0);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-
-        storedPower = tag.getFloat("powerStored");
-
-        for(int i=0; i<6; i++) {
-            ForgeDirection dir = ForgeDirection.getOrientation(i);
-            outputMode[i] = tag.getString("outputSide_" + dir.toString().toLowerCase());
-        }
-
-        if(tag.hasKey("capacityUpgrade"))
-            capacitySlot.put(new ItemStack(Items.upgrade_Capacity, tag.getInteger("capacityUpgrade"), 0));
-        if(tag.hasKey("outputSpeedUpgrade"))
-            outputSpeedSlot.put(new ItemStack(Items.upgrade_OutputSpeed, tag.getInteger("outputSpeedUpgrade"), 0));
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-
-        tag.setFloat("powerStored", storedPower);
-
-        for(int i=0; i<6; i++) {
-            ForgeDirection dir = ForgeDirection.getOrientation(i);
-            tag.setString("outputSide_" + dir.toString().toLowerCase(), outputMode[i]);
-        }
-
-        if(capacitySlot.get() != null)
-            tag.setInteger("capacityUpgrade", capacitySlot.get().stackSize);
-        if(outputSpeedSlot.get() != null)
-            tag.setInteger("outputSpeedUpgrade", outputSpeedSlot.get().stackSize);
     }
 
     public int getPowerStored() {
@@ -152,42 +123,32 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt);
         return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, nbt);
-
     }
+
     @Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
         readFromNBT(pkt.data);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
-    private void convertBC() {
-        setPowerStored(getPowerStored() + (int) Math.floor(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
-        //setPowerStored(getPowerStored() + (int) Config.convertInput(Ratios.MJ, convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true)));
-    }
-
     @Override
     public void updateEntity()
     {
+        super.updateEntity();
         if(worldObj == null || worldObj.isRemote)
             return;
 
-        super.updateEntity();
-        if (!addedToENet)
-        {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-            addedToENet = true;
-        }
+        loadTile();
 
         if(hasToUpdateENet == true) {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            unloadTile();
+            loadTile();
+
             hasToUpdateENet = false;
         }
 
 
-        if(convHandler.getEnergyStored() > 0)
-            convertBC();
-
+        convertBC();
         tryOutputtingEnergy();
 
         if(capacitySlot != null && capacitySlot.get() != null) {
@@ -214,17 +175,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         if(storedPower == 1)
             storedPower = 0;
 
-        if(storedPower >= 2) {
-            int sent = chargeSlot.charge((int) (storedPower * Ratios.EU.conversion));
-
-            storedPower -= sent / Ratios.EU.conversion;
-        }
-
-        if (demandedEnergyUnits() > 0.0D) {
-            int gain = dischargeSlot.discharge((int) demandedEnergyUnits(), false);
-
-            storedPower += Config.convertInput(Ratios.EU, gain);
-        }
+        fill_chargeSlot();
+        empty_dischargeSlot();
 
         if(storedPower < 0)
             storedPower = 0;
@@ -255,260 +207,42 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
 
     @Override
     public void validate() {
-        if(worldObj == null)
-            return;
-        if(worldObj.isRemote) {
-            return;
-        }
-
-        if(addedToENet == false) {
-            addedToENet = true;
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-        }
-
         super.validate();
+
+        if(worldObj == null || worldObj.isRemote)
+            return;
     }
     @Override
     public void invalidate() {
+        super.invalidate();
+
         if(worldObj == null || worldObj.isRemote)
             return;
 
-        if(addedToENet == true) {
-            addedToENet = false;
-            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-        }
-
-        super.invalidate();
+        unloadTile();
     }
     @Override
     public void onChunkUnload() {
+        super.onChunkUnload();
+
         if(worldObj == null || worldObj.isRemote)
             return;
 
-        if(addedToENet == true) {
-            addedToENet = false;
-            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-        }
-
-        super.onChunkUnload();
+        unloadTile();
     }
     //------------------------------
 
-    //--- IEnergySink
-    @Override
-    public double demandedEnergyUnits() {
-        return maxPowers - storedPower;
-    }
-
-    @Override
-    public double injectEnergyUnits(ForgeDirection forgeDirection, double v) {
-        double returning = 0;
-
-        storedPower += Config.convertInput(Ratios.EU, v);
-        if(storedPower > maxPowers) {
-            returning = storedPower - maxPowers;
-            storedPower = maxPowers;
-        }
-        return returning;
-    }
-
-    @Override
-    public int getMaxSafeInput() {
-        return 2048;
-    }
-
-    @Override
-    public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
-        if(tileEntity == null) return false;
-        if(tileEntity instanceof TileEntityPowerBox) return false;
-
-        if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("input"))
-            return true;
-
-        return false;
-    }
-    //---------------------------------
-
-    //-- IEnergySource
-    @Override
-    public double getOfferedEnergy() {
-        if(storedPower > 0) {
-            if(getOutput() > (int) (storedPower / Ratios.EU.conversion))
-                return (int) (storedPower / Ratios.EU.conversion);
-            else
-                return getOutput();
-        }
-        return 0;
-    }
-
-    @Override
-    public void drawEnergy(double v) {
-        storedPower -= v / Ratios.EU.conversion;
-        if(storedPower < 0)
-            storedPower = 0;
-    }
-
-    @Override
-    public boolean emitsEnergyTo(TileEntity tileEntity, ForgeDirection forgeDirection) {
-        if(tileEntity == null) return false;
-        if(tileEntity instanceof TileEntityPowerBox) return false;
-
-        if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("output"))
-            return true;
-
-        return false;
-    }
-    //---------------------------------
-
-    //--- IEnergyStorage
-    @Override
-    public int getStored() {
-        return (int) storedPower;
-    }
-
-    @Override
-    public void setStored(int i) {
-        storedPower = i;
-        if(storedPower > maxPowers)
-            storedPower = maxPowers;
-        return;
-    }
-
-    @Override
-    public int addEnergy(int i) {
-        int returning = 0;
-
-        storedPower += Config.convertInput(Ratios.EU, i);
-        if(storedPower > maxPowers) {
-            returning = (int) (storedPower - maxPowers);
-            storedPower = maxPowers;
-        }
-
-        return returning;
-    }
-
-    @Override
-    public int getCapacity() {
-        return (int) maxPowers;
-    }
-
-    @Override
-    public int getOutput() {
-        return maxOutput;
-    }
-
-    @Override
-    public double getOutputEnergyUnitsPerTick() {
-        return 1;
-    }
-
-    @Override
-    public boolean isTeleporterCompatible(ForgeDirection forgeDirection) {
-        return false;
-    }
-    //---------------------------------
-
-    //--- IPowerReceptor
-    public void tryOutputtingEnergy() {
-        if(storedPower <= 0)
-            return;
-
-        boolean[] conSides = new boolean[6];
-        int connected = 0;
-        for(int i=0; i<6; i++) {
-            if(outputMode[i].equalsIgnoreCase("output")) {
-                TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
-                if(tmpTile != null) {
-                    if(tmpTile instanceof IPowerReceptor) {
-                        connected += 1;
-                        conSides[i] = true;
-                    }
-                }
-            }
-        }
-        if(connected == 0) return;
-
-        int xPower = 25;
-        if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
-            int tmpStackSize = outputSpeedSlot.get().stackSize;
-            if(tmpStackSize > 2)
-                tmpStackSize = 2;
-
-            if(tmpStackSize == 1)
-                xPower += 25;
-            if(tmpStackSize == 2)
-                xPower += 50;
-        }
-        if(xPower > storedPower)
-            xPower = (int) storedPower;
-
-        int equalPower = xPower / connected;
-        if(Math.floor(equalPower) < Ratios.MJ.conversion)
-            return;
-
-        int drainPower = 0;
-        for(int i=0; i<6; i++) {
-            if(conSides[i] != false) {
-                TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
-
-                if(tmptile instanceof IPowerReceptor) {
-                    if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
-                        PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
-                        float neededPower = rec.powerRequest();
-                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= 5)
-                            continue;
-                        if(neededPower > equalPower)
-                            neededPower = equalPower;
-
-                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, (float) Math.ceil(neededPower / Ratios.MJ.conversion), ForgeDirection.getOrientation(i).getOpposite());
-                        drainPower += (equalPower - restEnergy);
-                    }
-                }
-            }
-        }
-        storedPower -= drainPower / Ratios.MJ.conversion;
-    }
-
-    @Override
-    public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
-        if(!outputMode[side.ordinal()].equalsIgnoreCase("disabled"))
-            return convHandler.getPowerReceiver();
-        return null;
-    }
-
-    @Override
-    public void doWork(PowerHandler workProvider) {
-
-    }
-
-    @Override
-    public World getWorld() {
-        return worldObj;
-    }
-    //---------------------------------
-
-    //--- IPowerEmitter
-    @Override
-    public boolean canEmitPowerFrom(ForgeDirection side) {
-        if(outputMode[side.ordinal()].equalsIgnoreCase("output"))
-            return true;
-
-        return false;
-    }
-    //---------------------------------
-
-    //--- IPeripheral
-    @Override
+    @Optional.Method(modid = "ComputerCraft")
     public String getType() {
         return "powerBox";
     }
 
-    @Override
+    @Optional.Method(modid = "ComputerCraft")
     public String[] getMethodNames() {
         return new String[]{"setMode", "getMode", "getEnergyStored", "getCapacity"};
     }
 
-    @Override
+    @Optional.Method(modid = "ComputerCraft")
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
         if(worldObj.isRemote)
             return new Object[0];
@@ -575,22 +309,288 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         return new Object[]{"Error"};
     }
 
-    @Override
+    @Optional.Method(modid = "ComputerCraft")
     public boolean canAttachToSide(int side) {
         return true;
     }
 
-    @Override
+    @Optional.Method(modid = "ComputerCraft")
     public void attach(IComputerAccess computer) {
+
     }
 
-    @Override
+    @Optional.Method(modid = "ComputerCraft")
     public void detach(IComputerAccess computer) {
-    }
-    //-----------------------------------------------
 
-    //--- IInventory
-    @Override
+    }
+
+    //-----------------------------------------------------------------
+
+    public void fill_chargeSlot() {
+        if(!Main.ICSupplied || chargeSlot == null)
+            return;
+
+        if(storedPower >= Ratios.EU.conversion) {
+            int sent = chargeSlot.charge((int) (storedPower * Ratios.EU.conversion));
+
+            storedPower -= sent / Ratios.EU.conversion;
+        }
+    }
+
+    public void empty_dischargeSlot() {
+        if(!Main.ICSupplied || dischargeSlot == null)
+            return;
+
+        if (demandedEnergyUnits() > 0.0D) {
+            int gain = dischargeSlot.discharge((int) demandedEnergyUnits(), false);
+
+            storedPower += Config.convertInput(Ratios.EU, gain);
+        }
+    }
+
+    public void loadTile() {
+        if(!Main.ICSupplied)
+            return;
+
+        if(addedToENet == false) {
+            addedToENet = true;
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+        }
+    }
+
+    public void unloadTile() {
+        if(!Main.ICSupplied)
+            return;
+
+        if(addedToENet == true) {
+            addedToENet = false;
+            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+        }
+    }
+
+    @Optional.Method(modid = "IC2")
+    public double demandedEnergyUnits() {
+        return maxPowers - storedPower;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public double injectEnergyUnits(ForgeDirection forgeDirection, double v) {
+        double returning = 0;
+
+        storedPower += Config.convertInput(Ratios.EU, v);
+        if(storedPower > maxPowers) {
+            returning = storedPower - maxPowers;
+            storedPower = maxPowers;
+        }
+        return returning;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public int getMaxSafeInput() {
+        return 2147483647;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
+        if(tileEntity == null) return false;
+        if(tileEntity instanceof TileEntityPowerBox) return false;
+
+        if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("input"))
+            return true;
+
+        return false;
+    }
+    //---------------------------------
+
+    //-- IEnergySource
+    @Optional.Method(modid = "IC2")
+    public double getOfferedEnergy() {
+        if(storedPower > 0) {
+            if(getOutput() > (int) (storedPower / Ratios.EU.conversion))
+                return (int) (storedPower / Ratios.EU.conversion);
+            else
+                return getOutput();
+        }
+        return 0;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public void drawEnergy(double v) {
+        storedPower -= v / Ratios.EU.conversion;
+        if(storedPower < 0)
+            storedPower = 0;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public boolean emitsEnergyTo(TileEntity tileEntity, ForgeDirection forgeDirection) {
+        if(tileEntity == null) return false;
+        if(tileEntity instanceof TileEntityPowerBox) return false;
+
+        if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("output"))
+            return true;
+
+        return false;
+    }
+    //---------------------------------
+
+    //--- IEnergyStorage
+    @Optional.Method(modid = "IC2")
+    public int getStored() {
+        return (int) storedPower;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public void setStored(int i) {
+        storedPower = i;
+        if(storedPower > maxPowers)
+            storedPower = maxPowers;
+        return;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public int addEnergy(int i) {
+        int returning = 0;
+
+        storedPower += Config.convertInput(Ratios.EU, i);
+        if(storedPower > maxPowers) {
+            returning = (int) (storedPower - maxPowers);
+            storedPower = maxPowers;
+        }
+
+        return returning;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public int getCapacity() {
+        return (int) maxPowers;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public int getOutput() {
+        return maxOutput;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public double getOutputEnergyUnitsPerTick() {
+        return 1;
+    }
+
+    @Optional.Method(modid = "IC2")
+    public boolean isTeleporterCompatible(ForgeDirection forgeDirection) {
+        return false;
+    }
+
+    //-------------------------------------------------------------------------------------
+
+    public void convertBC() {
+        if(convHandler == null)
+            getPowerProvider();
+        if(convHandler.getEnergyStored() <= 0)
+            return;
+
+        setPowerStored(getPowerStored() + (int) Math.floor(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+    }
+
+    public void tryOutputtingEnergy() {
+        if(storedPower <= 0)
+            return;
+
+        boolean[] conSides = new boolean[6];
+        int connected = 0;
+        for(int i=0; i<6; i++) {
+            if(outputMode[i].equalsIgnoreCase("output")) {
+                TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
+                if(tmpTile != null) {
+                    if(tmpTile instanceof IPowerReceptor) {
+                        connected += 1;
+                        conSides[i] = true;
+                    }
+                }
+            }
+        }
+        if(connected == 0) return;
+
+        int xPower = 25;
+        if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
+            int tmpStackSize = outputSpeedSlot.get().stackSize;
+            if(tmpStackSize > 2)
+                tmpStackSize = 2;
+
+            if(tmpStackSize == 1)
+                xPower += 25;
+            if(tmpStackSize == 2)
+                xPower += 50;
+        }
+        if(xPower > storedPower)
+            xPower = (int) storedPower;
+
+        int equalPower = xPower / connected;
+        if(Math.floor(equalPower) < Ratios.MJ.conversion)
+            return;
+
+        int drainPower = 0;
+        for(int i=0; i<6; i++) {
+            if(conSides[i] != false) {
+                TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
+
+                if(tmptile instanceof IPowerReceptor) {
+                    if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
+                        PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
+                        float neededPower = rec.powerRequest();
+                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= 5)
+                            continue;
+                        if(neededPower > equalPower)
+                            neededPower = equalPower;
+
+                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, (float) Math.ceil(neededPower / Ratios.MJ.conversion), ForgeDirection.getOrientation(i).getOpposite());
+                        drainPower += (equalPower - restEnergy);
+                    }
+                }
+            }
+        }
+        storedPower -= drainPower / Ratios.MJ.conversion;
+    }
+
+    public PowerHandler getPowerProvider() {
+        if (convHandler == null)
+        {
+            convHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
+            if (convHandler != null) {
+                convHandler.configure(1.0F, 500.0F, 800.0F, 640.0F);
+            }
+        }
+        return convHandler;
+    }
+
+    @Optional.Method(modid = "BuildCraft|Transport")
+    public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
+        if(!outputMode[side.ordinal()].equalsIgnoreCase("disabled"))
+            return getPowerProvider().getPowerReceiver();
+        return null;
+    }
+
+    @Optional.Method(modid = "BuildCraft|Transport")
+    public void doWork(PowerHandler workProvider) {
+
+    }
+
+    @Optional.Method(modid = "BuildCraft|Transport")
+    public World getWorld() {
+        return worldObj;
+    }
+    //---------------------------------
+
+    //--- IPowerEmitter
+    @Optional.Method(modid = "BuildCraft|Transport")
+    public boolean canEmitPowerFrom(ForgeDirection side) {
+        if(outputMode[side.ordinal()].equalsIgnoreCase("output"))
+            return true;
+
+        return false;
+    }
+
+    //---------------------------------------------------------------------------------------
+
     public int getSizeInventory() {
         int ret = 0;
 
@@ -601,7 +601,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         return ret;
     }
 
-    @Override
     public ItemStack getStackInSlot(int slot) {
         for (InvSlot invSlot : invSlots) {
             if (slot < invSlot.size()) {
@@ -613,7 +612,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         return null;
     }
 
-    @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
         for (InvSlot invSlot : invSlots) {
             if (slot < invSlot.size()) {
@@ -624,7 +622,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         }
     }
 
-    @Override
     public ItemStack decrStackSize(int slot, int amt) {
         ItemStack itemStack = getStackInSlot(slot);
         if (itemStack == null) return null;
@@ -643,7 +640,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         return ret;
     }
 
-    @Override
     public ItemStack getStackInSlotOnClosing(int slot) {
         ItemStack ret = getStackInSlot(slot);
 
@@ -652,36 +648,29 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IEnerg
         return ret;
     }
 
-    @Override
     public int getInventoryStackLimit() {
         return 16;
     }
 
-    @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) == this &&
                 player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
     }
 
-    @Override
     public void openChest() {}
 
-    @Override
     public void closeChest() {}
 
-    @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
         InvSlot invSlot = getInvSlot(slot);
 
         return (invSlot != null) && (invSlot.canInput()) && (invSlot.accepts(itemstack));
     }
 
-    @Override
     public String getInvName() {
         return "pboxes.tileentitypbox";
     }
 
-    @Override
     public boolean isInvNameLocalized() {
         return false;
     }
