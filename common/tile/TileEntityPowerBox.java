@@ -132,6 +132,40 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     }
 
     @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+
+        storedPower = tag.getFloat("powerStored");
+
+        for(int i=0; i<6; i++) {
+            ForgeDirection dir = ForgeDirection.getOrientation(i);
+            outputMode[i] = tag.getString("outputSide_" + dir.toString().toLowerCase());
+        }
+
+        if(tag.hasKey("capacityUpgrade"))
+            capacitySlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("capacityUpgrade"), 0));
+        if(tag.hasKey("outputSpeedUpgrade"))
+            outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("outputSpeedUpgrade"), 1));
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+
+        tag.setFloat("powerStored", storedPower);
+
+        for(int i=0; i<6; i++) {
+            ForgeDirection dir = ForgeDirection.getOrientation(i);
+            tag.setString("outputSide_" + dir.toString().toLowerCase(), outputMode[i]);
+        }
+
+        if(capacitySlot.get() != null)
+            tag.setInteger("capacityUpgrade", capacitySlot.get().stackSize);
+        if(outputSpeedSlot.get() != null)
+            tag.setInteger("outputSpeedUpgrade", outputSpeedSlot.get().stackSize);
+    }
+
+    @Override
     public void updateEntity()
     {
         super.updateEntity();

@@ -210,6 +210,5 @@ public class BlockPowerBox extends BlockContainer {
     public Icon getIcon(int par1, int par2)
     {
         return icons[2];
-        //return icons[par2];
     }
 }
