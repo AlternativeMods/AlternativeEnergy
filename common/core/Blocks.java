@@ -11,4 +11,5 @@ import net.minecraft.block.Block;
  */
 public class Blocks {
     public static Block powerBox_block;
+    public static Block powerCable_block;
 }

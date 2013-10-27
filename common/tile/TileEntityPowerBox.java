@@ -246,6 +246,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(worldObj == null || worldObj.isRemote)
             return;
     }
+
     @Override
     public void invalidate() {
         super.invalidate();
@@ -255,6 +256,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
         unloadTile();
     }
+
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
@@ -389,6 +391,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(addedToENet == false) {
             addedToENet = true;
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            System.out.println("LOADED");
         }
     }
 
@@ -440,8 +443,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     @Optional.Method(modid = "IC2")
     public double getOfferedEnergy() {
         if(storedPower > 0) {
-            if(getOutput() > (int) (storedPower / Ratios.EU.conversion))
-                return (int) (storedPower / Ratios.EU.conversion);
+            if(getOutput() > (int) Math.ceil(storedPower / Ratios.EU.conversion))
+                return (int) Math.ceil(storedPower / Ratios.EU.conversion);
             else
                 return getOutput();
         }
@@ -590,7 +593,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         {
             convHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
             if (convHandler != null) {
-                convHandler.configure(1.0F, 500.0F, 800.0F, 640.0F);
+                convHandler.configure(25, 500, 1337, 1000);
+                convHandler.configurePowerPerdition(0, 0);
             }
         }
         return convHandler;

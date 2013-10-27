@@ -1,6 +1,7 @@
 package core;
 
 import block.BlockPowerBox;
+import block.BlockPowerCable;
 import block.ItemBlockPowerBox;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -22,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import tile.TileEntityPowerBox;
+import tile.TileEntityPowerCable;
 
 import javax.swing.*;
 
@@ -32,7 +34,7 @@ import javax.swing.*;
  * You are not allowed to change this code,
  * nor publish it without my permission.
  */
-@Mod(modid = Main.modid, name = "Power Boxes", version = "1.03.1", dependencies = "required-after:Forge@[9.11.1.917,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = Main.modid, name = "Power Boxes", version = "1.04", dependencies = "required-after:Forge@[9.11.1.917,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod(channels = {"PBoxes"}, packetHandler = PacketHandler.class)
 public class Main {
 
@@ -80,6 +82,7 @@ public class Main {
 
     public void createBlocks() {
         Blocks.powerBox_block = new BlockPowerBox(Config.powerBox_blockId, Material.iron);
+        Blocks.powerCable_block = new BlockPowerCable(Config.powerBox_blockId + 1, Material.iron);
     }
 
     public void createItems() {
@@ -88,6 +91,7 @@ public class Main {
 
     public void registerBlocks() {
         GameRegistry.registerBlock(Blocks.powerBox_block, ItemBlockPowerBox.class, "PowerBox_Block");
+        GameRegistry.registerBlock(Blocks.powerCable_block, "PowerCable_Block");
     }
 
     public void registerItems() {
@@ -96,10 +100,12 @@ public class Main {
 
     public void registerTiles() {
         GameRegistry.registerTileEntity(TileEntityPowerBox.class, "PowerBox_Tile");
+        GameRegistry.registerTileEntity(TileEntityPowerCable.class, "PowerCable_Tile");
     }
 
     public void addNames() {
         LanguageRegistry.addName(new ItemStack(Blocks.powerBox_block, 1, 0), "Power Box");
+        LanguageRegistry.addName(new ItemStack(Blocks.powerCable_block, 1, 0), "Power Cable");
 
         Items.upgrade_Item.addNames();
 

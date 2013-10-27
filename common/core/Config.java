@@ -35,8 +35,8 @@ public class Config {
      * @return
      */
     public static double convertInput(Ratios ratio, double input) {
-        if(ratio == Ratios.EU) return (input / Ratios.EU.conversion);
-        else                   return (input / Ratios.MJ.conversion);
+        if(ratio == Ratios.EU) return Math.ceil(input / Ratios.EU.conversion);
+        else                   return Math.ceil(input / Ratios.MJ.conversion);
     }
 
     public static String convertNumber(int number) {
