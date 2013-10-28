@@ -9,8 +9,8 @@ import java.util.Locale;
  * Author: Lordmau5
  * Date: 21.08.13
  * Time: 16:17
- * You are not allowed to change this code,
- * nor publish it without my permission.
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
  */
 public class Config {
     public static double eu = 5;

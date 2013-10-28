@@ -14,8 +14,8 @@ import java.util.ArrayList;
  * Author: Lordmau5
  * Date: 23.08.13
  * Time: 14:40
- * You are not allowed to change this code,
- * nor publish it without my permission.
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
  */
 public class ContainerPowerBox extends Container {
 

@@ -1,18 +1,15 @@
 package core;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import tile.TileEntityPowerBox;
 
 /**
  * Author: Lordmau5
- * Date: 23.08.13
- * Time: 17:18
- * You are not allowed to change this code,
- * nor publish it without my permission.
+ * Date: 21.08.13
+ * Time: 16:13
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
  */
 public class SlotAdvanced extends Slot {
 

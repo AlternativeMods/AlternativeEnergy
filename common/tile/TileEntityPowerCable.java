@@ -22,8 +22,8 @@ import net.minecraftforge.common.MinecraftForge;
  * Author: Lordmau5
  * Date: 27.10.13
  * Time: 20:38
- * You are not allowed to change this code,
- * nor publish it without my permission.
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
  */
 @Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),

@@ -9,8 +9,8 @@ import java.util.List;
  * Author: Lordmau5
  * Date: 27.10.13
  * Time: 20:38
- * You are not allowed to change this code,
- * nor publish it without my permission.
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
  */
 public class EnergyNetwork {
     public List<TileEntityPowerCable> cables = new ArrayList<TileEntityPowerCable>();

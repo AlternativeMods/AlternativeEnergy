@@ -33,8 +33,8 @@ import javax.swing.*;
  * Author: Lordmau5
  * Date: 21.08.13
  * Time: 16:10
- * You are not allowed to change this code,
- * nor publish it without my permission.
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
  */
 @Mod(modid = Main.modid, name = "Power Boxes", version = "1.04", dependencies = "required-after:Forge@[9.11.1.917,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod(channels = {"PBoxes"}, packetHandler = PacketHandler.class)

@@ -5,6 +5,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import tile.TileEntityPowerBox;
 
+/**
+ * Author: Lordmau5
+ * Date: 28.10.13
+ * Time: 10:23
+ * You are allowed to change this code,
+ * however, not to publish it without my permission.
+ */
 public class InvSlot
 {
     public final TileEntityPowerBox base;
