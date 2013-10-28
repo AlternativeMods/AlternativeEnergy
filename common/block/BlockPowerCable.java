@@ -1,15 +1,25 @@
 package block;
 
+import buildcraft.api.power.IPowerEmitter;
+import buildcraft.api.power.IPowerReceptor;
 import core.EnergyNetwork;
 import core.Main;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+import ic2.api.tile.IEnergyStorage;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tile.TileEntityPowerCable;
+
+import java.util.List;
 
 /**
  * Author: Lordmau5
@@ -89,5 +99,135 @@ public class BlockPowerCable extends BlockContainer {
                 player.addChatMessage("Energy: " + network.networkPower + " / " + network.maxNetworkPower);
         }
         return false;
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k)
+    {
+        setCableBoundingBox(world, i, j, k);
+    }
+
+    public void setCableBoundingBox(IBlockAccess bAccess, int x, int y, int z)
+    {
+        TileEntity xTile = null;
+        TileEntityPowerCable thisTile = (TileEntityPowerCable) bAccess.getBlockTileEntity(x, y, z);
+
+        float minX = 0.335F;
+        float minY = 0.335F;
+        float minZ = 0.335F;
+
+        float maxX = 0.665F;
+        float maxY = 0.665F;
+        float maxZ = 0.665F;
+
+        xTile = bAccess.getBlockTileEntity(x - 1, y, z);
+
+        xTile = bAccess.getBlockTileEntity(x - 1, y, z);
+        if(xTile != null)
+        {
+            if(xTile instanceof TileEntityPowerCable
+                    || xTile instanceof IEnergySink
+                    || xTile instanceof IEnergyStorage
+                    || xTile instanceof IEnergySource
+                    || xTile instanceof IPowerReceptor
+                    || xTile instanceof IPowerEmitter)
+                minX = 0.0F;
+        }
+
+        xTile = bAccess.getBlockTileEntity(x + 1, y, z);
+        if(xTile != null)
+        {
+            if(xTile instanceof TileEntityPowerCable
+                    || xTile instanceof IEnergySink
+                    || xTile instanceof IEnergyStorage
+                    || xTile instanceof IEnergySource
+                    || xTile instanceof IPowerReceptor
+                    || xTile instanceof IPowerEmitter)
+                maxX = 1.0F;
+        }
+
+        xTile = bAccess.getBlockTileEntity(x, y, z - 1);
+        if(xTile != null)
+        {
+            if(xTile instanceof TileEntityPowerCable
+                    || xTile instanceof IEnergySink
+                    || xTile instanceof IEnergyStorage
+                    || xTile instanceof IEnergySource
+                    || xTile instanceof IPowerReceptor
+                    || xTile instanceof IPowerEmitter)
+                minZ = 0.0F;
+        }
+
+        xTile = bAccess.getBlockTileEntity(x, y, z + 1);
+        if(xTile != null)
+        {
+            if(xTile instanceof TileEntityPowerCable
+                    || xTile instanceof IEnergySink
+                    || xTile instanceof IEnergyStorage
+                    || xTile instanceof IEnergySource
+                    || xTile instanceof IPowerReceptor
+                    || xTile instanceof IPowerEmitter)
+                maxZ = 1.0F;
+        }
+
+        xTile = bAccess.getBlockTileEntity(x, y - 1, z);
+        if(xTile != null)
+        {
+            if(xTile instanceof TileEntityPowerCable
+                    || xTile instanceof IEnergySink
+                    || xTile instanceof IEnergyStorage
+                    || xTile instanceof IEnergySource
+                    || xTile instanceof IPowerReceptor
+                    || xTile instanceof IPowerEmitter)
+                minY = 0.0F;
+        }
+
+        xTile = bAccess.getBlockTileEntity(x, y + 1, z);
+        if(xTile != null)
+        {
+            if(xTile instanceof TileEntityPowerCable
+                    || xTile instanceof IEnergySink
+                    || xTile instanceof IEnergyStorage
+                    || xTile instanceof IEnergySource
+                    || xTile instanceof IPowerReceptor
+                    || xTile instanceof IPowerEmitter)
+                maxY = 1.0F;
+        }
+
+        this.setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    @Override
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity)
+    {
+        setCableBoundingBox(world, x, y, z);
+        AxisAlignedBB aabb = super.getCollisionBoundingBoxFromPool(world, x, y, z);
+        if ((aabb != null) && (axisAlignedBB.intersectsWith(aabb)))
+        {
+            list.add(aabb);
+        }
+    }
+
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockNormalCube(World world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+
+    @Override
+    public int getRenderType()
+    {
+        return -1;
     }
 }

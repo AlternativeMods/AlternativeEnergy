@@ -252,12 +252,14 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             getPowerProvider();
         if(convHandler.getEnergyStored() <= 0)
             return;
+        if(convHandler.getEnergyStored() < Ratios.MJ.conversion)
+            return;
 
         network.addPower((int) Math.ceil(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
     public void tryOutputtingEnergy() {
-        if(network.networkPower <= 0)
+        if(network.networkPower <= Ratios.MJ.conversion)
             return;
 
         boolean[] conSides = new boolean[6];
@@ -284,7 +286,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
-                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= 5)
+                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= Ratios.MJ.conversion)
                             continue;
                         if(neededPower > equalPower)
                             neededPower = equalPower;
@@ -303,7 +305,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         {
             convHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
             if (convHandler != null) {
-                convHandler.configure(25, 500, 1337, 1000);
+                convHandler.configure(1, 1000, 1337, 5000);
                 convHandler.configurePowerPerdition(0, 0);
             }
         }

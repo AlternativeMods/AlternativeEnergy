@@ -6,6 +6,7 @@ import block.ItemBlockPowerBox;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -22,6 +23,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
+import proxy.CommonProxy;
 import tile.TileEntityPowerBox;
 import tile.TileEntityPowerCable;
 
@@ -44,6 +46,9 @@ public class Main {
     public static boolean BCSupplied = false;
     public static boolean ICSupplied = false;
     public static boolean CCSupplied = false;
+
+    @SidedProxy(clientSide = "proxy.ClientProxy", serverSide = "proxy.CommonProxy")
+    public static CommonProxy commonProxy;
 
     @Mod.Instance(modid)
     public static Main instance;
@@ -174,6 +179,8 @@ public class Main {
         addNames();
 
         NetworkRegistry.instance().registerGuiHandler(this, new GUIHandler());
+
+        commonProxy.initRendering();
     }
 
     public void findWrenchIds() {
