@@ -14,6 +14,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import item.Items;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -54,6 +55,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public float maxPowers = Config.powerBox_capacity;
     public int maxOutput;
 
+    int euToConvert;
+
     int oldEnergy;
     float oldMaxPowers;
     int oldMaxOutput;
@@ -79,7 +82,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     }
 
     public int getPowerStored() {
-        return (int) storedPower;
+        return (int) Math.ceil(storedPower);
     }
 
     public void setPowerStored(int power) {
@@ -146,6 +149,15 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             capacitySlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("capacityUpgrade"), 0));
         if(tag.hasKey("outputSpeedUpgrade"))
             outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("outputSpeedUpgrade"), 1));
+
+        if(tag.hasKey("chargeSlot")) {
+            chargeSlot.put(new ItemStack(Block.stone));
+            chargeSlot.get().readFromNBT(tag.getCompoundTag("chargeSlot"));
+        }
+        if(tag.hasKey("dischargeSlot")) {
+            dischargeSlot.put(new ItemStack(Block.stone));
+            dischargeSlot.get().readFromNBT(tag.getCompoundTag("dischargeSlot"));
+        }
     }
 
     @Override
@@ -163,6 +175,11 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             tag.setInteger("capacityUpgrade", capacitySlot.get().stackSize);
         if(outputSpeedSlot.get() != null)
             tag.setInteger("outputSpeedUpgrade", outputSpeedSlot.get().stackSize);
+
+        if(chargeSlot.get() != null)
+            tag.setCompoundTag("chargeSlot", chargeSlot.get().writeToNBT(new NBTTagCompound()));
+        if(dischargeSlot.get() != null)
+            tag.setCompoundTag("dischargeSlot", dischargeSlot.get().writeToNBT(new NBTTagCompound()));
     }
 
     @Override
@@ -181,6 +198,17 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             hasToUpdateENet = false;
         }
 
+        if(euToConvert >= Ratios.EU.conversion) {
+            if(storedPower < 1.0)
+                storedPower = 1.0F;
+
+            int toAdd = (int) Math.ceil(euToConvert / Ratios.EU.conversion);
+
+            storedPower += toAdd;
+            euToConvert = 0;
+        }
+
+        outputToPowerCables();
 
         convertBC();
         tryOutputtingEnergy();
@@ -265,6 +293,32 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             return;
 
         unloadTile();
+    }
+
+    public void outputToPowerCables() {
+        if(storedPower < 1.0)
+            return;
+
+        for(int i=0; i<6; i++) {
+            ForgeDirection dr = ForgeDirection.getOrientation(i);
+            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
+
+            if(tmpTile != null && tmpTile instanceof TileEntityPowerCable) {
+                TileEntityPowerCable cable = (TileEntityPowerCable) tmpTile;
+                EnergyNetwork network = cable.getEnergyNetwork();
+
+                if(network != null) {
+                    if(storedPower >= 0.0) {
+                        int toSend = (int) Math.ceil(storedPower);
+                        if(storedPower > 5.0)
+                            toSend = 5;
+
+                        storedPower -= toSend;
+                        System.out.println(network.addPower(toSend));
+                    }
+                }
+            }
+        }
     }
     //------------------------------
 
@@ -391,7 +445,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(addedToENet == false) {
             addedToENet = true;
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-            System.out.println("LOADED");
         }
     }
 
@@ -414,10 +467,10 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public double injectEnergyUnits(ForgeDirection forgeDirection, double v) {
         double returning = 0;
 
-        storedPower += Config.convertInput(Ratios.EU, v);
-        if(storedPower > maxPowers) {
-            returning = storedPower - maxPowers;
-            storedPower = maxPowers;
+        euToConvert += v;
+        if(euToConvert > (Ratios.EU.conversion * 10000)) {
+            returning = euToConvert - (Ratios.EU.conversion * 10000);
+            euToConvert = (int) (Ratios.EU.conversion * 10000);
         }
         return returning;
     }
@@ -431,6 +484,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
         if(tileEntity == null) return false;
         if(tileEntity instanceof TileEntityPowerBox) return false;
+        if(tileEntity instanceof TileEntityPowerCable) return false;
 
         if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("input"))
             return true;
@@ -462,6 +516,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public boolean emitsEnergyTo(TileEntity tileEntity, ForgeDirection forgeDirection) {
         if(tileEntity == null) return false;
         if(tileEntity instanceof TileEntityPowerBox) return false;
+        if(tileEntity instanceof TileEntityPowerCable) return false;
 
         if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("output"))
             return true;
@@ -488,10 +543,10 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public int addEnergy(int i) {
         int returning = 0;
 
-        storedPower += Config.convertInput(Ratios.EU, i);
-        if(storedPower > maxPowers) {
-            returning = (int) (storedPower - maxPowers);
-            storedPower = maxPowers;
+        euToConvert += i;
+        if(euToConvert > (Ratios.EU.conversion * 10000)) {
+            returning = (int) (euToConvert - (Ratios.EU.conversion * 10000));
+            euToConvert = (int) (Ratios.EU.conversion * 10000);
         }
 
         return returning;
@@ -538,7 +593,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             if(outputMode[i].equalsIgnoreCase("output")) {
                 TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
                 if(tmpTile != null) {
-                    if(tmpTile instanceof IPowerReceptor) {
+                    if(tmpTile instanceof IPowerReceptor && !(tmpTile instanceof TileEntityPowerCable)) {
                         connected += 1;
                         conSides[i] = true;
                     }
@@ -570,7 +625,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             if(conSides[i] != false) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor) {
+                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();

@@ -1,6 +1,5 @@
 package core;
 
-import net.minecraft.tileentity.TileEntity;
 import tile.TileEntityPowerCable;
 
 import java.util.ArrayList;
@@ -15,8 +14,6 @@ import java.util.List;
  */
 public class EnergyNetwork {
     public List<TileEntityPowerCable> cables = new ArrayList<TileEntityPowerCable>();
-    public List<TileEntity> inputs = new ArrayList<TileEntity>();
-    public List<TileEntity> outputs = new ArrayList<TileEntity>();
 
     public int networkPower;
     public int maxNetworkPower = 5000;
@@ -31,30 +28,6 @@ public class EnergyNetwork {
         cables.add(cable);
     }
 
-    public void addInput(TileEntity input) {
-        if(inputs.contains(input))
-            return;
-        inputs.add(input);
-    }
-
-    public void removeInput(TileEntity input) {
-        if(!inputs.contains(input))
-            return;
-        inputs.remove(input);
-    }
-
-    public void addOutput(TileEntity output) {
-        if(outputs.contains(output))
-            return;
-        outputs.add(output);
-    }
-
-    public void removeOutput(TileEntity output) {
-        if(!outputs.contains(output))
-            return;
-        outputs.remove(output);
-    }
-
     public void recalculateNetworks(TileEntityPowerCable exclude) {
         for(TileEntityPowerCable cable : cables) {
             cable.initializeNetwork();
@@ -66,10 +39,6 @@ public class EnergyNetwork {
             headNetwork.addCable(cable);
             cable.setEnergyNetwork(headNetwork);
         }
-        for(TileEntity input : soldierNetwork.inputs)
-            headNetwork.addInput(input);
-        for(TileEntity output : soldierNetwork.outputs)
-            headNetwork.addOutput(output);
 
         return headNetwork;
     }

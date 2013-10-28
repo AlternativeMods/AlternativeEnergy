@@ -41,6 +41,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     PowerHandler convHandler;
 
+    int euForNetwork;
+
     public TileEntityPowerCable() {
         initializeNetwork();
 
@@ -81,6 +83,13 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         }
 
         loadTile();
+
+        if(euForNetwork >= Ratios.EU.conversion) {
+            int toAdd = (int) Math.ceil(euForNetwork / Ratios.EU.conversion);
+
+            network.addPower(toAdd);
+            euForNetwork = 0;
+        }
 
         convertBC();
         tryOutputtingEnergy();
@@ -141,7 +150,15 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Override
     public int addEnergy(int amount) {
-        return network.addPower((int) Math.ceil(amount / Ratios.EU.conversion));
+        int returning = 0;
+
+        euForNetwork += amount;
+        if(euForNetwork > (Ratios.EU.conversion * 10000)) {
+            returning = (int) (euForNetwork - (Ratios.EU.conversion * 10000));
+            euForNetwork = (int) (Ratios.EU.conversion * 10000);
+        }
+
+        return returning;
     }
 
     @Override
@@ -175,7 +192,14 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Override
     public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
-        return network.addPower((int) Math.ceil(amount / Ratios.EU.conversion));
+        double returning = 0;
+
+        euForNetwork += amount;
+        if(euForNetwork > (Ratios.EU.conversion * 10000)) {
+            returning = euForNetwork - (Ratios.EU.conversion * 10000);
+            euForNetwork = (int) (Ratios.EU.conversion * 10000);
+        }
+        return returning;
     }
 
     @Override
@@ -185,6 +209,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Override
     public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
+        if(emitter instanceof TileEntityPowerCable)
+            return false;
         return true;
     }
 
@@ -210,6 +236,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Override
     public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
+        if(receiver instanceof TileEntityPowerCable)
+            return false;
         if(network.networkPower <= 0)
             return false;
         return true;
@@ -237,7 +265,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         for(int i=0; i<6; i++) {
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
             if(tmpTile != null) {
-                if(tmpTile instanceof IPowerReceptor && !(tmpTile instanceof IPipeTile)) {
+                if(tmpTile instanceof IPowerReceptor && !(tmpTile instanceof IPipeTile) && !(tmpTile instanceof TileEntityPowerCable)) {
                     connected += 1;
                     conSides[i] = true;
                 }
@@ -245,7 +273,6 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         }
         if(connected == 0) return;
 
-        int myPower = network.networkPower;
         int equalPower = (int) Math.floor(network.networkPower / connected);
 
         int drainPower = 0;
@@ -253,7 +280,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             if(conSides[i] != false) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof IPipeTile)) {
+                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof IPipeTile) && !(tmptile instanceof TileEntityPowerCable)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
