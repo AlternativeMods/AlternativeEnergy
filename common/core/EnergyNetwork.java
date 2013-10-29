@@ -22,6 +22,10 @@ public class EnergyNetwork {
         cables.add(headCable);
     }
 
+    public int getNetworkPower() {
+        return networkPower;
+    }
+
     public void addCable(TileEntityPowerCable cable) {
         if(cables.contains(cable))
             return;

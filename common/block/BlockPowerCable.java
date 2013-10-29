@@ -2,19 +2,25 @@ package block;
 
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.transport.IPipeTile;
 import core.EnergyNetwork;
 import core.Main;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tile.TileEntityPowerCable;
@@ -32,7 +38,7 @@ public class BlockPowerCable extends BlockContainer {
 
     public BlockPowerCable(int par1, Material par2Material) {
         super(par1, par2Material);
-        setUnlocalizedName("PowerBox");
+        setUnlocalizedName("PowerCable");
         setHardness(5.0F);
         setStepSound(soundMetalFootstep);
         setCreativeTab(Main.tabPowerBox);
@@ -53,6 +59,33 @@ public class BlockPowerCable extends BlockContainer {
     public TileEntity createTileEntity(World world, int meta)
     {
         return new TileEntityPowerCable();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon(Main.modid + ":" + this.getUnlocalizedName());
+    }
+
+    @Override
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+    {
+        return this.getIcon(side, par1IBlockAccess.getBlockMetadata(x, y, z));
+    }
+
+    @Override
+    public Icon getIcon(int side, int meta)
+    {
+        return this.blockIcon;
+    }
+
+    @Override
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+        if(par1World == null || par1World.isRemote)
+            return;
+
+        TileEntityPowerCable meCable = (TileEntityPowerCable) par1World.getBlockTileEntity(par2, par3, par4);
+        meCable.updateENet();
     }
 
     @Override
@@ -123,7 +156,7 @@ public class BlockPowerCable extends BlockContainer {
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
 
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -135,7 +168,7 @@ public class BlockPowerCable extends BlockContainer {
         }
 
         xTile = bAccess.getBlockTileEntity(x + 1, y, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -147,7 +180,7 @@ public class BlockPowerCable extends BlockContainer {
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z - 1);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -159,7 +192,7 @@ public class BlockPowerCable extends BlockContainer {
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z + 1);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -171,7 +204,7 @@ public class BlockPowerCable extends BlockContainer {
         }
 
         xTile = bAccess.getBlockTileEntity(x, y - 1, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -183,7 +216,7 @@ public class BlockPowerCable extends BlockContainer {
         }
 
         xTile = bAccess.getBlockTileEntity(x, y + 1, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink

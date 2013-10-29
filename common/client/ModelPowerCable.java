@@ -2,8 +2,10 @@ package client;
 
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.transport.IPipeTile;
 import core.Main;
 import cpw.mods.fml.client.FMLClientHandler;
+import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
@@ -74,7 +76,7 @@ public class ModelPowerCable extends ModelBase {
         TileEntity xTile = null;
 
         xTile = thisTile.worldObj.getBlockTileEntity(x - 1, y, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -88,7 +90,7 @@ public class ModelPowerCable extends ModelBase {
         }
 
         xTile = thisTile.worldObj.getBlockTileEntity(x + 1, y, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -102,7 +104,7 @@ public class ModelPowerCable extends ModelBase {
         }
 
         xTile = thisTile.worldObj.getBlockTileEntity(x, y - 1, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -116,7 +118,7 @@ public class ModelPowerCable extends ModelBase {
         }
 
         xTile = thisTile.worldObj.getBlockTileEntity(x, y + 1, z);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -130,7 +132,7 @@ public class ModelPowerCable extends ModelBase {
         }
 
         xTile = thisTile.worldObj.getBlockTileEntity(x, y, z - 1);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -144,7 +146,7 @@ public class ModelPowerCable extends ModelBase {
         }
 
         xTile = thisTile.worldObj.getBlockTileEntity(x, y, z + 1);
-        if(xTile != null)
+        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
             if(xTile instanceof TileEntityPowerCable
                     || xTile instanceof IEnergySink
@@ -169,7 +171,7 @@ public class ModelPowerCable extends ModelBase {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)posX + posX_mod, (float)posY + posY_mod, (float)posZ + posZ_mod);
             GL11.glScalef(scaleX, scaleY, scaleZ);
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/RedstoneCable.png"));
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png"));
             this.render(MODE_NS);
             GL11.glPopMatrix();
         }
@@ -178,7 +180,7 @@ public class ModelPowerCable extends ModelBase {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)posX + 0.5F, (float)posY + 0.5F, (float)posZ + 0.5F);
             GL11.glScalef(scaleX, scaleY, scaleZ);
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/RedstoneCable.png"));
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png"));
             this.render(MODE_EW);
             GL11.glPopMatrix();
         }
@@ -187,7 +189,7 @@ public class ModelPowerCable extends ModelBase {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)posX + 0.5F, (float)posY + 0.5F, (float)posZ + 0.5F);
             GL11.glScalef(scaleX, scaleY, scaleZ);
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/RedstoneCable.png"));
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png"));
             this.render(MODE_TB);
             GL11.glPopMatrix();
         }

@@ -198,7 +198,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             hasToUpdateENet = false;
         }
 
-        if(euToConvert >= Ratios.EU.conversion) {
+        if(euToConvert % Ratios.EU.conversion == 0) {
             if(storedPower < 1.0)
                 storedPower = 1.0F;
 
@@ -434,7 +434,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if (demandedEnergyUnits() > 0.0D) {
             int gain = dischargeSlot.discharge((int) demandedEnergyUnits(), false);
 
-            storedPower += Config.convertInput(Ratios.EU, gain);
+            euToConvert += gain;
         }
     }
 

@@ -4,14 +4,15 @@ import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.api.transport.IPipeTile;
+import buildcraft.core.IMachine;
 import core.EnergyNetwork;
 import core.Main;
 import core.Ratios;
 import cpw.mods.fml.common.Optional;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -29,15 +30,14 @@ import net.minecraftforge.common.MinecraftForge;
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 
-        @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
-
         @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Transport"),
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Transport")})
 
-public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor, IPowerEmitter {
+public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor, IPowerEmitter {
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
+    boolean hasToUpdateENet;
 
     PowerHandler convHandler;
 
@@ -47,6 +47,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         initializeNetwork();
 
         addedToENet = false;
+        hasToUpdateENet = false;
     }
 
     public void initializeNetwork() {
@@ -73,6 +74,13 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         }
     }
 
+    public void updateENet() {
+        if(!Main.ICSupplied)
+            return;
+
+        hasToUpdateENet = true;
+    }
+
     public void updateEntity() {
         if(worldObj == null || worldObj.isRemote)
             return;
@@ -82,10 +90,15 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             initialized = true;
         }
 
+        if(hasToUpdateENet) {
+            unloadTile();
+            loadTile();
+        }
+
         loadTile();
 
-        if(euForNetwork >= Ratios.EU.conversion) {
-            int toAdd = (int) Math.ceil(euForNetwork / Ratios.EU.conversion);
+        if(euForNetwork % Ratios.EU.conversion == 0) {
+            int toAdd = (int) (euForNetwork / Ratios.EU.conversion);
 
             network.addPower(toAdd);
             euForNetwork = 0;
@@ -93,6 +106,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
         convertBC();
         tryOutputtingEnergy();
+
+        tryOutputtingEU();
     }
 
     @Override
@@ -138,17 +153,17 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     }
 
     //-- IEnergyStorage
-    @Override
+    @Optional.Method(modid = "IC2")
     public int getStored() {
-        return network.networkPower;
+        return (int) Math.ceil(network.networkPower / Ratios.EU.conversion);
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public void setStored(int energy) {
         network.setPower((int) Math.ceil(energy / Ratios.EU.conversion));
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public int addEnergy(int amount) {
         int returning = 0;
 
@@ -161,22 +176,22 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         return returning;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public int getCapacity() {
         return network.maxNetworkPower;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public int getOutput() {
-        return 64;
+        return 32;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public double getOutputEnergyUnitsPerTick() {
         return 1;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public boolean isTeleporterCompatible(ForgeDirection side) {
         return false;
     }
@@ -185,12 +200,44 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     //-- IEnergySink
 
-    @Override
+    public void tryOutputtingEU() {
+        if(!Main.ICSupplied)
+            return;
+
+        for(int i=0; i<6; i++) {
+            ForgeDirection dr = ForgeDirection.getOrientation(i);
+            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
+
+            if(tmpTile != null) {
+                if(tmpTile instanceof TileEntityPowerCable)
+                    continue;
+
+                if(tmpTile instanceof IEnergySink) {
+                    IEnergySink sink = (IEnergySink) tmpTile;
+
+                    if(sink.acceptsEnergyFrom(this, dr.getOpposite())) {
+                        if(network.getNetworkPower() >= 1) {
+                            int toDrain = (int) Ratios.EU.conversion * 4;
+                            if(network.getNetworkPower() < Ratios.EU.conversion * 4)
+                                toDrain = network.getNetworkPower();
+                            sink.injectEnergyUnits(dr.getOpposite(), toDrain * Ratios.EU.conversion);
+                            //System.out.println(network.networkPower + " BEFORE");
+                            network.drainPower((int) Math.ceil(toDrain));
+                            //network.drainPower((int) Math.ceil(Ratios.EU.conversion / toDrain));
+                            //System.out.println(network.networkPower + " AFTER");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Optional.Method(modid = "IC2")
     public double demandedEnergyUnits() {
         return network.maxNetworkPower - network.networkPower;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
         double returning = 0;
 
@@ -202,14 +249,14 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         return returning;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public int getMaxSafeInput() {
         return 2147483647;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-        if(emitter instanceof TileEntityPowerCable)
+        if(emitter instanceof TileEntityPowerCable || emitter instanceof IEnergyConductor)
             return false;
         return true;
     }
@@ -218,36 +265,36 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     //-- IEnergySource
 
-    @Override
+    /*@Optional.Method(modid = "IC2")
     public double getOfferedEnergy() {
-        if(network.networkPower > 0) {
-            if(getOutput() > network.networkPower)
-                return network.networkPower;
+        if(network.getNetworkPower() > 0) {
+            if(getOutput() > network.getNetworkPower())
+                return network.getNetworkPower();
             else
                 return getOutput();
         }
         return 0;
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public void drawEnergy(double amount) {
-        network.drainPower((int) Math.ceil(amount / Ratios.EU.conversion));
+        //network.drainPower((int) Math.ceil(amount / Ratios.EU.conversion));
     }
 
-    @Override
+    @Optional.Method(modid = "IC2")
     public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
         if(receiver instanceof TileEntityPowerCable)
             return false;
-        if(network.networkPower <= 0)
-            return false;
-        return true;
-    }
+        return false;
+    } */
 
     //------------------------------------------------
 
     //-- BC Stuffy
 
     public void convertBC() {
+        if(!Main.BCSupplied)
+            return;
         if(convHandler == null)
             getPowerProvider();
         if(convHandler.getEnergyStored() <= 0)
@@ -259,6 +306,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     }
 
     public void tryOutputtingEnergy() {
+        if(!Main.BCSupplied)
+            return;
         if(network.networkPower <= Ratios.MJ.conversion)
             return;
 
@@ -267,9 +316,13 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         for(int i=0; i<6; i++) {
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
             if(tmpTile != null) {
-                if(tmpTile instanceof IPowerReceptor && !(tmpTile instanceof IPipeTile) && !(tmpTile instanceof TileEntityPowerCable)) {
-                    connected += 1;
-                    conSides[i] = true;
+                if(!(tmpTile instanceof IPipeTile) && !(tmpTile instanceof TileEntityPowerCable)) {
+                    if(tmpTile instanceof IPowerReceptor) {
+                        if(tmpTile instanceof IMachine && !((IMachine)tmpTile).isActive())
+                            continue;
+                        connected += 1;
+                        conSides[i] = true;
+                    }
                 }
             }
         }
@@ -314,7 +367,10 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Optional.Method(modid = "BuildCraft|Transport")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
-        return getPowerProvider().getPowerReceiver();
+        TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
+        if(tmpTile != null && !(tmpTile instanceof IPipeTile))
+            return getPowerProvider().getPowerReceiver();
+        return null;
     }
 
     @Optional.Method(modid = "BuildCraft|Transport")
@@ -333,4 +389,6 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     public boolean canEmitPowerFrom(ForgeDirection side) {
         return true;
     }
+
+    //---------------------------------
 }
