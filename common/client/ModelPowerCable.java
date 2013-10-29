@@ -32,33 +32,33 @@ public class ModelPowerCable extends ModelBase {
         base = new ModelRenderer(this, 0, 0);
         base.addBox(0F, 0F, 0F, 5, 5, 5);
         base.setRotationPoint(-2.5F, 13.5F, -2.5F);
-        base.setTextureSize(16, 16);
+        base.setTextureSize(6, 6);
         base.mirror = true;
         setRotation(base, 0F, 0F, 0F);
 
         toNorth[0] = new ModelRenderer(this, 0, 0);
         toNorth[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toNorth[0].setRotationPoint(-2.5F, 13.5F, -7.5F);
-        toNorth[0].setTextureSize(16, 16);
+        toNorth[0].setTextureSize(5, 6);
         toNorth[0].mirror = true;
         setRotation(toNorth[0], 0F, 0F, 0F);
         toNorth[1] = new ModelRenderer(this, 0, 0);
         toNorth[1].addBox(0F, 0F, 0F, 5, 5, 1);
         toNorth[1].setRotationPoint(-2.5F, 13.5F, -8F);
-        toNorth[1].setTextureSize(16, 16);
+        toNorth[1].setTextureSize(5, 6);
         toNorth[1].mirror = true;
         setRotation(toNorth[1], 0F, 0F, 0F);
 
         toSouth[0] = new ModelRenderer(this, 0, 0);
         toSouth[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toSouth[0].setRotationPoint(-2.5F, 13.5F, 3F);
-        toSouth[0].setTextureSize(16, 16);
+        toSouth[0].setTextureSize(5, 6);
         toSouth[0].mirror = true;
         setRotation(toSouth[0], 0F, 0F, 0F);
         toSouth[1] = new ModelRenderer(this, 0, 0);
         toSouth[1].addBox(0F, 0F, 0F, 5, 5, 1);
         toSouth[1].setRotationPoint(-2.5F, 13.5F, 2.3F);
-        toSouth[1].setTextureSize(16, 16);
+        toSouth[1].setTextureSize(5, 6);
         toSouth[1].mirror = true;
         setRotation(toSouth[1], 0F, 0F, 0F);
 
