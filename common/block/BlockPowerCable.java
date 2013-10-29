@@ -1,16 +1,11 @@
 package block;
 
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipeTile;
 import core.EnergyNetwork;
 import core.Main;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.energy.tile.IEnergyConductor;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.tile.IEnergyStorage;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -158,72 +153,42 @@ public class BlockPowerCable extends BlockContainer {
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter)
+            if(Main.isValidPowerTile(xTile))
                 minX = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x + 1, y, z);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter)
+            if(Main.isValidPowerTile(xTile))
                 maxX = 1.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z - 1);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter)
+            if(Main.isValidPowerTile(xTile))
                 minZ = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z + 1);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter)
+            if(Main.isValidPowerTile(xTile))
                 maxZ = 1.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y - 1, z);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter)
+            if(Main.isValidPowerTile(xTile))
                 minY = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y + 1, z);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
         {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter)
+            if(Main.isValidPowerTile(xTile))
                 maxY = 1.0F;
         }
 

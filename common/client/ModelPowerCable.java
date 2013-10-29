@@ -1,197 +1,161 @@
 package client;
 
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.transport.IPipeTile;
 import core.Main;
-import cpw.mods.fml.client.FMLClientHandler;
-import ic2.api.energy.tile.IEnergyConductor;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.tile.IEnergyStorage;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
-import org.lwjgl.opengl.GL11;
-import tile.TileEntityPowerCable;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Author: Lordmau5
- * Date: 28.10.13
- * Time: 11:00
+ * Date: 29.10.13
+ * Time: 18:10
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
 public class ModelPowerCable extends ModelBase {
-    private int MODE_NS = 1;
-    private int MODE_EW = 2;
-    private int MODE_TB = 3;
 
-    private IModelCustom North_South;
-    private IModelCustom East_West;
-    private IModelCustom Top_Bottom;
+    ModelRenderer base;
+    ModelRenderer[] toNorth = new ModelRenderer[2];
+    ModelRenderer[] toSouth = new ModelRenderer[2];
+    ModelRenderer[] toEast = new ModelRenderer[2];
+    ModelRenderer[] toWest = new ModelRenderer[2];
+    ModelRenderer[] toTop = new ModelRenderer[2];
+    ModelRenderer[] toBottom = new ModelRenderer[2];
 
-    public ModelPowerCable()
-    {
-        North_South = AdvancedModelLoader.loadModel("/assets/powerboxes/textures/models/Standard.obj");
-        East_West = AdvancedModelLoader.loadModel("/assets/powerboxes/textures/models/Standard.obj");
-        Top_Bottom = AdvancedModelLoader.loadModel("/assets/powerboxes/textures/models/Standard.obj");
+    public ModelPowerCable() {
+        initModels();
     }
 
-    public void render(int mode)
+    public void initModels() {
+        base = new ModelRenderer(this, 0, 0);
+        base.addBox(0F, 0F, 0F, 5, 5, 5);
+        base.setRotationPoint(-2.5F, 13.5F, -2.5F);
+        base.setTextureSize(16, 16);
+        base.mirror = true;
+        setRotation(base, 0F, 0F, 0F);
+
+        toNorth[0] = new ModelRenderer(this, 0, 0);
+        toNorth[0].addBox(0F, 0F, 0F, 5, 5, 5);
+        toNorth[0].setRotationPoint(-2.5F, 13.5F, -7.5F);
+        toNorth[0].setTextureSize(16, 16);
+        toNorth[0].mirror = true;
+        setRotation(toNorth[0], 0F, 0F, 0F);
+        toNorth[1] = new ModelRenderer(this, 0, 0);
+        toNorth[1].addBox(0F, 0F, 0F, 5, 5, 1);
+        toNorth[1].setRotationPoint(-2.5F, 13.5F, -8F);
+        toNorth[1].setTextureSize(16, 16);
+        toNorth[1].mirror = true;
+        setRotation(toNorth[1], 0F, 0F, 0F);
+
+        toSouth[0] = new ModelRenderer(this, 0, 0);
+        toSouth[0].addBox(0F, 0F, 0F, 5, 5, 5);
+        toSouth[0].setRotationPoint(-2.5F, 13.5F, 3F);
+        toSouth[0].setTextureSize(16, 16);
+        toSouth[0].mirror = true;
+        setRotation(toSouth[0], 0F, 0F, 0F);
+        toSouth[1] = new ModelRenderer(this, 0, 0);
+        toSouth[1].addBox(0F, 0F, 0F, 5, 5, 1);
+        toSouth[1].setRotationPoint(-2.5F, 13.5F, 2.3F);
+        toSouth[1].setTextureSize(16, 16);
+        toSouth[1].mirror = true;
+        setRotation(toSouth[1], 0F, 0F, 0F);
+
+        toEast[0] = new ModelRenderer(this, 0, 0);
+        toEast[0].addBox(0F, 0F, 0F, 5, 5, 5);
+        toEast[0].setRotationPoint(-7.5F, 13.5F, -2.5F);
+        toEast[0].setTextureSize(16, 16);
+        toEast[0].mirror = true;
+        setRotation(toEast[0], 0F, 0F, 0F);
+        toEast[1] = new ModelRenderer(this, 0, 0);
+        toEast[1].addBox(0F, 0F, 0F, 1, 5, 5);
+        toEast[1].setRotationPoint(-8F, 13.5F, -2.5F);
+        toEast[1].setTextureSize(16, 16);
+        toEast[1].mirror = true;
+        setRotation(toEast[1], 0F, 0F, 0F);
+
+        toWest[0] = new ModelRenderer(this, 0, 0);
+        toWest[0].addBox(0F, 0F, 0F, 5, 5, 5);
+        toWest[0].setRotationPoint(3F, 13.5F, -2.5F);
+        toWest[0].setTextureSize(16, 16);
+        toWest[0].mirror = true;
+        setRotation(toWest[0], 0F, 0F, 0F);
+        toWest[1] = new ModelRenderer(this, 0, 0);
+        toWest[1].addBox(0F, 0F, 0F, 1, 5, 5);
+        toWest[1].setRotationPoint(2.3F, 13.5F, -2.5F);
+        toWest[1].setTextureSize(16, 16);
+        toWest[1].mirror = true;
+        setRotation(toWest[1], 0F, 0F, 0F);
+
+        toTop[0] = new ModelRenderer(this, 0, 0);
+        toTop[0].addBox(0F, 0F, 0F, 5, 5, 5);
+        toTop[0].setRotationPoint(-2.5F, 8.5F, -2.5F);
+        toTop[0].setTextureSize(16, 16);
+        toTop[0].mirror = true;
+        setRotation(toTop[0], 0F, 0F, 0F);
+        toTop[1] = new ModelRenderer(this, 0, 0);
+        toTop[1].addBox(0F, 0F, 0F, 5, 1, 5);
+        toTop[1].setRotationPoint(-2.5F, 8F, -2.5F);
+        toTop[1].setTextureSize(16, 16);
+        toTop[1].mirror = true;
+        setRotation(toTop[1], 0F, 0F, 0F);
+
+        toBottom[0] = new ModelRenderer(this, 0, 0);
+        toBottom[0].addBox(0F, 0F, 0F, 5, 5, 5);
+        toBottom[0].setRotationPoint(-2.5F, 19F, -2.5F);
+        toBottom[0].setTextureSize(16, 16);
+        toBottom[0].mirror = true;
+        setRotation(toBottom[0], 0F, 0F, 0F);
+        toBottom[1] = new ModelRenderer(this, 0, 0);
+        toBottom[1].addBox(0F, 0F, 0F, 5, 1, 5);
+        toBottom[1].setRotationPoint(-2.5F, 18.5F, -2.5F);
+        toBottom[1].setTextureSize(16, 16);
+        toBottom[1].mirror = true;
+        setRotation(toBottom[1], 0F, 0F, 0F);
+
+    }
+
+    public void render(TileEntity tile, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        if(mode == MODE_NS)
-            North_South.renderAll();
-        else if(mode == MODE_EW)
-            East_West.renderAll();
-        else if(mode == MODE_TB)
-            Top_Bottom.renderAll();
-        else
-        {
-            North_South.renderAll();
-            East_West.renderAll();
-            Top_Bottom.renderAll();
+        super.render(null, f, f1, f2, f3, f4, f5);
+        setRotationAngles(f, f1, f2, f3, f4, f5, null);
+        base.render(f5);
+        for(int i=0; i<6; i++) {
+            ForgeDirection dr = ForgeDirection.getOrientation(i);
+            TileEntity tmpTile = tile.worldObj.getBlockTileEntity(tile.xCoord + dr.offsetX, tile.yCoord + dr.offsetY, tile.zCoord + dr.offsetZ);
+            if(tmpTile != null && Main.isValidPowerTile(tmpTile)) {
+                if(dr == ForgeDirection.UP)
+                    for(ModelRenderer rend : toTop)
+                        rend.render(f5);
+                else if(dr == ForgeDirection.DOWN)
+                    for(ModelRenderer rend : toBottom)
+                        rend.render(f5);
+                else if(dr == ForgeDirection.NORTH)
+                    for(ModelRenderer rend : toNorth)
+                        rend.render(f5);
+                else if(dr == ForgeDirection.SOUTH)
+                    for(ModelRenderer rend : toSouth)
+                        rend.render(f5);
+                else if(dr == ForgeDirection.EAST)
+                    for(ModelRenderer rend : toEast)
+                        rend.render(f5);
+                else if(dr == ForgeDirection.WEST)
+                    for(ModelRenderer rend : toWest)
+                        rend.render(f5);
+            }
         }
     }
 
-    public void render(TileEntityPowerCable thisTile, double d0, double d1, double d2)
+    private void setRotation(ModelRenderer model, float x, float y, float z)
     {
-        World bAccess = thisTile.worldObj;
-
-        double ew_posX = d0;
-        double tb_posY = d1;
-        double ns_posZ = d2;
-
-        float ew_scaleX = 0.5f;
-        float tb_scaleY = 0.5f;
-        float ns_scaleZ = 0.5f;
-
-        int x = thisTile.xCoord;
-        int y = thisTile.yCoord;
-        int z = thisTile.zCoord;
-
-        TileEntity xTile = null;
-
-        xTile = thisTile.worldObj.getBlockTileEntity(x - 1, y, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
-        {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter) {
-                ew_posX -= 0.5F;
-                ew_scaleX = 2F;
-            }
-        }
-
-        xTile = thisTile.worldObj.getBlockTileEntity(x + 1, y, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
-        {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter) {
-                ew_posX += 0.5F;
-                ew_scaleX = 2F;
-            }
-        }
-
-        xTile = thisTile.worldObj.getBlockTileEntity(x, y - 1, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
-        {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter) {
-                tb_posY -= 0.5F;
-                tb_scaleY = 2F;
-            }
-        }
-
-        xTile = thisTile.worldObj.getBlockTileEntity(x, y + 1, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
-        {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter) {
-                tb_posY += 0.5F;
-                tb_scaleY = 2F;
-            }
-        }
-
-        xTile = thisTile.worldObj.getBlockTileEntity(x, y, z - 1);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
-        {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter) {
-                ns_posZ -= 0.5F;
-                ns_scaleZ = 2F;
-            }
-        }
-
-        xTile = thisTile.worldObj.getBlockTileEntity(x, y, z + 1);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
-        {
-            if(xTile instanceof TileEntityPowerCable
-                    || xTile instanceof IEnergySink
-                    || xTile instanceof IEnergyStorage
-                    || xTile instanceof IEnergySource
-                    || xTile instanceof IPowerReceptor
-                    || xTile instanceof IPowerEmitter) {
-                ns_posZ += 0.5F;
-                ns_scaleZ = 2F;
-            }
-        }
-
-        beforeRender(MODE_NS, d0, d1, ns_posZ, 0.5F, 0.5F, 0.5F, 0.5F, 0.5F, ns_scaleZ);
-        beforeRender(MODE_EW, ew_posX, d1, d2, 0.5F, 0.5F, 0.5F, ew_scaleX, 0.5F, 0.5F);
-        beforeRender(MODE_TB, d0, tb_posY, d2, 0.5F, 0.5F, 0.5F, 0.5F, tb_scaleY, 0.5F);
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
-    public void beforeRender(int mode, double posX, double posY, double posZ, float posX_mod, float posY_mod, float posZ_mod, float scaleX, float scaleY, float scaleZ)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
     {
-        if(mode == MODE_NS)
-        {
-            GL11.glPushMatrix();
-            GL11.glTranslatef((float)posX + posX_mod, (float)posY + posY_mod, (float)posZ + posZ_mod);
-            GL11.glScalef(scaleX, scaleY, scaleZ);
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png"));
-            this.render(MODE_NS);
-            GL11.glPopMatrix();
-        }
-        else if(mode == MODE_EW)
-        {
-            GL11.glPushMatrix();
-            GL11.glTranslatef((float)posX + 0.5F, (float)posY + 0.5F, (float)posZ + 0.5F);
-            GL11.glScalef(scaleX, scaleY, scaleZ);
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png"));
-            this.render(MODE_EW);
-            GL11.glPopMatrix();
-        }
-        else if(mode == MODE_TB)
-        {
-            GL11.glPushMatrix();
-            GL11.glTranslatef((float)posX + 0.5F, (float)posY + 0.5F, (float)posZ + 0.5F);
-            GL11.glScalef(scaleX, scaleY, scaleZ);
-            FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png"));
-            this.render(MODE_TB);
-            GL11.glPopMatrix();
-        }
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
     }
 }

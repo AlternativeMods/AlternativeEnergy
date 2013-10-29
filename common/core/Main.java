@@ -22,6 +22,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
 import proxy.CommonProxy;
 import tile.TileEntityPowerBox;
@@ -195,5 +196,51 @@ public class Main {
         findWrenchIds();
 
         //addRecipes();
+    }
+
+    private static String[] invalidTiles_Classes = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};
+
+    private static String[] validTiles_Interfaces = {"IEnergySink", "IEnergyStorage", "IEnergySource", "IPowerReceptor", "IPowerEmitter"};
+    private static String[] validTiles_Superclasses = {"TileEntityElectricBlock", "TileEntityCompactSolar", "TileEntityBaseGenerator", "TileEntityTransformer", "TileEntityStandardMachine"};
+    private static String[] validTiles_Classes = {"TileEntityPowerCable", "TileEntityCompactSolar", "TileCapacitorBank"};
+    public static boolean isInvalidPowerTile(TileEntity tile) {
+        Class iClass = tile.getClass();
+
+        for(String cClass : invalidTiles_Classes) {
+            if(iClass.getSimpleName().equalsIgnoreCase(cClass))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean isValidPowerTile(TileEntity tile) {
+
+        Class iClass = tile.getClass();
+
+        for(String cClass : invalidTiles_Classes) {
+            if(iClass.getSimpleName().equalsIgnoreCase(cClass))
+                return false;
+        }
+        //---------------------------------------------------------------------------
+
+        for(String cClass : validTiles_Classes) {
+            if(iClass.getSimpleName().equalsIgnoreCase(cClass))
+                return true;
+        }
+
+        Class superClass = iClass.getSuperclass();
+        for(String sClass : validTiles_Superclasses) {
+            if(superClass.getSimpleName().equalsIgnoreCase(sClass))
+                return true;
+        }
+
+        Class[] interfaces = iClass.getInterfaces();
+        for(Class xInterface : interfaces) {
+            for(String iName : validTiles_Interfaces) {
+                if(xInterface.getSimpleName().equalsIgnoreCase(iName))
+                    return true;
+            }
+        }
+        return false;
     }
 }

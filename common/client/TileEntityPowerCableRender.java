@@ -1,8 +1,10 @@
 package client;
 
+import core.Main;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import tile.TileEntityPowerCable;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Author: Lordmau5
@@ -12,11 +14,24 @@ import tile.TileEntityPowerCable;
  * however, not to publish it without my permission.
  */
 public class TileEntityPowerCableRender extends TileEntitySpecialRenderer {
-    private ModelPowerCable modelPowerCable = new ModelPowerCable();
+    private ModelPowerCable modelPowerCable;
+    private static final ResourceLocation texture = new ResourceLocation(Main.modid.toLowerCase(), "textures/blocks/powerCable.png");
+
+    public TileEntityPowerCableRender() {
+        this.modelPowerCable = new ModelPowerCable();
+    }
 
     @Override
     public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f)
     {
-        modelPowerCable.render((TileEntityPowerCable)tileentity, d0, d1, d2);
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float) d0 + 0.5F, (float) d1 + 1.5F, (float) d2 + 0.5F);
+        bindTexture(texture);
+
+        GL11.glPushMatrix();
+        GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+        this.modelPowerCable.render(tileentity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        GL11.glPopMatrix();
+        GL11.glPopMatrix();
     }
 }

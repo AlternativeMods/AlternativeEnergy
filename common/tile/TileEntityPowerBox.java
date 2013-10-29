@@ -625,7 +625,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             if(conSides[i] != false) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable)) {
+                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable) && !Main.isInvalidPowerTile(tmptile)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
@@ -657,7 +657,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     @Optional.Method(modid = "BuildCraft|Transport")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
-        if(!outputMode[side.ordinal()].equalsIgnoreCase("disabled"))
+        TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
+        if(!outputMode[side.ordinal()].equalsIgnoreCase("disabled") && tmpTile != null && !Main.isInvalidPowerTile(tmpTile))
             return getPowerProvider().getPowerReceiver();
         return null;
     }

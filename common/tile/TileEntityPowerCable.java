@@ -3,7 +3,6 @@ package tile;
 import buildcraft.api.power.IPowerEmitter;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
-import buildcraft.api.transport.IPipeTile;
 import buildcraft.core.IMachine;
 import core.EnergyNetwork;
 import core.Main;
@@ -30,10 +29,10 @@ import net.minecraftforge.common.MinecraftForge;
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Transport"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Transport")})
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Transport"),
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Transport")})
 
-public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor, IPowerEmitter {
+public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerEmitter, IPowerReceptor {
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
@@ -220,11 +219,14 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                             int toDrain = (int) Ratios.EU.conversion * 4;
                             if(network.getNetworkPower() < Ratios.EU.conversion * 4)
                                 toDrain = network.getNetworkPower();
-                            sink.injectEnergyUnits(dr.getOpposite(), toDrain * Ratios.EU.conversion);
-                            //System.out.println(network.networkPower + " BEFORE");
-                            network.drainPower((int) Math.ceil(toDrain));
-                            //network.drainPower((int) Math.ceil(Ratios.EU.conversion / toDrain));
-                            //System.out.println(network.networkPower + " AFTER");
+                            if(sink.getMaxSafeInput() > toDrain)
+                                toDrain = (int) Math.floor(sink.getMaxSafeInput() / 5);
+                            if(network.getNetworkPower() < toDrain)
+                                toDrain = network.getNetworkPower();
+                            toDrain -= sink.injectEnergyUnits(dr.getOpposite(), toDrain * Ratios.EU.conversion);
+                            if(toDrain < 0)
+                                toDrain = 0;
+                            network.drainPower(toDrain);
                         }
                     }
                 }
@@ -263,38 +265,12 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     //------------------------------------------------
 
-    //-- IEnergySource
-
-    /*@Optional.Method(modid = "IC2")
-    public double getOfferedEnergy() {
-        if(network.getNetworkPower() > 0) {
-            if(getOutput() > network.getNetworkPower())
-                return network.getNetworkPower();
-            else
-                return getOutput();
-        }
-        return 0;
-    }
-
-    @Optional.Method(modid = "IC2")
-    public void drawEnergy(double amount) {
-        //network.drainPower((int) Math.ceil(amount / Ratios.EU.conversion));
-    }
-
-    @Optional.Method(modid = "IC2")
-    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
-        if(receiver instanceof TileEntityPowerCable)
-            return false;
-        return false;
-    } */
-
-    //------------------------------------------------
-
     //-- BC Stuffy
 
     public void convertBC() {
         if(!Main.BCSupplied)
             return;
+
         if(convHandler == null)
             getPowerProvider();
         if(convHandler.getEnergyStored() <= 0)
@@ -302,12 +278,23 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         if(convHandler.getEnergyStored() < Ratios.MJ.conversion)
             return;
 
-        network.addPower((int) Math.ceil(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+        network.addPower((int) Math.floor(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+    }
+
+    public boolean checkForMachine(TileEntity tmpTile) {
+        if(!Main.BCSupplied)
+            return false;
+
+        if(tmpTile instanceof IMachine && !((IMachine)tmpTile).isActive())
+            return true;
+
+        return false;
     }
 
     public void tryOutputtingEnergy() {
         if(!Main.BCSupplied)
             return;
+
         if(network.networkPower <= Ratios.MJ.conversion)
             return;
 
@@ -316,9 +303,9 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         for(int i=0; i<6; i++) {
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
             if(tmpTile != null) {
-                if(!(tmpTile instanceof IPipeTile) && !(tmpTile instanceof TileEntityPowerCable)) {
+                if(!Main.isInvalidPowerTile(tmpTile) && !(tmpTile instanceof TileEntityPowerCable)) {
                     if(tmpTile instanceof IPowerReceptor) {
-                        if(tmpTile instanceof IMachine && !((IMachine)tmpTile).isActive())
+                        if(checkForMachine(tmpTile))
                             continue;
                         connected += 1;
                         conSides[i] = true;
@@ -335,7 +322,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             if(conSides[i] != false) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof IPipeTile) && !(tmptile instanceof TileEntityPowerCable)) {
+                if(tmptile instanceof IPowerReceptor && !Main.isInvalidPowerTile(tmptile) && !(tmptile instanceof TileEntityPowerCable)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
@@ -344,8 +331,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                         if(neededPower > equalPower)
                             neededPower = equalPower;
 
-                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, (float) Math.floor(neededPower / Ratios.MJ.conversion), ForgeDirection.getOrientation(i).getOpposite());
-                        drainPower += (equalPower - restEnergy);
+                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, neededPower, ForgeDirection.getOrientation(i).getOpposite());
+                        drainPower += equalPower + restEnergy;
                     }
                 }
             }
@@ -368,7 +355,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     @Optional.Method(modid = "BuildCraft|Transport")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-        if(tmpTile != null && !(tmpTile instanceof IPipeTile))
+        if(tmpTile != null && !Main.isInvalidPowerTile(tmpTile))
             return getPowerProvider().getPowerReceiver();
         return null;
     }
