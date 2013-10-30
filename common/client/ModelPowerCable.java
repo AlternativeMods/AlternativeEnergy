@@ -29,88 +29,85 @@ public class ModelPowerCable extends ModelBase {
     }
 
     public void initModels() {
+        textureWidth = 128;
+        textureHeight = 64;
+
         base = new ModelRenderer(this, 0, 0);
         base.addBox(0F, 0F, 0F, 10, 10, 10);
         base.setRotationPoint(-5F, 27F, -5F);
-        base.setTextureSize(128, 64);
+        base.setTextureSize(64, 32);
         setRotation(base, 0F, 0F, 0F);
 
+        //-----------------------------------------------------------------
+
         toNorth[0] = new ModelRenderer(this, 0, 32);
-        toNorth[0].addBox(0F, 0F, 0F, 5, 5, 5);
-        toNorth[0].setRotationPoint(-2.5F, 13.5F, -7.5F);
-        toNorth[0].setTextureSize(128, 64);
-        toNorth[0].mirror = true;
+        toNorth[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toNorth[0].setRotationPoint(-5F, 27F, -15F);
+        toNorth[0].setTextureSize(64, 32);
         setRotation(toNorth[0], 0F, 0F, 0F);
-        /*toNorth[1] = new ModelRenderer(this, 0, 0);
-        toNorth[1].addBox(0F, 0F, 0F, 5, 5, 1);
-        toNorth[1].setRotationPoint(-2.5F, 13.5F, -8F);
-        toNorth[1].setTextureSize(64, 64);
-        toNorth[1].mirror = true;
-        setRotation(toNorth[1], 0F, 0F, 0F);*/
+        toNorth[1] = new ModelRenderer(this, 0, 32);
+        toNorth[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toNorth[1].setRotationPoint(-5F, 27F, -16F);
+        toNorth[1].setTextureSize(64, 32);
+        setRotation(toNorth[1], 0F, 0F, 0F);
 
         toSouth[0] = new ModelRenderer(this, 0, 32);
-        toSouth[0].addBox(0F, 0F, 0F, 5, 5, 5);
-        toSouth[0].setRotationPoint(-2.5F, 13.5F, 3F);
-        toSouth[0].setTextureSize(128, 64);
-        toSouth[0].mirror = true;
+        toSouth[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toSouth[0].setRotationPoint(-5F, 27F, 5F);
+        toSouth[0].setTextureSize(64, 32);
         setRotation(toSouth[0], 0F, 0F, 0F);
-        /*toSouth[1] = new ModelRenderer(this, 0, 0);
-        toSouth[1].addBox(0F, 0F, 0F, 5, 5, 1);
-        toSouth[1].setRotationPoint(-2.5F, 13.5F, 2.3F);
-        toSouth[1].setTextureSize(64, 64);
-        toSouth[1].mirror = true;
-        setRotation(toSouth[1], 0F, 0F, 0F);*/
+        toSouth[1] = new ModelRenderer(this, 0, 32);
+        toSouth[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toSouth[1].setRotationPoint(-5F, 27F, 6F);
+        toSouth[1].setTextureSize(64, 32);
+        setRotation(toSouth[1], 0F, 0F, 0F);
 
-        toEast[0] = new ModelRenderer(this, 0, 0);
-        toEast[0].addBox(0F, 0F, 0F, 5, 5, 5);
-        toEast[0].setRotationPoint(-7.5F, 13.5F, -2.5F);
-        toEast[0].setTextureSize(128, 64);
-        toEast[0].mirror = true;
+        //-----------------------------------------------------------------
+
+        toEast[0] = new ModelRenderer(this, 64, 0);
+        toEast[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toEast[0].setRotationPoint(-15F, 27F, -5F);
+        toEast[0].setTextureSize(64, 32);
         setRotation(toEast[0], 0F, 0F, 0F);
-        toEast[1] = new ModelRenderer(this, 0, 0);
-        toEast[1].addBox(0F, 0F, 0F, 1, 5, 5);
-        toEast[1].setRotationPoint(-8F, 13.5F, -2.5F);
-        toEast[1].setTextureSize(128, 64);
-        toEast[1].mirror = true;
+        toEast[1] = new ModelRenderer(this, 64, 0);
+        toEast[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toEast[1].setRotationPoint(-16F, 27F, -5F);
+        toEast[1].setTextureSize(64, 32);
         setRotation(toEast[1], 0F, 0F, 0F);
 
-        toWest[0] = new ModelRenderer(this, 0, 0);
-        toWest[0].addBox(0F, 0F, 0F, 5, 5, 5);
-        toWest[0].setRotationPoint(3F, 13.5F, -2.5F);
-        toWest[0].setTextureSize(128, 64);
-        toWest[0].mirror = true;
+        toWest[0] = new ModelRenderer(this, 64, 0);
+        toWest[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toWest[0].setRotationPoint(6F, 27F, -5F);
+        toWest[0].setTextureSize(64, 32);
         setRotation(toWest[0], 0F, 0F, 0F);
-        toWest[1] = new ModelRenderer(this, 0, 0);
-        toWest[1].addBox(0F, 0F, 0F, 1, 5, 5);
-        toWest[1].setRotationPoint(2.3F, 13.5F, -2.5F);
-        toWest[1].setTextureSize(128, 64);
-        toWest[1].mirror = true;
+        toWest[1] = new ModelRenderer(this, 64, 0);
+        toWest[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toWest[1].setRotationPoint(5F, 27F, -5F);
+        toWest[1].setTextureSize(64, 32);
         setRotation(toWest[1], 0F, 0F, 0F);
 
-        toTop[0] = new ModelRenderer(this, 0, 0);
-        toTop[0].addBox(0F, 0F, 0F, 5, 5, 5);
-        toTop[0].setRotationPoint(-2.5F, 8.5F, -2.5F);
-        toTop[0].setTextureSize(128, 64);
-        toTop[0].mirror = true;
+        //-----------------------------------------------------------------
+
+        toTop[0] = new ModelRenderer(this, 64, 32);
+        toTop[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toTop[0].setRotationPoint(-5F, 17F, -5F);
+        toTop[0].setTextureSize(64, 32);
         setRotation(toTop[0], 0F, 0F, 0F);
-        toTop[1] = new ModelRenderer(this, 0, 0);
-        toTop[1].addBox(0F, 0F, 0F, 5, 1, 5);
-        toTop[1].setRotationPoint(-2.5F, 8F, -2.5F);
-        toTop[1].setTextureSize(128, 64);
-        toTop[1].mirror = true;
+        toTop[1] = new ModelRenderer(this, 64, 32);
+        toTop[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toTop[1].setRotationPoint(-5F, 16F, -5F);
+        toTop[1].setTextureSize(64, 32);
         setRotation(toTop[1], 0F, 0F, 0F);
 
-        toBottom[0] = new ModelRenderer(this, 0, 0);
-        toBottom[0].addBox(0F, 0F, 0F, 5, 5, 5);
-        toBottom[0].setRotationPoint(-2.5F, 19F, -2.5F);
+        toBottom[0] = new ModelRenderer(this, 64, 32);
+        toBottom[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toBottom[0].setRotationPoint(-5F, 37F, -5F);
         toBottom[0].setTextureSize(128, 64);
-        toBottom[0].mirror = true;
         setRotation(toBottom[0], 0F, 0F, 0F);
-        toBottom[1] = new ModelRenderer(this, 0, 0);
-        toBottom[1].addBox(0F, 0F, 0F, 5, 1, 5);
-        toBottom[1].setRotationPoint(-2.5F, 18.5F, -2.5F);
-        toBottom[1].setTextureSize(128, 64);
-        toBottom[1].mirror = true;
+        toBottom[1] = new ModelRenderer(this, 64, 32);
+        toBottom[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toBottom[1].setRotationPoint(-5F, 38F, -5F);
+        toBottom[1].setTextureSize(64, 32);
         setRotation(toBottom[1], 0F, 0F, 0F);
 
     }
@@ -125,29 +122,23 @@ public class ModelPowerCable extends ModelBase {
             TileEntity tmpTile = tile.worldObj.getBlockTileEntity(tile.xCoord + dr.offsetX, tile.yCoord + dr.offsetY, tile.zCoord + dr.offsetZ);
             if(tmpTile != null && Main.isValidPowerTile(tmpTile)) {
                 if(dr == ForgeDirection.UP)
-                    for(ModelRenderer rendT : toTop)
-                        if(rendT != null)
-                            rendT.render(f5);
+                    for(ModelRenderer rend : toTop)
+                        if(rend != null) rend.render(f5); else continue;
                 else if(dr == ForgeDirection.DOWN)
-                    for(ModelRenderer rendB : toBottom)
-                        if(rendB != null)
-                            rendB.render(f5);
+                    for(ModelRenderer rend : toBottom)
+                        if(rend != null) rend.render(f5); else continue;
                 else if(dr == ForgeDirection.NORTH)
-                    for(ModelRenderer rendN : toNorth)
-                        if(rendN != null)
-                            rendN.render(f5);
+                    for(ModelRenderer rend : toNorth)
+                        if(rend != null) rend.render(f5); else continue;
                 else if(dr == ForgeDirection.SOUTH)
-                    for(ModelRenderer rendS : toSouth)
-                        if(rendS != null)
-                            rendS.render(f5);
+                    for(ModelRenderer rend : toSouth)
+                        if(rend != null) rend.render(f5); else continue;
                 else if(dr == ForgeDirection.EAST)
-                    for(ModelRenderer rendE : toEast)
-                        if(rendE != null)
-                            rendE.render(f5);
+                    for(ModelRenderer rend : toEast)
+                        if(rend != null) rend.render(f5); else continue;
                 else if(dr == ForgeDirection.WEST)
-                    for(ModelRenderer rendW : toWest)
-                        if(rendW != null)
-                            rendW.render(f5);
+                    for(ModelRenderer rend : toWest)
+                        if(rend != null) rend.render(f5); else continue;
             }
         }
     }

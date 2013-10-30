@@ -1,6 +1,7 @@
 package client;
 
 import core.Main;
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +29,8 @@ public class TileEntityPowerCableRender extends TileEntitySpecialRenderer {
         GL11.glTranslatef((float) d0 + 0.5F, (float) d1 + 1.5F, (float) d2 + 0.5F);
         //GL11.glTranslatef((float) d0, (float) d1, (float) d2);
         GL11.glScalef(0.5F, 0.5F, 0.5F);
-        bindTexture(texture);
+        //bindTexture(texture);
+        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture);
 
         GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
         //-0.1F;
