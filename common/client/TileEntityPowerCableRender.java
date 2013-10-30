@@ -26,12 +26,13 @@ public class TileEntityPowerCableRender extends TileEntitySpecialRenderer {
     {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) d0 + 0.5F, (float) d1 + 1.5F, (float) d2 + 0.5F);
+        //GL11.glTranslatef((float) d0, (float) d1, (float) d2);
+        GL11.glScalef(0.5F, 0.5F, 0.5F);
         bindTexture(texture);
 
-        GL11.glPushMatrix();
         GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-        this.modelPowerCable.render(tileentity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        GL11.glPopMatrix();
+        //-0.1F;
+        this.modelPowerCable.render(tileentity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
         GL11.glPopMatrix();
     }
 }
