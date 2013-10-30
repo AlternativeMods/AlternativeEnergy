@@ -32,13 +32,13 @@ public class ModelPowerCable extends ModelBase {
         base = new ModelRenderer(this, 0, 0);
         base.addBox(0F, 0F, 0F, 10, 10, 10);
         base.setRotationPoint(-5F, 27F, -5F);
-        base.setTextureSize(64, 32);
+        base.setTextureSize(128, 64);
         setRotation(base, 0F, 0F, 0F);
 
         toNorth[0] = new ModelRenderer(this, 0, 32);
         toNorth[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toNorth[0].setRotationPoint(-2.5F, 13.5F, -7.5F);
-        toNorth[0].setTextureSize(64, 32);
+        toNorth[0].setTextureSize(128, 64);
         toNorth[0].mirror = true;
         setRotation(toNorth[0], 0F, 0F, 0F);
         /*toNorth[1] = new ModelRenderer(this, 0, 0);
@@ -51,7 +51,7 @@ public class ModelPowerCable extends ModelBase {
         toSouth[0] = new ModelRenderer(this, 0, 32);
         toSouth[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toSouth[0].setRotationPoint(-2.5F, 13.5F, 3F);
-        toSouth[0].setTextureSize(64, 32);
+        toSouth[0].setTextureSize(128, 64);
         toSouth[0].mirror = true;
         setRotation(toSouth[0], 0F, 0F, 0F);
         /*toSouth[1] = new ModelRenderer(this, 0, 0);
@@ -64,52 +64,52 @@ public class ModelPowerCable extends ModelBase {
         toEast[0] = new ModelRenderer(this, 0, 0);
         toEast[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toEast[0].setRotationPoint(-7.5F, 13.5F, -2.5F);
-        toEast[0].setTextureSize(64, 64);
+        toEast[0].setTextureSize(128, 64);
         toEast[0].mirror = true;
         setRotation(toEast[0], 0F, 0F, 0F);
         toEast[1] = new ModelRenderer(this, 0, 0);
         toEast[1].addBox(0F, 0F, 0F, 1, 5, 5);
         toEast[1].setRotationPoint(-8F, 13.5F, -2.5F);
-        toEast[1].setTextureSize(64, 64);
+        toEast[1].setTextureSize(128, 64);
         toEast[1].mirror = true;
         setRotation(toEast[1], 0F, 0F, 0F);
 
         toWest[0] = new ModelRenderer(this, 0, 0);
         toWest[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toWest[0].setRotationPoint(3F, 13.5F, -2.5F);
-        toWest[0].setTextureSize(64, 64);
+        toWest[0].setTextureSize(128, 64);
         toWest[0].mirror = true;
         setRotation(toWest[0], 0F, 0F, 0F);
         toWest[1] = new ModelRenderer(this, 0, 0);
         toWest[1].addBox(0F, 0F, 0F, 1, 5, 5);
         toWest[1].setRotationPoint(2.3F, 13.5F, -2.5F);
-        toWest[1].setTextureSize(64, 64);
+        toWest[1].setTextureSize(128, 64);
         toWest[1].mirror = true;
         setRotation(toWest[1], 0F, 0F, 0F);
 
         toTop[0] = new ModelRenderer(this, 0, 0);
         toTop[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toTop[0].setRotationPoint(-2.5F, 8.5F, -2.5F);
-        toTop[0].setTextureSize(64, 64);
+        toTop[0].setTextureSize(128, 64);
         toTop[0].mirror = true;
         setRotation(toTop[0], 0F, 0F, 0F);
         toTop[1] = new ModelRenderer(this, 0, 0);
         toTop[1].addBox(0F, 0F, 0F, 5, 1, 5);
         toTop[1].setRotationPoint(-2.5F, 8F, -2.5F);
-        toTop[1].setTextureSize(64, 64);
+        toTop[1].setTextureSize(128, 64);
         toTop[1].mirror = true;
         setRotation(toTop[1], 0F, 0F, 0F);
 
         toBottom[0] = new ModelRenderer(this, 0, 0);
         toBottom[0].addBox(0F, 0F, 0F, 5, 5, 5);
         toBottom[0].setRotationPoint(-2.5F, 19F, -2.5F);
-        toBottom[0].setTextureSize(64, 64);
+        toBottom[0].setTextureSize(128, 64);
         toBottom[0].mirror = true;
         setRotation(toBottom[0], 0F, 0F, 0F);
         toBottom[1] = new ModelRenderer(this, 0, 0);
         toBottom[1].addBox(0F, 0F, 0F, 5, 1, 5);
         toBottom[1].setRotationPoint(-2.5F, 18.5F, -2.5F);
-        toBottom[1].setTextureSize(64, 64);
+        toBottom[1].setTextureSize(128, 64);
         toBottom[1].mirror = true;
         setRotation(toBottom[1], 0F, 0F, 0F);
 
