@@ -29,85 +29,89 @@ public class ModelPowerCable extends ModelBase {
     }
 
     public void initModels() {
-        textureWidth = 128;
-        textureHeight = 64;
+        textureWidth = 256;
+        textureHeight = 128;
+
+        int squareSize = 20;
+        int textureWidth = 128;
+        int textureHeight = 64;
 
         base = new ModelRenderer(this, 0, 0);
-        base.addBox(0F, 0F, 0F, 10, 10, 10);
+        base.addBox(0F, 0F, 0F, 20, 20, 20);
         base.setRotationPoint(-5F, 27F, -5F);
-        base.setTextureSize(64, 32);
+        base.setTextureSize(textureWidth, textureHeight);
         setRotation(base, 0F, 0F, 0F);
 
         //-----------------------------------------------------------------
 
-        toNorth[0] = new ModelRenderer(this, 0, 32);
-        toNorth[0].addBox(0F, 0F, 0F, 10, 10, 10);
-        toNorth[0].setRotationPoint(-5F, 27F, -15F);
-        toNorth[0].setTextureSize(64, 32);
+        toNorth[0] = new ModelRenderer(this, 0, 64);
+        toNorth[0].addBox(0F, 0F, 0F, squareSize, squareSize, 25);
+        toNorth[0].setRotationPoint(-5F, 27F, -25F);
+        toNorth[0].setTextureSize(textureWidth, textureHeight);
         setRotation(toNorth[0], 0F, 0F, 0F);
-        toNorth[1] = new ModelRenderer(this, 0, 32);
-        toNorth[1].addBox(0F, 0F, 0F, 10, 10, 10);
-        toNorth[1].setRotationPoint(-5F, 27F, -16F);
-        toNorth[1].setTextureSize(64, 32);
-        setRotation(toNorth[1], 0F, 0F, 0F);
+        /*toNorth[1] = new ModelRenderer(this, 0, 64);
+        toNorth[1].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
+        toNorth[1].setRotationPoint(-5F, 27F, -27F);
+        toNorth[1].setTextureSize(textureWidth, textureHeight);
+        setRotation(toNorth[1], 0F, 0F, 0F);   */
 
-        toSouth[0] = new ModelRenderer(this, 0, 32);
-        toSouth[0].addBox(0F, 0F, 0F, 10, 10, 10);
-        toSouth[0].setRotationPoint(-5F, 27F, 5F);
-        toSouth[0].setTextureSize(64, 32);
+        toSouth[0] = new ModelRenderer(this, 0, 64);
+        toSouth[0].addBox(0F, 0F, 0F, squareSize, squareSize, 25);
+        toSouth[0].setRotationPoint(-5F, 27F, 15F);
+        toSouth[0].setTextureSize(textureWidth, textureHeight);
         setRotation(toSouth[0], 0F, 0F, 0F);
-        toSouth[1] = new ModelRenderer(this, 0, 32);
-        toSouth[1].addBox(0F, 0F, 0F, 10, 10, 10);
-        toSouth[1].setRotationPoint(-5F, 27F, 6F);
-        toSouth[1].setTextureSize(64, 32);
-        setRotation(toSouth[1], 0F, 0F, 0F);
+        /*toSouth[1] = new ModelRenderer(this, 0, 64);
+        toSouth[1].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
+        toSouth[1].setRotationPoint(-5F, 27F, 17F);
+        toSouth[1].setTextureSize(textureWidth, textureHeight);
+        setRotation(toSouth[1], 0F, 0F, 0F); */
 
         //-----------------------------------------------------------------
 
-        toEast[0] = new ModelRenderer(this, 64, 0);
-        toEast[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toEast[0] = new ModelRenderer(this, 128, 0);
+        toEast[0].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toEast[0].setRotationPoint(-15F, 27F, -5F);
-        toEast[0].setTextureSize(64, 32);
+        toEast[0].setTextureSize(textureWidth, textureHeight);
         setRotation(toEast[0], 0F, 0F, 0F);
-        toEast[1] = new ModelRenderer(this, 64, 0);
-        toEast[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toEast[1] = new ModelRenderer(this, 128, 0);
+        toEast[1].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toEast[1].setRotationPoint(-16F, 27F, -5F);
-        toEast[1].setTextureSize(64, 32);
+        toEast[1].setTextureSize(textureWidth, textureHeight);
         setRotation(toEast[1], 0F, 0F, 0F);
 
-        toWest[0] = new ModelRenderer(this, 64, 0);
-        toWest[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toWest[0] = new ModelRenderer(this, 128, 0);
+        toWest[0].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toWest[0].setRotationPoint(6F, 27F, -5F);
-        toWest[0].setTextureSize(64, 32);
+        toWest[0].setTextureSize(textureWidth, textureHeight);
         setRotation(toWest[0], 0F, 0F, 0F);
-        toWest[1] = new ModelRenderer(this, 64, 0);
-        toWest[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toWest[1] = new ModelRenderer(this, 128, 0);
+        toWest[1].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toWest[1].setRotationPoint(5F, 27F, -5F);
-        toWest[1].setTextureSize(64, 32);
+        toWest[1].setTextureSize(textureWidth, textureHeight);
         setRotation(toWest[1], 0F, 0F, 0F);
 
         //-----------------------------------------------------------------
 
-        toTop[0] = new ModelRenderer(this, 64, 32);
-        toTop[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toTop[0] = new ModelRenderer(this, 128, 64);
+        toTop[0].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toTop[0].setRotationPoint(-5F, 17F, -5F);
-        toTop[0].setTextureSize(64, 32);
+        toTop[0].setTextureSize(textureWidth, textureHeight);
         setRotation(toTop[0], 0F, 0F, 0F);
-        toTop[1] = new ModelRenderer(this, 64, 32);
-        toTop[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toTop[1] = new ModelRenderer(this, 128, 64);
+        toTop[1].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toTop[1].setRotationPoint(-5F, 16F, -5F);
-        toTop[1].setTextureSize(64, 32);
+        toTop[1].setTextureSize(textureWidth, textureHeight);
         setRotation(toTop[1], 0F, 0F, 0F);
 
-        toBottom[0] = new ModelRenderer(this, 64, 32);
-        toBottom[0].addBox(0F, 0F, 0F, 10, 10, 10);
+        toBottom[0] = new ModelRenderer(this, 128, 64);
+        toBottom[0].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toBottom[0].setRotationPoint(-5F, 37F, -5F);
         toBottom[0].setTextureSize(128, 64);
         setRotation(toBottom[0], 0F, 0F, 0F);
-        toBottom[1] = new ModelRenderer(this, 64, 32);
-        toBottom[1].addBox(0F, 0F, 0F, 10, 10, 10);
+        toBottom[1] = new ModelRenderer(this, 128, 64);
+        toBottom[1].addBox(0F, 0F, 0F, squareSize, squareSize, squareSize);
         toBottom[1].setRotationPoint(-5F, 38F, -5F);
-        toBottom[1].setTextureSize(64, 32);
+        toBottom[1].setTextureSize(textureWidth, textureHeight);
         setRotation(toBottom[1], 0F, 0F, 0F);
 
     }

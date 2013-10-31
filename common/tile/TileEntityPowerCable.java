@@ -67,17 +67,15 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             ForgeDirection dr = ForgeDirection.getOrientation(i);
             TileEntity tile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
-            if(tile != null && tile instanceof TileEntityPowerCable) {
-                network = network.mergeNetworks(((TileEntityPowerCable)tile).network, network);
+            if(tile != null) {
+                if(tile instanceof TileEntityPowerCable) {
+                    network = network.mergeNetworks(((TileEntityPowerCable)tile).network, network);
+                }
+                else if(Main.isValidPowerTile(tile)) {
+                    getEnergyNetwork().addInput(this, tile);
+                }
             }
         }
-    }
-
-    public void updateENet() {
-        if(!Main.ICSupplied)
-            return;
-
-        hasToUpdateENet = true;
     }
 
     public void updateEntity() {
@@ -87,11 +85,6 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         if(initialized == false) {
             onNeighborChange();
             initialized = true;
-        }
-
-        if(hasToUpdateENet) {
-            unloadTile();
-            loadTile();
         }
 
         loadTile();
@@ -258,7 +251,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Optional.Method(modid = "IC2")
     public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-        if(emitter instanceof TileEntityPowerCable || emitter instanceof IEnergyConductor)
+        if(emitter instanceof TileEntityPowerCable || emitter instanceof IEnergyConductor || getEnergyNetwork().isAcceptor(this, emitter))
             return false;
         return true;
     }

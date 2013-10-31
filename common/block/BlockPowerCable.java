@@ -75,15 +75,6 @@ public class BlockPowerCable extends BlockContainer {
     }
 
     @Override
-    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
-        if(par1World == null || par1World.isRemote)
-            return;
-
-        TileEntityPowerCable meCable = (TileEntityPowerCable) par1World.getBlockTileEntity(par2, par3, par4);
-        meCable.updateENet();
-    }
-
-    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
         if(world.isRemote)
             return;
@@ -105,6 +96,23 @@ public class BlockPowerCable extends BlockContainer {
             tile.getEnergyNetwork().recalculateNetworks(tile);
 
         return world.setBlockToAir(x, y, z);
+    }
+
+    @Override
+    public void onNeighborTileChange(World world, int x, int y, int z, int tileX, int tileY, int tileZ)
+    {
+        if(world.isRemote)
+            return;
+
+        TileEntityPowerCable me = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
+        if(me == null)
+            return;
+
+        TileEntity xTile = world.getBlockTileEntity(tileX, tileY, tileZ);
+        if(xTile == null || Main.isInvalidPowerTile(xTile))
+            me.getEnergyNetwork().removeInput(me, xTile);
+        else
+            me.getEnergyNetwork().addInput(me, xTile);
     }
 
     @Override
@@ -137,9 +145,7 @@ public class BlockPowerCable extends BlockContainer {
 
     public void setCableBoundingBox(IBlockAccess bAccess, int x, int y, int z)
     {
-        TileEntity xTile = null;
-        TileEntityPowerCable thisTile = (TileEntityPowerCable) bAccess.getBlockTileEntity(x, y, z);
-
+        TileEntity xTile;
         float minX = 0.335F;
         float minY = 0.335F;
         float minZ = 0.335F;
@@ -147,8 +153,6 @@ public class BlockPowerCable extends BlockContainer {
         float maxX = 0.665F;
         float maxY = 0.665F;
         float maxZ = 0.665F;
-
-        xTile = bAccess.getBlockTileEntity(x - 1, y, z);
 
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
         if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))

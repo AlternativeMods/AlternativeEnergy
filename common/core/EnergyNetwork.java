@@ -1,9 +1,12 @@
 package core;
 
+import net.minecraft.tileentity.TileEntity;
 import tile.TileEntityPowerCable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Lordmau5
@@ -14,6 +17,7 @@ import java.util.List;
  */
 public class EnergyNetwork {
     public List<TileEntityPowerCable> cables = new ArrayList<TileEntityPowerCable>();
+    public Map<TileEntity, TileEntityPowerCable> inputs = new HashMap<TileEntity, TileEntityPowerCable>();
 
     public int networkPower;
     public int maxNetworkPower = 5000;
@@ -30,6 +34,26 @@ public class EnergyNetwork {
         if(cables.contains(cable))
             return;
         cables.add(cable);
+    }
+
+    public void addInput(TileEntityPowerCable cable, TileEntity input) {
+        if(inputs.containsKey(input))
+            return;
+        inputs.put(input, cable);
+    }
+
+    public void removeInput(TileEntityPowerCable cable, TileEntity input) {
+        if(!inputs.containsKey(input))
+            return;
+        inputs.put(input, cable);
+    }
+
+    public boolean isAcceptor(TileEntityPowerCable cable, TileEntity input) {
+        if(!inputs.containsKey(input))
+            return false;
+        if(inputs.get(cable) == input)
+            return true;
+        return false;
     }
 
     public void recalculateNetworks(TileEntityPowerCable exclude) {
