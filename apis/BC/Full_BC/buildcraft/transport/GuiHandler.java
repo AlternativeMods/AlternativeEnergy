@@ -49,8 +49,7 @@ public class GuiHandler implements IGuiHandler {
 					return new ContainerEmeraldPipe(player.inventory, (PipeItemsEmerald) pipe.pipe);
 
 				case GuiIds.GATES:
-					if (pipe.pipe.hasGate())
-						return new ContainerGateInterface(player.inventory, pipe.pipe);
+					return new ContainerGateInterface(player.inventory, pipe.pipe);
 
 				default:
 					return null;
@@ -90,8 +89,7 @@ public class GuiHandler implements IGuiHandler {
 					return new GuiEmeraldPipe(player.inventory, (PipeItemsEmerald) pipe.pipe);
 
 				case GuiIds.GATES:
-					if (pipe.pipe.hasGate())
-						return new GuiGateInterface(player.inventory, pipe.pipe);
+					return new GuiGateInterface(player.inventory, pipe.pipe);
 
 				default:
 					return null;

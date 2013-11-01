@@ -195,7 +195,10 @@ public class Main {
         //------------------------------------------------------
         //------- Power Box ------------------------------------
 
-        if(ICSupplied)
+        if(ICSupplied && BCSupplied)
+            addBCandICRecipies();
+
+        /*if(ICSupplied)
             if(BCSupplied)
                 addBCandICRecipies();
             else
@@ -204,7 +207,7 @@ public class Main {
             if(ICSupplied)
                 addBCandICRecipies();
             else
-                addBCRecipies();
+                addBCRecipies();  */
         //------------------------------------------------------
     }
 

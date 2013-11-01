@@ -43,8 +43,8 @@ import java.util.List;
 
         @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraftAPI|power"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraftAPI|power")})
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Energy"),
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
 
 public class TileEntityPowerBox extends TileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor, IPowerEmitter {
     public String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
@@ -592,7 +592,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     //-------------------------------------------------------------------------------------
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
         if(!Main.BCSupplied)
             return;
@@ -605,7 +605,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         setPowerStored(getPowerStored() + (int) Math.floor(Main.bcComp.getPowerHandler(this).useEnergy(1, Main.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
         if(!Main.BCSupplied)
             return;
@@ -639,7 +639,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
                 xPower += 50;
         }
         if(xPower > storedPower)
-            xPower = (int) storedPower;
+            xPower = storedPower;
 
         int equalPower = xPower / connected;
         if(Math.floor(equalPower) < Ratios.MJ.conversion)
@@ -668,7 +668,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         storedPower -= drainPower / Ratios.MJ.conversion;
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler getPowerProvider() {
         if(Main.bcComp.getPowerHandler(this) == null)
         {
@@ -681,7 +681,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         return Main.bcComp.getPowerHandler(this);
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
         if(!outputMode[side.ordinal()].equalsIgnoreCase("disabled") && tmpTile != null && !Main.isInvalidPowerTile(tmpTile))
@@ -689,19 +689,19 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         return null;
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public void doWork(PowerHandler workProvider) {
 
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public World getWorld() {
         return worldObj;
     }
     //---------------------------------
 
     //--- IPowerEmitter
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public boolean canEmitPowerFrom(ForgeDirection side) {
         if(outputMode[side.ordinal()].equalsIgnoreCase("output"))
             return true;

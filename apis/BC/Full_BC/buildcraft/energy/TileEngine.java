@@ -174,13 +174,8 @@ public abstract class TileEngine extends TileBuildCraft implements IPowerRecepto
 			if (!isOrientationValid())
 				switchOrientation(true);
 		}
-		
-		if (!isRedstonePowered)
-			if (energy > 1)
-				energy--;
 
 		updateHeatLevel();
-		getEnergyStage();
 		engineUpdate();
 
 		TileEntity tile = getTileBuffer(orientation).getTile();

@@ -28,8 +28,8 @@ import net.minecraftforge.common.MinecraftForge;
 @Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.Lordmau5.PowerBoxes.tile.IEnergyStorage", modid = "IC2"),
         @Optional.Interface(iface = "ic2.api.energy.Lordmau5.PowerBoxes.tile.IEnergySink", modid = "IC2"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraftAPI|power"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraftAPI|power")})
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy"),
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Energy")})
 
 public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerEmitter, IPowerReceptor {
     EnergyNetwork network;
@@ -284,7 +284,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     //-- BC Stuffy
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
         if(!Main.BCSupplied)
             return;
@@ -297,7 +297,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         network.addPower((int) Math.floor(Main.bcComp.getPowerHandler(this).useEnergy(1, Main.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public boolean checkForMachine(TileEntity tmpTile) {
         if(!Main.BCSupplied)
             return false;
@@ -308,7 +308,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         return false;
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
         if(!Main.BCSupplied)
             return;
@@ -360,7 +360,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         network.drainPower((int) Math.floor(drainPower / Ratios.MJ.conversion));
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler getPowerProvider() {
         if(Main.bcComp.getPowerHandler(this) == null)
         {
@@ -369,12 +369,11 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                 Main.bcComp.configurePowerHandler(Main.bcComp.getPowerHandler(this), 25, 500, 1337, 1000);
                 Main.bcComp.configurePerdition(Main.bcComp.getPowerHandler(this), 0, 0);
             }
-            System.out.println(Main.bcComp.getPowerHandler(this));
         }
         return Main.bcComp.getPowerHandler(this);
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
         if(tmpTile != null && Main.isValidPowerTile(tmpTile))
@@ -382,19 +381,19 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         return null;
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public void doWork(PowerHandler workProvider) {
 
     }
 
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public World getWorld() {
         return worldObj;
     }
     //---------------------------------
 
     //--- IPowerEmitter
-    @Optional.Method(modid = "BuildCraftAPI|power")
+    @Optional.Method(modid = "BuildCraft|Energy")
     public boolean canEmitPowerFrom(ForgeDirection side) {
         return true;
     }

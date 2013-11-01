@@ -59,7 +59,6 @@ public class PipeRenderState implements IClientState {
 		textureMatrix.clean();
 		facadeMatrix.clean();
 		wireMatrix.clean();
-		plugMatrix.clean();
 	}
 
 	public boolean isDirty() {
