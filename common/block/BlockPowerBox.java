@@ -120,8 +120,10 @@ public class BlockPowerBox extends BlockContainer {
             entityitem.delayBeforeCanPickup = 10;
             world.spawnEntityInWorld(entityitem);
 
+            if(Main.ICSupplied) {
             dropItemStackInWorld(world, x, y, z, pBox.chargeSlot.get());
             dropItemStackInWorld(world, x, y, z, pBox.dischargeSlot.get());
+            }
         }
 
         return world.setBlockToAir(x, y, z);

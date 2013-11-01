@@ -49,9 +49,8 @@ import java.util.List;
 public class TileEntityPowerBox extends TileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor, IPowerEmitter {
     public String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
     public boolean addedToENet;
-    public boolean hasToUpdateENet;
 
-    public float storedPower;
+    public int storedPower;
     public int maxPowers = Config.powerBox_capacity;
     public int maxOutput;
 
@@ -75,14 +74,16 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public TileEntityPowerBox() {
         capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Item, 1, 0));
         outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Item, 1, 1));
-        chargeSlot = new InvSlotCharge(this, 2);
-        dischargeSlot = new InvSlotDisCharge(this, 3);
+        if(Main.ICSupplied) {
+            chargeSlot = new InvSlotCharge(this, 2);
+            dischargeSlot = new InvSlotDisCharge(this, 3);
+        }
 
         addedToENet = false;
     }
 
     public int getPowerStored() {
-        return (int) Math.ceil(storedPower);
+        return storedPower;
     }
 
     public void setPowerStored(int power) {
@@ -90,6 +91,10 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(storedPower > maxPowers)
             storedPower = maxPowers;
         return;
+    }
+
+    public int neededPower() {
+        return maxPowers - storedPower;
     }
 
     public int getMaxPower() {
@@ -103,7 +108,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             return;
 
         outputMode[side] = var;
-        hasToUpdateENet = true;
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord));
     }
@@ -138,7 +142,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
 
-        storedPower = tag.getFloat("powerStored");
+        storedPower = tag.getInteger("powerStored");
 
         for(int i=0; i<6; i++) {
             ForgeDirection dir = ForgeDirection.getOrientation(i);
@@ -150,13 +154,15 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(tag.hasKey("outputSpeedUpgrade"))
             outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("outputSpeedUpgrade"), 1));
 
-        if(tag.hasKey("chargeSlot")) {
-            chargeSlot.put(new ItemStack(Block.stone));
-            chargeSlot.get().readFromNBT(tag.getCompoundTag("chargeSlot"));
-        }
-        if(tag.hasKey("dischargeSlot")) {
-            dischargeSlot.put(new ItemStack(Block.stone));
-            dischargeSlot.get().readFromNBT(tag.getCompoundTag("dischargeSlot"));
+        if(Main.ICSupplied) {
+            if(tag.hasKey("chargeSlot")) {
+                chargeSlot.put(new ItemStack(Block.stone));
+                chargeSlot.get().readFromNBT(tag.getCompoundTag("chargeSlot"));
+            }
+            if(tag.hasKey("dischargeSlot")) {
+                dischargeSlot.put(new ItemStack(Block.stone));
+                dischargeSlot.get().readFromNBT(tag.getCompoundTag("dischargeSlot"));
+            }
         }
 
         forceMaxPowersUpdate();
@@ -167,7 +173,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
 
-        tag.setFloat("powerStored", storedPower);
+        tag.setInteger("powerStored", storedPower);
 
         for(int i=0; i<6; i++) {
             ForgeDirection dir = ForgeDirection.getOrientation(i);
@@ -179,10 +185,12 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(outputSpeedSlot.get() != null)
             tag.setInteger("outputSpeedUpgrade", outputSpeedSlot.get().stackSize);
 
-        if(chargeSlot.get() != null)
-            tag.setCompoundTag("chargeSlot", chargeSlot.get().writeToNBT(new NBTTagCompound()));
-        if(dischargeSlot.get() != null)
-            tag.setCompoundTag("dischargeSlot", dischargeSlot.get().writeToNBT(new NBTTagCompound()));
+        if(Main.ICSupplied) {
+            if(chargeSlot.get() != null)
+                tag.setCompoundTag("chargeSlot", chargeSlot.get().writeToNBT(new NBTTagCompound()));
+            if(dischargeSlot.get() != null)
+                tag.setCompoundTag("dischargeSlot", dischargeSlot.get().writeToNBT(new NBTTagCompound()));
+        }
     }
 
     @Override
@@ -194,16 +202,9 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
         loadTile();
 
-        if(hasToUpdateENet == true) {
-            unloadTile();
-            loadTile();
-
-            hasToUpdateENet = false;
-        }
-
         if(euToConvert % Ratios.EU.conversion == 0) {
-            if(storedPower < 1.0)
-                storedPower = 1.0F;
+            if(storedPower < 1)
+                storedPower = 1;
 
             int toAdd = (int) Math.ceil(euToConvert / Ratios.EU.conversion);
 
@@ -213,8 +214,10 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
         outputToPowerCables();
 
-        convertBC();
-        tryOutputtingEnergy();
+        if(Main.BCSupplied) {
+            convertBC();
+            tryOutputtingEnergy();
+        }
 
         forceMaxPowersUpdate();
         forceOutputSpeedUpdate();
@@ -224,8 +227,10 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(storedPower == 1)
             storedPower = 0;
 
-        fill_chargeSlot();
-        empty_dischargeSlot();
+        if(Main.ICSupplied) {
+            fill_chargeSlot();
+            empty_dischargeSlot();
+        }
 
         if(storedPower < 0)
             storedPower = 0;
@@ -311,20 +316,22 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             return;
 
         for(int i=0; i<6; i++) {
-            ForgeDirection dr = ForgeDirection.getOrientation(i);
-            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
+            if(outputMode[i].equalsIgnoreCase("output")) {
+                ForgeDirection dr = ForgeDirection.getOrientation(i);
+                TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
-            if(tmpTile != null && tmpTile instanceof TileEntityPowerCable) {
-                TileEntityPowerCable cable = (TileEntityPowerCable) tmpTile;
-                EnergyNetwork network = cable.getEnergyNetwork();
+                if(tmpTile != null && tmpTile instanceof TileEntityPowerCable) {
+                    TileEntityPowerCable cable = (TileEntityPowerCable) tmpTile;
+                    EnergyNetwork network = cable.getEnergyNetwork();
 
-                if(network != null) {
-                    if(storedPower >= 0.0) {
-                        int toSend = (int) Math.ceil(storedPower);
-                        if(storedPower > 5.0)
-                            toSend = 5;
+                    if(network != null) {
+                        if(storedPower >= 0.0) {
+                            int toSend = (int) Math.ceil(storedPower);
+                            if(storedPower > 5.0)
+                                toSend = 5;
 
-                        storedPower -= toSend;
+                            storedPower -= toSend - network.addPower(toSend);
+                        }
                     }
                 }
             }
@@ -367,7 +374,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
                             }
 
                             outputMode[side] = mode;
-                            hasToUpdateENet = true;
                             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                             worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord));
                             return new Object[] { true };
@@ -426,6 +432,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     //-----------------------------------------------------------------
 
+    @Optional.Method(modid = "IC2")
     public void fill_chargeSlot() {
         if(!Main.ICSupplied || chargeSlot == null)
             return;
@@ -437,6 +444,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         }
     }
 
+    @Optional.Method(modid = "IC2")
     public void empty_dischargeSlot() {
         if(!Main.ICSupplied || dischargeSlot == null)
             return;
@@ -584,20 +592,20 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     //-------------------------------------------------------------------------------------
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public void convertBC() {
         if(!Main.BCSupplied)
             return;
 
         if(Main.bcComp.getPowerHandler(this) == null)
             getPowerProvider();
-        if(Main.bcComp.getPowerHandler(this) == null)
-            return;
         if(Main.bcComp.getPowerHandler(this).getEnergyStored() <= 0)
             return;
 
         setPowerStored(getPowerStored() + (int) Math.floor(Main.bcComp.getPowerHandler(this).useEnergy(1, Main.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public void tryOutputtingEnergy() {
         if(!Main.BCSupplied)
             return;
@@ -660,6 +668,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         storedPower -= drainPower / Ratios.MJ.conversion;
     }
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public PowerHandler getPowerProvider() {
         if(Main.bcComp.getPowerHandler(this) == null)
         {

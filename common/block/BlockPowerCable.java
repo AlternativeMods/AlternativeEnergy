@@ -1,11 +1,9 @@
 package block;
 
-import buildcraft.api.transport.IPipeTile;
 import core.Main;
 import core.Render;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ic2.api.energy.tile.IEnergyConductor;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -86,6 +84,20 @@ public class BlockPowerCable extends BlockContainer {
     }
 
     @Override
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    {
+        if(par1World.isRemote)
+            return false;
+
+        TileEntity tmpTile = par1World.getBlockTileEntity(par2, par3, par4);
+        if(tmpTile == null || !(tmpTile instanceof TileEntityPowerCable))
+            return false;
+        TileEntityPowerCable pCable = (TileEntityPowerCable) tmpTile;
+        System.out.println(pCable.getEnergyNetwork().getNetworkPower());
+        return false;
+    }
+
+    @Override
     public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
         if(world.isRemote)
@@ -134,42 +146,42 @@ public class BlockPowerCable extends BlockContainer {
         float maxZ = 0.665F;
 
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
+        if(xTile != null)
         {
             if(Main.isValidPowerTile(xTile))
                 minX = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x + 1, y, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
+        if(xTile != null)
         {
             if(Main.isValidPowerTile(xTile))
                 maxX = 1.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z - 1);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
+        if(xTile != null)
         {
             if(Main.isValidPowerTile(xTile))
                 minZ = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z + 1);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
+        if(xTile != null)
         {
             if(Main.isValidPowerTile(xTile))
                 maxZ = 1.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y - 1, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
+        if(xTile != null)
         {
             if(Main.isValidPowerTile(xTile))
                 minY = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y + 1, z);
-        if(xTile != null && !(xTile instanceof IPipeTile) && !(xTile instanceof IEnergyConductor))
+        if(xTile != null)
         {
             if(Main.isValidPowerTile(xTile))
                 maxY = 1.0F;

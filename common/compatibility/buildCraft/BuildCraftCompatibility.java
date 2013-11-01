@@ -13,7 +13,7 @@ import java.util.Map;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class BuildCraftCompatibility implements BuildCraftCompatibilityInterface {
+public class BuildCraftCompatibility {
     Map<IPowerReceptor, PowerHandler> powerHandlers = new HashMap<IPowerReceptor, PowerHandler>();
 
     public void addPowerHandler(IPowerReceptor receptor, PowerHandler.Type type) {

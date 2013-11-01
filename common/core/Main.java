@@ -4,8 +4,6 @@ import block.BlockPowerBox;
 import block.BlockPowerCable;
 import block.ItemBlockPowerBox;
 import compatibility.buildCraft.BuildCraftCompatibility;
-import compatibility.buildCraft.BuildCraftCompatibilityInterface;
-import compatibility.buildCraft.BuildCraftIncompatibility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -56,7 +54,7 @@ public class Main {
     @SidedProxy(clientSide = "proxy.ClientProxy", serverSide = "proxy.CommonProxy")
     public static CommonProxy commonProxy;
 
-    public static BuildCraftCompatibilityInterface bcComp;
+    public static BuildCraftCompatibility bcComp;
 
     @Mod.Instance(modid)
     public static Main instance;
@@ -143,8 +141,6 @@ public class Main {
         }
         if(BCSupplied)
             bcComp = new BuildCraftCompatibility();
-        else
-            bcComp = new BuildCraftIncompatibility();
     }
 
     public void addBCRecipies() {
@@ -240,8 +236,10 @@ public class Main {
     public void findWrenchIds() {
         if(BCSupplied)
             wrenches.add(GameRegistry.findItem("BuildCraft|Core", "wrenchItem").itemID);
-        if(ICSupplied)
+        if(ICSupplied) {
+            wrenches.add(ic2.api.item.Items.getItem("wrench").itemID);
             wrenches.add(ic2.api.item.Items.getItem("electricWrench").itemID);
+        }
     }
 
     @Mod.EventHandler
@@ -256,7 +254,7 @@ public class Main {
     private static String[] invalidTiles_Classes = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};
 
     private static String[] validTiles_Interfaces = {"IEnergySink", "IEnergyStorage", "IEnergySource", "IPowerReceptor", "IPowerEmitter"};
-    private static String[] validTiles_Superclasses = {"TileEntityElectricBlock", "TileEntityCompactSolar", "TileEntityBaseGenerator", "TileEntityTransformer", "TileEntityStandardMachine"};
+    private static String[] validTiles_Superclasses = {"TileEngine", "TileEngineWithInventory", "TileEntityElectricBlock", "TileEntityCompactSolar", "TileEntityBaseGenerator", "TileEntityTransformer", "TileEntityStandardMachine"};
     private static String[] validTiles_Classes = {"TileEntityPowerCable", "TileEntityCompactSolar", "TileCapacitorBank"};
     public static boolean isInvalidPowerTile(TileEntity tile) {
         Class iClass = tile.getClass();
@@ -272,10 +270,8 @@ public class Main {
 
         Class iClass = tile.getClass();
 
-        for(String cClass : invalidTiles_Classes) {
-            if(iClass.getSimpleName().equalsIgnoreCase(cClass))
-                return false;
-        }
+        if(isInvalidPowerTile(tile))
+            return false;
         //---------------------------------------------------------------------------
 
         for(String cClass : validTiles_Classes) {

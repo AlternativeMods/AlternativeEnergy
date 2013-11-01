@@ -35,9 +35,6 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
-    boolean hasToUpdateENet;
-
-    PowerHandler convHandler;
 
     int euForNetwork;
 
@@ -45,7 +42,6 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         initializeNetwork();
 
         addedToENet = false;
-        hasToUpdateENet = false;
     }
 
     public void initializeNetwork() {
@@ -95,10 +91,15 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             euForNetwork = 0;
         }
 
-        convertBC();
-        tryOutputtingEnergy();
+        tryOutputtingPBu();
 
-        tryOutputtingEU();
+        if(Main.BCSupplied) {
+            convertBC();
+            tryOutputtingEnergy();
+        }
+
+        if(Main.ICSupplied)
+            tryOutputtingEU();
     }
 
     @Override
@@ -189,6 +190,32 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     //------------------------------------------------
 
+    public void tryOutputtingPBu() {
+        for(int i=0; i<6; i++) {
+            ForgeDirection dr = ForgeDirection.getOrientation(i);
+            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
+
+            if(tmpTile != null && tmpTile instanceof TileEntityPowerBox) {
+                TileEntityPowerBox pBox = (TileEntityPowerBox) tmpTile;
+
+                if(!pBox.getMode(dr.getOpposite().ordinal()).equalsIgnoreCase("input")) continue;
+
+                if(network.getNetworkPower() < 1) return;
+
+                if(pBox.neededPower() < 1) continue;
+
+                int toInsert = 25;
+                if(toInsert > pBox.getMaxPower() - pBox.getPowerStored())
+                    toInsert = pBox.getMaxPower() - pBox.getPowerStored();
+                if(toInsert > network.getNetworkPower())
+                    toInsert = network.getNetworkPower();
+
+                pBox.setPowerStored(pBox.getPowerStored() + toInsert);
+                network.drainPower(toInsert);
+            }
+        }
+    }
+
     //-- IEnergySink
 
     public void tryOutputtingEU() {
@@ -257,20 +284,20 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     //-- BC Stuffy
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public void convertBC() {
         if(!Main.BCSupplied)
             return;
 
-        if(convHandler == null)
+        if(Main.bcComp.getPowerHandler(this) == null)
             getPowerProvider();
-        if(convHandler.getEnergyStored() <= 0)
-            return;
-        if(convHandler.getEnergyStored() < Ratios.MJ.conversion)
+        if(Main.bcComp.getPowerHandler(this).getEnergyStored() <= 0)
             return;
 
-        network.addPower((int) Math.floor(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+        network.addPower((int) Math.floor(Main.bcComp.getPowerHandler(this).useEnergy(1, Main.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public boolean checkForMachine(TileEntity tmpTile) {
         if(!Main.BCSupplied)
             return false;
@@ -281,6 +308,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
         return false;
     }
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public void tryOutputtingEnergy() {
         if(!Main.BCSupplied)
             return;
@@ -312,7 +340,7 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             if(conSides[i] != false) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor && !Main.isInvalidPowerTile(tmptile) && !(tmptile instanceof TileEntityPowerCable)) {
+                if(tmptile instanceof IPowerReceptor && Main.isValidPowerTile(tmptile) && !(tmptile instanceof TileEntityPowerCable)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
@@ -322,47 +350,51 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                             neededPower = equalPower;
 
                         float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, neededPower, ForgeDirection.getOrientation(i).getOpposite());
-                        drainPower += equalPower + restEnergy;
+                        drainPower += equalPower - restEnergy;
                     }
                 }
             }
         }
+        if(drainPower < 0)
+            return;
         network.drainPower((int) Math.floor(drainPower / Ratios.MJ.conversion));
     }
 
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public PowerHandler getPowerProvider() {
-        if (convHandler == null)
+        if(Main.bcComp.getPowerHandler(this) == null)
         {
-            convHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-            if (convHandler != null) {
-                convHandler.configure(1, 1000, 1337, 5000);
-                convHandler.configurePowerPerdition(0, 0);
+            Main.bcComp.addPowerHandler(this, PowerHandler.Type.MACHINE);
+            if (Main.bcComp.getPowerHandler(this) != null) {
+                Main.bcComp.configurePowerHandler(Main.bcComp.getPowerHandler(this), 25, 500, 1337, 1000);
+                Main.bcComp.configurePerdition(Main.bcComp.getPowerHandler(this), 0, 0);
             }
+            System.out.println(Main.bcComp.getPowerHandler(this));
         }
-        return convHandler;
+        return Main.bcComp.getPowerHandler(this);
     }
 
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-        if(tmpTile != null && !Main.isInvalidPowerTile(tmpTile))
+        if(tmpTile != null && Main.isValidPowerTile(tmpTile))
             return getPowerProvider().getPowerReceiver();
         return null;
     }
 
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public void doWork(PowerHandler workProvider) {
 
     }
 
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public World getWorld() {
         return worldObj;
     }
     //---------------------------------
 
     //--- IPowerEmitter
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public boolean canEmitPowerFrom(ForgeDirection side) {
         return true;
     }
