@@ -4,6 +4,13 @@ import Lordmau5.PowerBoxes.block.BlockPowerBox;
 import Lordmau5.PowerBoxes.block.BlockPowerCable;
 import Lordmau5.PowerBoxes.block.ItemBlockPowerBox;
 import Lordmau5.PowerBoxes.compatibility.buildCraft.BuildCraftCompatibility;
+import Lordmau5.PowerBoxes.item.ItemUpgrade;
+import Lordmau5.PowerBoxes.item.Items;
+import Lordmau5.PowerBoxes.proxy.CommonProxy;
+import Lordmau5.PowerBoxes.tile.TileEntityPowerBox;
+import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -16,8 +23,10 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
-import Lordmau5.PowerBoxes.item.ItemUpgrade;
-import Lordmau5.PowerBoxes.item.Items;
+import ic2.api.energy.tile.IEnergyConductor;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+import ic2.api.tile.IEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,9 +34,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
-import Lordmau5.PowerBoxes.proxy.CommonProxy;
-import Lordmau5.PowerBoxes.tile.TileEntityPowerBox;
-import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -40,7 +46,7 @@ import java.util.List;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Mod(modid = Main.modid, name = "Power Boxes", version = "1.1", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = Main.modid, name = "Power Boxes", version = "1.1.2", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod(channels = {"PBoxes"}, packetHandler = PacketHandler.class)
 public class Main {
 
@@ -256,9 +262,8 @@ public class Main {
 
     private static String[] invalidTiles_Classes = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};
 
-    private static String[] validTiles_Interfaces = {"IEnergySink", "IEnergyStorage", "IEnergySource", "IPowerReceptor", "IPowerEmitter"};
-    private static String[] validTiles_Superclasses = {"TileEngine", "TileEngineWithInventory", "TileEntityElectricBlock", "TileEntityCompactSolar", "TileEntityBaseGenerator", "TileEntityTransformer", "TileEntityStandardMachine"};
-    private static String[] validTiles_Classes = {"TileEntityPowerCable", "TileEntityCompactSolar", "TileCapacitorBank"};
+    private static String[] validTiles_Classes = {"TileEntityCompactSolar"};
+    private static String[] validTiles_Superclasses = {"TileEntityCompactSolar"};
     public static boolean isInvalidPowerTile(TileEntity tile) {
         Class iClass = tile.getClass();
 
@@ -269,13 +274,31 @@ public class Main {
         return false;
     }
 
-    public static boolean isValidPowerTile(TileEntity tile) {
+    public static boolean checkForModTile(TileEntity tile) {
+        if(BCSupplied) {
+            if(tile instanceof IPipeTile)
+                return false;
 
-        Class iClass = tile.getClass();
+            if(tile instanceof IPowerReceptor)
+                return true;
+        }
+        if(ICSupplied) {
+            if(tile instanceof IEnergyConductor)
+                return false;
+
+            if(tile instanceof IEnergySink || tile instanceof IEnergyStorage || tile instanceof IEnergySource)
+                return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isValidPowerTile(TileEntity tile) {
 
         if(isInvalidPowerTile(tile))
             return false;
         //---------------------------------------------------------------------------
+        Class iClass = tile.getClass();
 
         for(String cClass : validTiles_Classes) {
             if(iClass.getSimpleName().equalsIgnoreCase(cClass))
@@ -288,13 +311,9 @@ public class Main {
                 return true;
         }
 
-        Class[] interfaces = iClass.getInterfaces();
-        for(Class xInterface : interfaces) {
-            for(String iName : validTiles_Interfaces) {
-                if(xInterface.getSimpleName().equalsIgnoreCase(iName))
-                    return true;
-            }
-        }
+        if(checkForModTile(tile))
+            return true;
+
         return false;
     }
 }

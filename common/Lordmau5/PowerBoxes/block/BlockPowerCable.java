@@ -90,10 +90,10 @@ public class BlockPowerCable extends BlockContainer {
             return false;
 
         TileEntity tmpTile = par1World.getBlockTileEntity(par2, par3, par4);
-        if(tmpTile == null || !(tmpTile instanceof TileEntityPowerCable))
-            return false;
-        TileEntityPowerCable pCable = (TileEntityPowerCable) tmpTile;
-        System.out.println(pCable.getEnergyNetwork().getNetworkPower());
+        if(tmpTile != null && tmpTile instanceof TileEntityPowerCable) {
+            TileEntityPowerCable cable = (TileEntityPowerCable) tmpTile;
+            par5EntityPlayer.addChatMessage(cable.getEnergyNetwork().toString() + " _ " + cable.getEnergyNetwork().getNetworkPower());
+        }
         return false;
     }
 

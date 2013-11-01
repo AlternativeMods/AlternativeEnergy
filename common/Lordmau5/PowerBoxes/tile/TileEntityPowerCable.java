@@ -1,16 +1,14 @@
 package Lordmau5.PowerBoxes.tile;
 
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.core.IMachine;
 import Lordmau5.PowerBoxes.core.EnergyNetwork;
 import Lordmau5.PowerBoxes.core.Main;
 import Lordmau5.PowerBoxes.core.Ratios;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.core.IMachine;
 import cpw.mods.fml.common.Optional;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.tile.IEnergyStorage;
 import net.minecraft.tileentity.TileEntity;
@@ -25,13 +23,12 @@ import net.minecraftforge.common.MinecraftForge;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.Lordmau5.PowerBoxes.tile.IEnergyStorage", modid = "IC2"),
-        @Optional.Interface(iface = "ic2.api.energy.Lordmau5.PowerBoxes.tile.IEnergySink", modid = "IC2"),
+@Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Energy")})
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
 
-public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerEmitter, IPowerReceptor {
+public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
@@ -275,8 +272,12 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     @Optional.Method(modid = "IC2")
     public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-        if(emitter instanceof TileEntityPowerCable || emitter instanceof IEnergyConductor || getEnergyNetwork().isAcceptor(this, emitter))
+        if(emitter instanceof TileEntityPowerCable)
             return false;
+        if(!Main.isValidPowerTile(emitter))
+            return false;
+        if(!getEnergyNetwork().isAcceptor(this, emitter))
+            return true;
         return true;
     }
 
@@ -390,13 +391,5 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     public World getWorld() {
         return worldObj;
     }
-    //---------------------------------
-
-    //--- IPowerEmitter
-    @Optional.Method(modid = "BuildCraft|Energy")
-    public boolean canEmitPowerFrom(ForgeDirection side) {
-        return true;
-    }
-
     //---------------------------------
 }

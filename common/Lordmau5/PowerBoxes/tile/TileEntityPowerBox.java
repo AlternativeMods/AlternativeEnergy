@@ -1,9 +1,9 @@
 package Lordmau5.PowerBoxes.tile;
 
-import buildcraft.api.power.IPowerEmitter;
+import Lordmau5.PowerBoxes.core.*;
+import Lordmau5.PowerBoxes.item.Items;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
-import Lordmau5.PowerBoxes.core.*;
 import cpw.mods.fml.common.Optional;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
@@ -13,7 +13,6 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
-import Lordmau5.PowerBoxes.item.Items;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -37,16 +36,15 @@ import java.util.List;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.Lordmau5.PowerBoxes.tile.IEnergyStorage", modid = "IC2"),
-        @Optional.Interface(iface = "ic2.api.energy.Lordmau5.PowerBoxes.tile.IEnergySink", modid = "IC2"),
-        @Optional.Interface(iface = "ic2.api.energy.Lordmau5.PowerBoxes.tile.IEnergySource", modid = "IC2"),
+@Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
+        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 
         @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Energy"),
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
 
-public class TileEntityPowerBox extends TileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor, IPowerEmitter {
+public class TileEntityPowerBox extends TileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
     public String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
     public boolean addedToENet;
 
@@ -697,16 +695,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     @Optional.Method(modid = "BuildCraft|Energy")
     public World getWorld() {
         return worldObj;
-    }
-    //---------------------------------
-
-    //--- IPowerEmitter
-    @Optional.Method(modid = "BuildCraft|Energy")
-    public boolean canEmitPowerFrom(ForgeDirection side) {
-        if(outputMode[side.ordinal()].equalsIgnoreCase("output"))
-            return true;
-
-        return false;
     }
 
     //---------------------------------------------------------------------------------------

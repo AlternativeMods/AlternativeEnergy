@@ -121,8 +121,8 @@ public class BlockPowerBox extends BlockContainer {
             world.spawnEntityInWorld(entityitem);
 
             if(Main.ICSupplied) {
-            dropItemStackInWorld(world, x, y, z, pBox.chargeSlot.get());
-            dropItemStackInWorld(world, x, y, z, pBox.dischargeSlot.get());
+                dropItemStackInWorld(world, x, y, z, pBox.chargeSlot.get());
+                dropItemStackInWorld(world, x, y, z, pBox.dischargeSlot.get());
             }
         }
 
