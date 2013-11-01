@@ -40,7 +40,7 @@ import java.util.List;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Mod(modid = Main.modid, name = "Power Boxes", version = "1.04", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = Main.modid, name = "Power Boxes", version = "1.1", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod(channels = {"PBoxes"}, packetHandler = PacketHandler.class)
 public class Main {
 
