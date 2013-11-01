@@ -1,8 +1,8 @@
 package block;
 
 import buildcraft.api.transport.IPipeTile;
-import core.EnergyNetwork;
 import core.Main;
+import core.Render;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.energy.tile.IEnergyConductor;
@@ -33,7 +33,7 @@ public class BlockPowerCable extends BlockContainer {
 
     public BlockPowerCable(int par1, Material par2Material) {
         super(par1, par2Material);
-        setUnlocalizedName("PowerCable");
+        setUnlocalizedName("block_PowerCable");
         setHardness(5.0F);
         setStepSound(soundMetalFootstep);
         setCreativeTab(Main.tabPowerBox);
@@ -59,7 +59,7 @@ public class BlockPowerCable extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(Main.modid + ":" + this.getUnlocalizedName());
+        this.blockIcon = par1IconRegister.registerIcon(Main.modid + ":" + this.getUnlocalizedName().substring(5));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class BlockPowerCable extends BlockContainer {
 
         TileEntityPowerCable tile = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
         if(tile != null)
-            tile.getEnergyNetwork().recalculateNetworks(tile);
+            tile.getEnergyNetwork().recalculateNetworks();
 
         return world.setBlockToAir(x, y, z);
     }
@@ -112,29 +112,8 @@ public class BlockPowerCable extends BlockContainer {
         if(xTile == null || Main.isInvalidPowerTile(xTile))
             me.getEnergyNetwork().removeInput(me, xTile);
         else
-            me.getEnergyNetwork().addInput(me, xTile);
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        if(world.isRemote)
-            return false;
-
-        TileEntity tempTile = world.getBlockTileEntity(x, y, z);
-        if(tempTile == null)
-            return false;
-
-        if(tempTile instanceof TileEntityPowerCable) {
-            TileEntityPowerCable pCable = (TileEntityPowerCable) tempTile;
-
-            EnergyNetwork network = pCable.getEnergyNetwork();
-
-            if(player.isSneaking())
-                player.addChatMessage(network.toString());
-            else
-                player.addChatMessage("Energy: " + network.networkPower + " / " + network.maxNetworkPower);
-        }
-        return false;
+            if(Main.isInvalidPowerTile(xTile))
+                me.getEnergyNetwork().addInput(me, xTile);
     }
 
     @Override
@@ -230,6 +209,6 @@ public class BlockPowerCable extends BlockContainer {
     @Override
     public int getRenderType()
     {
-        return -1;
+        return Render.RENDER_BLOCKPOWERCABLE;
     }
 }

@@ -1,7 +1,10 @@
 package proxy;
 
+import client.BlockPowerCableRender;
 import client.TileEntityPowerCableRender;
+import core.Render;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import tile.TileEntityPowerCable;
 
 /**
@@ -17,6 +20,10 @@ public class ClientProxy extends CommonProxy {
     public void initRendering()
     {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCable.class, new TileEntityPowerCableRender());
+
+        Render.RENDER_BLOCKPOWERCABLE = RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler(Render.RENDER_BLOCKPOWERCABLE, new BlockPowerCableRender());
+
     }
 
 }

@@ -27,10 +27,9 @@ import net.minecraftforge.common.MinecraftForge;
  */
 @Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
-        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Transport"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Transport")})
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraftAPI|power"),
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraftAPI|power")})
 
 public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerEmitter, IPowerReceptor {
     EnergyNetwork network;
@@ -210,8 +209,6 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                     if(sink.acceptsEnergyFrom(this, dr.getOpposite())) {
                         if(network.getNetworkPower() >= 1) {
                             int toDrain = (int) Ratios.EU.conversion * 4;
-                            if(network.getNetworkPower() < Ratios.EU.conversion * 4)
-                                toDrain = network.getNetworkPower();
                             if(sink.getMaxSafeInput() > toDrain)
                                 toDrain = (int) Math.floor(sink.getMaxSafeInput() / 5);
                             if(network.getNetworkPower() < toDrain)

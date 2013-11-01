@@ -3,6 +3,9 @@ package core;
 import block.BlockPowerBox;
 import block.BlockPowerCable;
 import block.ItemBlockPowerBox;
+import compatibility.buildCraft.BuildCraftCompatibility;
+import compatibility.buildCraft.BuildCraftCompatibilityInterface;
+import compatibility.buildCraft.BuildCraftIncompatibility;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -29,6 +32,8 @@ import tile.TileEntityPowerBox;
 import tile.TileEntityPowerCable;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: Lordmau5
@@ -37,7 +42,7 @@ import javax.swing.*;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Mod(modid = Main.modid, name = "Power Boxes", version = "1.04", dependencies = "required-after:Forge@[9.11.1.917,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = Main.modid, name = "Power Boxes", version = "1.04", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod(channels = {"PBoxes"}, packetHandler = PacketHandler.class)
 public class Main {
 
@@ -50,6 +55,8 @@ public class Main {
 
     @SidedProxy(clientSide = "proxy.ClientProxy", serverSide = "proxy.CommonProxy")
     public static CommonProxy commonProxy;
+
+    public static BuildCraftCompatibilityInterface bcComp;
 
     @Mod.Instance(modid)
     public static Main instance;
@@ -134,12 +141,17 @@ public class Main {
                 dialog.setVisible(true);
             }
         }
+        if(BCSupplied)
+            bcComp = new BuildCraftCompatibility();
+        else
+            bcComp = new BuildCraftIncompatibility();
     }
 
-    public void addRecipes() {
-        //------------------------------------------------------
-        //------- Power Box ------------------------------------
+    public void addBCRecipies() {
 
+    }
+
+    public void addICRecipies() {
         Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
         Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
         ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);
@@ -150,13 +162,7 @@ public class Main {
 
         ItemStack glassFiber = ic2.api.item.Items.getItem("glassFiberCableItem");
 
-        if(ICSupplied) {
-            hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
-            goldCable = ic2.api.item.Items.getItem("insulatedGoldCableItem");
-            energyCrystal = ic2.api.item.Items.getItem("energyCrystal");
-
-            glassFiber = ic2.api.item.Items.getItem("glassFiberCableItem");
-        }
+        //------------------------------------------------------------------------------------------------------------------
 
         GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerBox_block), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
 
@@ -164,6 +170,45 @@ public class Main {
 
         GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
 
+        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerCable_block, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', Blocks.powerBox_block});
+    }
+
+    public void addBCandICRecipies() {
+        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
+        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
+        ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);
+
+        ItemStack hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
+        ItemStack goldCable = ic2.api.item.Items.getItem("insulatedGoldCableItem");
+        ItemStack energyCrystal = ic2.api.item.Items.getItem("energyCrystal");
+
+        ItemStack glassFiber = ic2.api.item.Items.getItem("glassFiberCableItem");
+
+        //------------------------------------------------------------------------------------------------------------------
+
+        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerBox_block), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
+
+        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 0), new Object[] {" A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal});
+
+        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
+
+        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerCable_block, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', Blocks.powerBox_block});
+    }
+
+    public void addRecipes() {
+        //------------------------------------------------------
+        //------- Power Box ------------------------------------
+
+        if(ICSupplied)
+            if(BCSupplied)
+                addBCandICRecipies();
+            else
+                addICRecipies();
+        else if(BCSupplied)
+            if(ICSupplied)
+                addBCandICRecipies();
+            else
+                addBCRecipies();
         //------------------------------------------------------
     }
 
@@ -184,9 +229,19 @@ public class Main {
         commonProxy.initRendering();
     }
 
+    private static List<Integer> wrenches = new ArrayList<Integer>();
+    public static boolean isWrench(int itemID) {
+        for(Integer wInt : wrenches)
+            if(wInt == itemID)
+                return true;
+        return false;
+    }
+
     public void findWrenchIds() {
         if(BCSupplied)
-            bcWrenchId = GameRegistry.findItem("BuildCraft|Core", "wrenchItem").itemID;
+            wrenches.add(GameRegistry.findItem("BuildCraft|Core", "wrenchItem").itemID);
+        if(ICSupplied)
+            wrenches.add(ic2.api.item.Items.getItem("electricWrench").itemID);
     }
 
     @Mod.EventHandler

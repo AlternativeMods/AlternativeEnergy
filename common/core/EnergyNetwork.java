@@ -56,7 +56,7 @@ public class EnergyNetwork {
         return false;
     }
 
-    public void recalculateNetworks(TileEntityPowerCable exclude) {
+    public void recalculateNetworks() {
         for(TileEntityPowerCable cable : cables) {
             cable.initializeNetwork();
         }

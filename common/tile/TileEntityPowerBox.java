@@ -43,8 +43,8 @@ import java.util.List;
 
         @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
 
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraft|Transport"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Transport")})
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerEmitter", modid = "BuildCraftAPI|power"),
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraftAPI|power")})
 
 public class TileEntityPowerBox extends TileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor, IPowerEmitter {
     public String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
@@ -52,7 +52,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     public boolean hasToUpdateENet;
 
     public float storedPower;
-    public float maxPowers = Config.powerBox_capacity;
+    public int maxPowers = Config.powerBox_capacity;
     public int maxOutput;
 
     int euToConvert;
@@ -63,7 +63,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     public final List<InvSlot> invSlots = new ArrayList();
 
-    PowerHandler convHandler;
+    //PowerHandler convHandler;
 
     public InvSlot capacitySlot;
     public InvSlot outputSpeedSlot;
@@ -93,7 +93,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     }
 
     public int getMaxPower() {
-        return (int) maxPowers;
+        return maxPowers;
     }
 
     public void setMode(int side, String var) {
@@ -158,6 +158,9 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             dischargeSlot.put(new ItemStack(Block.stone));
             dischargeSlot.get().readFromNBT(tag.getCompoundTag("dischargeSlot"));
         }
+
+        forceMaxPowersUpdate();
+        forceOutputSpeedUpdate();
     }
 
     @Override
@@ -213,24 +216,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         convertBC();
         tryOutputtingEnergy();
 
-        if(capacitySlot != null && capacitySlot.get() != null) {
-            maxPowers = Config.powerBox_capacity;
-
-            for(int i=1; i<=capacitySlot.get().stackSize; i++) {
-                maxPowers += i * Config.powerBox_capacity_multiplier;
-            }
-        }
-        else
-            maxPowers = Config.powerBox_capacity;
-
-        if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
-            int tmpOutput = 32 * (4 ^ outputSpeedSlot.get().stackSize);
-            if(tmpOutput > 512) tmpOutput = 512;
-
-            maxOutput = tmpOutput;
-        }
-        else
-            maxOutput = 32;
+        forceMaxPowersUpdate();
+        forceOutputSpeedUpdate();
 
         if(storedPower > maxPowers)
             storedPower = maxPowers;
@@ -248,23 +235,47 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         oldEnergy = getPowerStored();
 
         if(oldMaxPowers != maxPowers) {
-            if(!worldObj.isRemote)
-                if(capacitySlot.get() == null)
-                    PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, 0);
-                else
-                    PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, capacitySlot.get().stackSize);
+            if(capacitySlot.get() == null)
+                PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, 0);
+            else
+                PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, capacitySlot.get().stackSize);
+
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
         oldMaxPowers = maxPowers;
 
         if(oldMaxOutput != maxOutput) {
-            if(!worldObj.isRemote) {
-                if(outputSpeedSlot.get() == null)
-                    PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, 0);
-                else
-                    PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, outputSpeedSlot.get().stackSize);
-            }
+            if(outputSpeedSlot.get() == null)
+                PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, 0);
+            else
+                PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, outputSpeedSlot.get().stackSize);
+
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
         oldMaxOutput = maxOutput;
+    }
+
+    public void forceMaxPowersUpdate() {
+        if(capacitySlot != null && capacitySlot.get() != null) {
+            maxPowers = Config.powerBox_capacity;
+
+            for(int i=1; i<=capacitySlot.get().stackSize; i++) {
+                maxPowers += i * Config.powerBox_capacity_multiplier;
+            }
+        }
+        else
+            maxPowers = Config.powerBox_capacity;
+    }
+
+    public void forceOutputSpeedUpdate() {
+        if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
+            int tmpOutput = 32 * (4 ^ outputSpeedSlot.get().stackSize);
+            if(tmpOutput > 512) tmpOutput = 512;
+
+            maxOutput = tmpOutput;
+        }
+        else
+            maxOutput = 32;
     }
 
     @Override
@@ -314,7 +325,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
                             toSend = 5;
 
                         storedPower -= toSend;
-                        System.out.println(network.addPower(toSend));
                     }
                 }
             }
@@ -554,7 +564,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     @Optional.Method(modid = "IC2")
     public int getCapacity() {
-        return (int) maxPowers;
+        return maxPowers;
     }
 
     @Optional.Method(modid = "IC2")
@@ -575,15 +585,22 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     //-------------------------------------------------------------------------------------
 
     public void convertBC() {
-        if(convHandler == null)
-            getPowerProvider();
-        if(convHandler.getEnergyStored() <= 0)
+        if(!Main.BCSupplied)
             return;
 
-        setPowerStored(getPowerStored() + (int) Math.floor(convHandler.useEnergy(1, convHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+        if(Main.bcComp.getPowerHandler(this) == null)
+            getPowerProvider();
+        if(Main.bcComp.getPowerHandler(this) == null)
+            return;
+        if(Main.bcComp.getPowerHandler(this).getEnergyStored() <= 0)
+            return;
+
+        setPowerStored(getPowerStored() + (int) Math.floor(Main.bcComp.getPowerHandler(this).useEnergy(1, Main.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
     public void tryOutputtingEnergy() {
+        if(!Main.BCSupplied)
+            return;
         if(storedPower <= 0)
             return;
 
@@ -644,18 +661,18 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     }
 
     public PowerHandler getPowerProvider() {
-        if (convHandler == null)
+        if(Main.bcComp.getPowerHandler(this) == null)
         {
-            convHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-            if (convHandler != null) {
-                convHandler.configure(25, 500, 1337, 1000);
-                convHandler.configurePowerPerdition(0, 0);
+            Main.bcComp.addPowerHandler(this, PowerHandler.Type.MACHINE);
+            if (Main.bcComp.getPowerHandler(this) != null) {
+                Main.bcComp.configurePowerHandler(Main.bcComp.getPowerHandler(this), 25, 500, 1337, 1000);
+                Main.bcComp.configurePerdition(Main.bcComp.getPowerHandler(this), 0, 0);
             }
         }
-        return convHandler;
+        return Main.bcComp.getPowerHandler(this);
     }
 
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
         if(!outputMode[side.ordinal()].equalsIgnoreCase("disabled") && tmpTile != null && !Main.isInvalidPowerTile(tmpTile))
@@ -663,19 +680,19 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         return null;
     }
 
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public void doWork(PowerHandler workProvider) {
 
     }
 
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public World getWorld() {
         return worldObj;
     }
     //---------------------------------
 
     //--- IPowerEmitter
-    @Optional.Method(modid = "BuildCraft|Transport")
+    @Optional.Method(modid = "BuildCraftAPI|power")
     public boolean canEmitPowerFrom(ForgeDirection side) {
         if(outputMode[side.ordinal()].equalsIgnoreCase("output"))
             return true;

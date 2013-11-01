@@ -33,15 +33,13 @@ public class PacketHandler implements IPacketHandler {
 
         DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
 
-        int ID = 0;
+        int ID;
 
-        int x = 0;
-        int y = 0;
-        int z = 0;
+        int x;
+        int y;
+        int z;
 
-        float var = 0;
-
-        float[] additional;
+        float var;
 
         World world = ((EntityPlayer)player).worldObj;
 
@@ -53,13 +51,6 @@ public class PacketHandler implements IPacketHandler {
             z = inputStream.readInt();
 
             var = inputStream.readFloat();
-
-            additional = new float[inputStream.readInt()];
-
-            for(int i=0; i<additional.length; i++)
-                additional[i] = inputStream.readFloat();
-        } catch (EOFException e) {
-            //e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -74,6 +65,7 @@ public class PacketHandler implements IPacketHandler {
                     pBox.capacitySlot.put(null);
                 else
                     pBox.capacitySlot.put(new ItemStack(Items.upgrade_Item, (int) var, 0));
+                pBox.forceMaxPowersUpdate();
             }
 
             else if(ID == OUTPUTSPEED_UPGRADE) {
@@ -81,6 +73,7 @@ public class PacketHandler implements IPacketHandler {
                     pBox.outputSpeedSlot.put(null);
                 else
                     pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, (int) var, 1));
+                pBox.forceOutputSpeedUpdate();
             }
         }
     }
@@ -157,28 +150,5 @@ public class PacketHandler implements IPacketHandler {
         packet.length = bos.size();
 
         PacketDispatcher.sendPacketToAllPlayers(packet);
-    }
-
-    public static void sendPacketToServer(int ID, int x, int y, int z, float var) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
-        DataOutputStream outputStream = new DataOutputStream(bos);
-        try {
-            outputStream.writeInt(ID);
-
-            outputStream.writeInt(x);
-            outputStream.writeInt(y);
-            outputStream.writeInt(z);
-
-            outputStream.writeFloat(var);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = Main.channelName;
-        packet.data = bos.toByteArray();
-        packet.length = bos.size();
-
-        PacketDispatcher.sendPacketToServer(packet);
     }
 }

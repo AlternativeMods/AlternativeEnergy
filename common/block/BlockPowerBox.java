@@ -159,15 +159,7 @@ public class BlockPowerBox extends BlockContainer {
         if(tempTile instanceof TileEntityPowerBox) {
             TileEntityPowerBox pBox = (TileEntityPowerBox) tempTile;
 
-            if(player.getHeldItem() == null) {
-                if(player.isSneaking()) {
-                    player.addChatMessage(pBox.storedPower + " _ " + pBox.getPowerStored());
-                }
-                else {
-                    player.openGui(Main.instance, GUIHandler.ID_GUI_PowerBox, world, x, y, z);
-                }
-            }
-            else if(player.getHeldItem().itemID == Main.bcWrenchId) {
+            if(player.getHeldItem() != null && Main.isWrench(player.getHeldItem().itemID) || (!Main.BCSupplied && !Main.ICSupplied && player.getHeldItem() == null)) {
                 if(player.isSneaking()) {
                     pBox.setMode(side, pBox.getNextMode(pBox.getMode(side)));
                     player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is now set to " + pBox.getMode(side));
@@ -177,6 +169,12 @@ public class BlockPowerBox extends BlockContainer {
                     player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is set to " + pBox.getMode(side));
                     return true;
                 }
+            }
+            else {
+                if(player.isSneaking())
+                    return false;
+                player.openGui(Main.instance, GUIHandler.ID_GUI_PowerBox, world, x, y, z);
+                return true;
             }
         }
         return false;
