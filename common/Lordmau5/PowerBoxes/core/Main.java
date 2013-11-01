@@ -148,8 +148,8 @@ public class Main {
     }
 
     public void addICRecipies() {
-        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "Lordmau5.PowerBoxes.item.buildcraftPipe.pipepowergold");
-        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "Lordmau5.PowerBoxes.item.buildcraftPipe.pipepowerwood");
+        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
+        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
         ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);
 
         ItemStack hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
@@ -170,8 +170,8 @@ public class Main {
     }
 
     public void addBCandICRecipies() {
-        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "Lordmau5.PowerBoxes.item.buildcraftPipe.pipepowergold");
-        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "Lordmau5.PowerBoxes.item.buildcraftPipe.pipepowerwood");
+        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
+        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
         ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);
 
         ItemStack hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
@@ -251,7 +251,7 @@ public class Main {
 
         findWrenchIds();
 
-        //addRecipes();
+        addRecipes();
     }
 
     private static String[] invalidTiles_Classes = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};
