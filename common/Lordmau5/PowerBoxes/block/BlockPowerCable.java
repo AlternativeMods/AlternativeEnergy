@@ -84,20 +84,6 @@ public class BlockPowerCable extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-    {
-        if(par1World.isRemote)
-            return false;
-
-        TileEntity tmpTile = par1World.getBlockTileEntity(par2, par3, par4);
-        if(tmpTile != null && tmpTile instanceof TileEntityPowerCable) {
-            TileEntityPowerCable cable = (TileEntityPowerCable) tmpTile;
-            par5EntityPlayer.addChatMessage(cable.getEnergyNetwork().toString() + " _ " + cable.getEnergyNetwork().getNetworkPower());
-        }
-        return false;
-    }
-
-    @Override
     public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
         if(world.isRemote)
