@@ -16,11 +16,18 @@ import java.util.Map;
  */
 public class LinkBoxNetwork {
 
-    public Map<Integer, ArrayList<TileEntityLinkBox>> linkBoxes = new HashMap<Integer, ArrayList<TileEntityLinkBox>>();
-    public Map<Integer, Boolean> initiatedNBTPower = new HashMap<Integer, Boolean>();
+    public Map<Integer, ArrayList<TileEntityLinkBox>> linkBoxes;
+    public Map<Integer, Boolean> initiatedNBTPower;
+    public Map<Integer, Integer> networkPower;
 
     public LinkBoxNetwork() {
+        initNetwork();
+    }
 
+    public void initNetwork() {
+        linkBoxes = new HashMap<Integer, ArrayList<TileEntityLinkBox>>();
+        initiatedNBTPower = new HashMap<Integer, Boolean>();
+        networkPower = new HashMap<Integer, Integer>();
     }
 
     public void addLinkBoxToNetwork(TileEntityLinkBox linkBox, int id) {
@@ -51,25 +58,8 @@ public class LinkBoxNetwork {
             return;
         list.remove(linkBox);
         linkBoxes.put(oldLinkID, list);
-        System.out.println(list.size());
         if(list.size() == 0)
             setNetworkPower(oldLinkID, 0);
-    }
-
-    public void addNetworkPower(int linkId, int power) {
-        int oldPower = getNetworkPower(linkId);
-        oldPower += power;
-        if(oldPower > Config.powerBox_capacity)
-            oldPower = Config.powerBox_capacity;
-        setNetworkPower(linkId, oldPower);
-    }
-
-    public void drainNetworkPower(int linkId, int power) {
-        int oldPower = getNetworkPower(linkId);
-        oldPower -= power;
-        if(oldPower < 0)
-            oldPower = 0;
-        setNetworkPower(linkId, oldPower);
     }
 
     public int neededPower(int linkId) {
@@ -80,14 +70,12 @@ public class LinkBoxNetwork {
     public void setNetworkPower(int linkId, int power) {
         if(power > Config.powerBox_capacity)
             power = Config.powerBox_capacity;
-        if(getFirstOfLink(linkId) == null || !getFirstOfLink(linkId).doesExist())
-            return;
-        getFirstOfLink(linkId).setPowerStored(power, true);
+        networkPower.put(linkId, power);
     }
 
     public int getNetworkPower(int linkId) {
-        if(getFirstOfLink(linkId) == null || !getFirstOfLink(linkId).doesExist())
+        if(networkPower.get(linkId) == null)
             return 0;
-        return getFirstOfLink(linkId).getPowerStored(true);
+        return networkPower.get(linkId);
     }
 }

@@ -84,13 +84,6 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         return storedPower;
     }
 
-    public int getPowerStored(boolean isFirst) {
-        if(!isFirst)
-            return 0;
-
-        return storedPower;
-    }
-
     public int getMaxPower() {
         if(linkedId != 0)
             return Config.powerBox_capacity;
@@ -102,15 +95,6 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
             Main.linkBoxNetwork.setNetworkPower(linkedId, power);
             return;
         }
-
-        storedPower = power;
-        if(storedPower > maxStoredPower)
-            storedPower = maxStoredPower;
-    }
-
-    public void setPowerStored(int power, boolean isFirst) {
-        if(!isFirst)
-            return;
 
         storedPower = power;
         if(storedPower > maxStoredPower)
@@ -184,24 +168,15 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
             tryOutputtingEnergy();
         }
 
-        if(linkedId == 0) {
-            if(storedPower > maxStoredPower)
-                storedPower = maxStoredPower;
+        if(getPowerStored() > maxStoredPower)
+            setPowerStored(maxStoredPower);
 
-            if(storedPower <= 1.0)
-                storedPower = 0;
+        if(getPowerStored() <= 1.0)
+            setPowerStored(0);
 
-            if(storedPower < 0)
-                storedPower = 0;
-
-            if(oldEnergy != getPowerStored())
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            oldEnergy = getPowerStored();
-        }
-    }
-
-    public boolean doesExist() {
-        return worldObj != null;
+        if(oldEnergy != getPowerStored())
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        oldEnergy = getPowerStored();
     }
 
     @Override
@@ -216,8 +191,6 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
     public void invalidate() {
         super.invalidate();
 
-        System.out.println(this.toString() + " get's invalidated!");
-
         if(worldObj == null || worldObj.isRemote)
             return;
 
@@ -227,8 +200,6 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
-
-        System.out.println(this.toString() + " get's chunkUnloaded!");
 
         if(worldObj == null || worldObj.isRemote)
             return;
