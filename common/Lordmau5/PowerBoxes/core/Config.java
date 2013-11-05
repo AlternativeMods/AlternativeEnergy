@@ -25,7 +25,6 @@ public class Config {
     public static int linkBox_blockId = 2002;
 
     public static int upgrade_ItemId = 5760;
-    public static int linkCard_ItemId = 5761;
 
     public static boolean unbreakable = false;
 

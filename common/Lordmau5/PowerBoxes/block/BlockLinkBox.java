@@ -3,7 +3,6 @@ package Lordmau5.PowerBoxes.block;
 import Lordmau5.PowerBoxes.core.Config;
 import Lordmau5.PowerBoxes.core.GUIHandler;
 import Lordmau5.PowerBoxes.core.Main;
-import Lordmau5.PowerBoxes.item.Items;
 import Lordmau5.PowerBoxes.tile.TileEntityLinkBox;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,7 +67,7 @@ public class BlockLinkBox extends BlockContainer {
         if(tempTile == null)
             return false;
 
-        if(player.getHeldItem() != null && player.getHeldItem().itemID == Items.linkCard_Item.itemID)
+        if(player.getHeldItem() != null)
             return false;
 
         if(tempTile instanceof TileEntityLinkBox) {

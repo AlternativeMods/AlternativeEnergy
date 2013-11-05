@@ -2,7 +2,6 @@ package Lordmau5.PowerBoxes.core;
 
 import Lordmau5.PowerBoxes.block.*;
 import Lordmau5.PowerBoxes.compatibility.buildCraft.BuildCraftCompatibility;
-import Lordmau5.PowerBoxes.item.ItemLinkCard;
 import Lordmau5.PowerBoxes.item.ItemUpgrade;
 import Lordmau5.PowerBoxes.item.Items;
 import Lordmau5.PowerBoxes.network.LinkBoxNetwork;
@@ -16,7 +15,10 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -89,7 +91,6 @@ public class Main {
         Config.linkBox_blockId = config.get(Configuration.CATEGORY_BLOCK, "Link Box", Config.linkBox_blockId).getInt(Config.linkBox_blockId);
 
         Config.upgrade_ItemId = config.get(Configuration.CATEGORY_ITEM, "Upgrades", Config.upgrade_ItemId).getInt(Config.upgrade_ItemId);
-        Config.linkCard_ItemId = config.get(Configuration.CATEGORY_ITEM, "Link Card", Config.linkCard_ItemId).getInt(Config.linkCard_ItemId);
 
         config.save();
     }
@@ -110,7 +111,6 @@ public class Main {
 
     public void createItems() {
         Items.upgrade_Item = new ItemUpgrade(Config.upgrade_ItemId);
-        Items.linkCard_Item = new ItemLinkCard(Config.linkCard_ItemId);
     }
 
     public void registerBlocks() {
@@ -121,7 +121,6 @@ public class Main {
 
     public void registerItems() {
         GameRegistry.registerItem(Items.upgrade_Item, "Upgrades");
-        GameRegistry.registerItem(Items.linkCard_Item, "LinkCard");
     }
 
     public void registerTiles() {
@@ -134,8 +133,6 @@ public class Main {
         LanguageRegistry.addName(Blocks.powerBox_block, "Power Box");
         LanguageRegistry.addName(Blocks.powerCable_block, "Power Cable");
         LanguageRegistry.addName(Blocks.linkBox_block, "Link Box");
-
-        LanguageRegistry.addName(Items.linkCard_Item, "Link Card");
 
         Items.upgrade_Item.addNames();
 
