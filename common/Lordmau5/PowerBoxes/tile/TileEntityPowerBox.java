@@ -2,6 +2,7 @@ package Lordmau5.PowerBoxes.tile;
 
 import Lordmau5.PowerBoxes.core.*;
 import Lordmau5.PowerBoxes.item.Items;
+import Lordmau5.PowerBoxes.network.EnergyNetwork;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import cpw.mods.fml.common.Optional;
@@ -59,8 +60,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     int oldMaxOutput;
 
     public final List<InvSlot> invSlots = new ArrayList();
-
-    //PowerHandler convHandler;
 
     public InvSlot capacitySlot;
     public InvSlot outputSpeedSlot;
@@ -499,7 +498,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     @Optional.Method(modid = "IC2")
     public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
         if(tileEntity == null) return false;
-        if(tileEntity instanceof TileEntityPowerBox) return false;
+        if(tileEntity instanceof TileEntityPowerBox || tileEntity instanceof TileEntityLinkBox) return false;
         if(tileEntity instanceof TileEntityPowerCable) return false;
 
         if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("input"))
@@ -531,7 +530,7 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     @Optional.Method(modid = "IC2")
     public boolean emitsEnergyTo(TileEntity tileEntity, ForgeDirection forgeDirection) {
         if(tileEntity == null) return false;
-        if(tileEntity instanceof TileEntityPowerBox) return false;
+        if(tileEntity instanceof TileEntityPowerBox || tileEntity instanceof TileEntityLinkBox) return false;
         if(tileEntity instanceof TileEntityPowerCable) return false;
 
         if(outputMode[forgeDirection.ordinal()].equalsIgnoreCase("output"))

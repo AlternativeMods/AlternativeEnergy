@@ -1,4 +1,4 @@
-package Lordmau5.PowerBoxes.core;
+package Lordmau5.PowerBoxes.network;
 
 import net.minecraft.tileentity.TileEntity;
 import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;

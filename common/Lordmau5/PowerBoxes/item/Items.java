@@ -9,4 +9,5 @@ package Lordmau5.PowerBoxes.item;
  */
 public class Items {
     public static ItemUpgrade upgrade_Item;
+    public static ItemLinkCard linkCard_Item;
 }

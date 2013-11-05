@@ -1,12 +1,15 @@
 package Lordmau5.PowerBoxes.core;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+import Lordmau5.PowerBoxes.gui.ContainerLinkBox;
 import Lordmau5.PowerBoxes.gui.ContainerPowerBox;
+import Lordmau5.PowerBoxes.gui.GUI_LinkBox;
 import Lordmau5.PowerBoxes.gui.GUI_PowerBox;
+import Lordmau5.PowerBoxes.tile.TileEntityLinkBox;
+import Lordmau5.PowerBoxes.tile.TileEntityPowerBox;
+import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import Lordmau5.PowerBoxes.tile.TileEntityPowerBox;
 
 /**
  * Author: Lordmau5
@@ -18,7 +21,7 @@ import Lordmau5.PowerBoxes.tile.TileEntityPowerBox;
 public class GUIHandler implements IGuiHandler {
 
     public static int ID_GUI_PowerBox = 0;
-    public static int ID_GUI_EnderBox = 1;
+    public static int ID_GUI_LinkBox = 1;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -26,6 +29,9 @@ public class GUIHandler implements IGuiHandler {
         if(ID == ID_GUI_PowerBox)
             if(tileEntity instanceof TileEntityPowerBox)
                 return new ContainerPowerBox(player.inventory, (TileEntityPowerBox) tileEntity);
+        if(ID == ID_GUI_LinkBox)
+            if(tileEntity instanceof TileEntityLinkBox)
+                return new ContainerLinkBox(player.inventory);
         return null;
     }
 
@@ -35,6 +41,9 @@ public class GUIHandler implements IGuiHandler {
         if(ID == ID_GUI_PowerBox)
             if(tileEntity instanceof TileEntityPowerBox)
                 return new GUI_PowerBox(player.inventory, (TileEntityPowerBox) tileEntity);
+        if(ID == ID_GUI_LinkBox)
+            if(tileEntity instanceof TileEntityLinkBox)
+                return new GUI_LinkBox(player.inventory, (TileEntityLinkBox) tileEntity);
         return null;
     }
 }

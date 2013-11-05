@@ -1,4 +1,4 @@
-package Lordmau5.PowerBoxes.core;
+package Lordmau5.PowerBoxes.block;
 
 import net.minecraft.block.Block;
 
@@ -12,4 +12,5 @@ import net.minecraft.block.Block;
 public class Blocks {
     public static Block powerBox_block;
     public static Block powerCable_block;
+    public static Block linkBox_block;
 }

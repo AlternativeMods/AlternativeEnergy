@@ -1,8 +1,8 @@
 package Lordmau5.PowerBoxes.tile;
 
-import Lordmau5.PowerBoxes.core.EnergyNetwork;
 import Lordmau5.PowerBoxes.core.Main;
 import Lordmau5.PowerBoxes.core.Ratios;
+import Lordmau5.PowerBoxes.network.EnergyNetwork;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import buildcraft.core.IMachine;
@@ -11,6 +11,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.tile.IEnergyStorage;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -97,6 +98,20 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
         if(Main.ICSupplied)
             tryOutputtingEU();
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+
+        network.setPower(tag.getInteger("storedPower"));
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+
+        tag.setInteger("storedPower", network.getNetworkPower());
     }
 
     @Override
@@ -192,7 +207,10 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             ForgeDirection dr = ForgeDirection.getOrientation(i);
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
-            if(tmpTile != null && tmpTile instanceof TileEntityPowerBox) {
+            if(tmpTile == null)
+                continue;
+
+            if(tmpTile instanceof TileEntityPowerBox) {
                 TileEntityPowerBox pBox = (TileEntityPowerBox) tmpTile;
 
                 if(!pBox.getMode(dr.getOpposite().ordinal()).equalsIgnoreCase("input")) continue;
@@ -208,6 +226,24 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                     toInsert = network.getNetworkPower();
 
                 pBox.setPowerStored(pBox.getPowerStored() + toInsert);
+                network.drainPower(toInsert);
+            }
+            else if(tmpTile instanceof TileEntityLinkBox) {
+                TileEntityLinkBox linkBox = (TileEntityLinkBox) tmpTile;
+
+                if(!linkBox.getMode(dr.getOpposite().ordinal()).equalsIgnoreCase("input")) continue;
+
+                if(network.getNetworkPower() < 1) return;
+
+                if(linkBox.neededPower() < 1) continue;
+
+                int toInsert = 25;
+                if(toInsert > linkBox.getMaxPower() - linkBox.getPowerStored())
+                    toInsert = linkBox.getMaxPower() - linkBox.getPowerStored();
+                if(toInsert > network.getNetworkPower())
+                    toInsert = network.getNetworkPower();
+
+                linkBox.setPowerStored(linkBox.getPowerStored() + toInsert);
                 network.drainPower(toInsert);
             }
         }

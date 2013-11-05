@@ -1,9 +1,12 @@
 package Lordmau5.PowerBoxes.core;
 
+import Lordmau5.PowerBoxes.tile.TileEntityLinkBox;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import Lordmau5.PowerBoxes.item.Items;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
@@ -25,6 +28,8 @@ public class PacketHandler implements IPacketHandler {
 
     public static int CAPACITY_UPGRADE = 0;
     public static int OUTPUTSPEED_UPGRADE = 1;
+    public static int NETWORKID_UPDATE = 2;
+    public static int NETWORKID_UPDATE_SERVER = 3;
 
     @Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -57,7 +62,10 @@ public class PacketHandler implements IPacketHandler {
         }
 
         TileEntity tmpTile = world.getBlockTileEntity(x, y, z);
-        if(tmpTile != null && tmpTile instanceof TileEntityPowerBox) {
+        if(tmpTile == null)
+            return;
+
+        if(tmpTile instanceof TileEntityPowerBox) {
             TileEntityPowerBox pBox = (TileEntityPowerBox) tmpTile;
 
             if(ID == CAPACITY_UPGRADE) {
@@ -76,6 +84,37 @@ public class PacketHandler implements IPacketHandler {
                 pBox.forceOutputSpeedUpdate();
             }
         }
+        else if(tmpTile instanceof TileEntityLinkBox) {
+            TileEntityLinkBox linkBox = (TileEntityLinkBox) tmpTile;
+
+            if(ID == NETWORKID_UPDATE)
+                linkBox.setLinkId((int) var);
+            else if(ID == NETWORKID_UPDATE_SERVER && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+                linkBox.setLinkId((int) var);
+        }
+    }
+
+    public static void sendPacketToServer(int ID, int x, int y, int z, float var) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+        DataOutputStream outputStream = new DataOutputStream(bos);
+        try {
+            outputStream.writeInt(ID);
+
+            outputStream.writeInt(x);
+            outputStream.writeInt(y);
+            outputStream.writeInt(z);
+
+            outputStream.writeFloat(var);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        Packet250CustomPayload packet = new Packet250CustomPayload();
+        packet.channel = Main.channelName;
+        packet.data = bos.toByteArray();
+        packet.length = bos.size();
+
+        PacketDispatcher.sendPacketToServer(packet);
     }
 
     public static void sendPacketToPlayer(Player player, int ID, int x, int y, int z, float var) {

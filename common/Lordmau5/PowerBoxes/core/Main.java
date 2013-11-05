@@ -1,12 +1,13 @@
 package Lordmau5.PowerBoxes.core;
 
-import Lordmau5.PowerBoxes.block.BlockPowerBox;
-import Lordmau5.PowerBoxes.block.BlockPowerCable;
-import Lordmau5.PowerBoxes.block.ItemBlockPowerBox;
+import Lordmau5.PowerBoxes.block.*;
 import Lordmau5.PowerBoxes.compatibility.buildCraft.BuildCraftCompatibility;
+import Lordmau5.PowerBoxes.item.ItemLinkCard;
 import Lordmau5.PowerBoxes.item.ItemUpgrade;
 import Lordmau5.PowerBoxes.item.Items;
+import Lordmau5.PowerBoxes.network.LinkBoxNetwork;
 import Lordmau5.PowerBoxes.proxy.CommonProxy;
+import Lordmau5.PowerBoxes.tile.TileEntityLinkBox;
 import Lordmau5.PowerBoxes.tile.TileEntityPowerBox;
 import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;
 import buildcraft.api.power.IPowerReceptor;
@@ -62,6 +63,8 @@ public class Main {
 
     public static BuildCraftCompatibility bcComp;
 
+    public static LinkBoxNetwork linkBoxNetwork;
+
     @Mod.Instance(modid)
     public static Main instance;
 
@@ -84,8 +87,11 @@ public class Main {
         Config.powerBox_capacity_multiplier = config.get(Configuration.CATEGORY_GENERAL, "Capacity Upgrade Multiplier", Config.powerBox_capacity_multiplier).getInt(Config.powerBox_capacity_multiplier);
 
         Config.powerBox_blockId = config.get(Configuration.CATEGORY_BLOCK, "Power Box", Config.powerBox_blockId).getInt(Config.powerBox_blockId);
+        Config.powerCable_blockId = config.get(Configuration.CATEGORY_BLOCK, "Power Cable", Config.powerCable_blockId).getInt(Config.powerCable_blockId);
+        Config.linkBox_blockId = config.get(Configuration.CATEGORY_BLOCK, "Link Box", Config.linkBox_blockId).getInt(Config.linkBox_blockId);
 
         Config.upgrade_ItemId = config.get(Configuration.CATEGORY_ITEM, "Upgrades", Config.upgrade_ItemId).getInt(Config.upgrade_ItemId);
+        Config.linkCard_ItemId = config.get(Configuration.CATEGORY_ITEM, "Link Card", Config.linkCard_ItemId).getInt(Config.linkCard_ItemId);
 
         config.save();
     }
@@ -95,34 +101,43 @@ public class Main {
         doConfig(event);
 
         instance = this;
+        linkBoxNetwork = new LinkBoxNetwork();
     }
 
     public void createBlocks() {
         Blocks.powerBox_block = new BlockPowerBox(Config.powerBox_blockId, Material.iron);
-        Blocks.powerCable_block = new BlockPowerCable(Config.powerBox_blockId + 1, Material.iron);
+        Blocks.powerCable_block = new BlockPowerCable(Config.powerCable_blockId, Material.iron);
+        Blocks.linkBox_block = new BlockLinkBox(Config.linkBox_blockId, Material.iron);
     }
 
     public void createItems() {
         Items.upgrade_Item = new ItemUpgrade(Config.upgrade_ItemId);
+        Items.linkCard_Item = new ItemLinkCard(Config.linkCard_ItemId);
     }
 
     public void registerBlocks() {
         GameRegistry.registerBlock(Blocks.powerBox_block, ItemBlockPowerBox.class, "PowerBox_Block");
         GameRegistry.registerBlock(Blocks.powerCable_block, "PowerCable_Block");
+        GameRegistry.registerBlock(Blocks.linkBox_block, "LinkBox_Block");
     }
 
     public void registerItems() {
         GameRegistry.registerItem(Items.upgrade_Item, "Upgrades");
+        GameRegistry.registerItem(Items.linkCard_Item, "LinkCard");
     }
 
     public void registerTiles() {
         GameRegistry.registerTileEntity(TileEntityPowerBox.class, "PowerBox_Tile");
         GameRegistry.registerTileEntity(TileEntityPowerCable.class, "PowerCable_Tile");
+        GameRegistry.registerTileEntity(TileEntityLinkBox.class, "LinkBox_Tile");
     }
 
     public void addNames() {
-        LanguageRegistry.addName(new ItemStack(Blocks.powerBox_block, 1, 0), "Power Box");
-        LanguageRegistry.addName(new ItemStack(Blocks.powerCable_block, 1, 0), "Power Cable");
+        LanguageRegistry.addName(Blocks.powerBox_block, "Power Box");
+        LanguageRegistry.addName(Blocks.powerCable_block, "Power Cable");
+        LanguageRegistry.addName(Blocks.linkBox_block, "Link Box");
+
+        LanguageRegistry.addName(Items.linkCard_Item, "Link Card");
 
         Items.upgrade_Item.addNames();
 
@@ -203,17 +218,6 @@ public class Main {
 
         if(ICSupplied && BCSupplied)
             addBCandICRecipies();
-
-        /*if(ICSupplied)
-            if(BCSupplied)
-                addBCandICRecipies();
-            else
-                addICRecipies();
-        else if(BCSupplied)
-            if(ICSupplied)
-                addBCandICRecipies();
-            else
-                addBCRecipies();  */
         //------------------------------------------------------
     }
 
