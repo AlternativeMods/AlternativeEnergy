@@ -1,7 +1,10 @@
-Power Boxes.iml
 common_103
 common_104_pre
 commonWUBWORKING
 .gradle
 build
 minecraft
+*.ipr
+*.iws
+*.iml
+.idea
