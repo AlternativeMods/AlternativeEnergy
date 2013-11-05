@@ -1,0 +1,24 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.abrarsyed.gmcp:GMCP:0.8.+'
+    }
+}
+
+apply plugin: 'gmcp'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+minecraft {
+    minecraftVersion = '1.6.4'
+    forgeVersion = '942'
+}
+
+dependencies {
+    
+}
