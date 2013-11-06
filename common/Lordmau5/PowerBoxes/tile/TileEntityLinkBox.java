@@ -43,6 +43,8 @@ import net.minecraftforge.common.MinecraftForge;
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
 public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
     int linkedId;
+    String owner;
+    boolean isPrivate;
 
     boolean needsToInit;
     int needsToInit_Power;
@@ -54,12 +56,10 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
     int euToConvert;
     boolean addedToENet;
 
-    boolean doesExist;
-
     String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
 
     public TileEntityLinkBox() {
-        doesExist = true;
+        isPrivate = false;
     }
 
     public void setLinkId(int linkId) {
@@ -107,6 +107,16 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         return maxStoredPower - storedPower;
     }
 
+    public void setOwner(String username) {
+        owner = username;
+    }
+
+    public String getOwner() {
+        if(owner == null || !isPrivate)
+            return "public";
+        return owner;
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
@@ -114,6 +124,8 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         storedPower = tag.getInteger("storedPower");
         for(int i=0; i<outputMode.length; i++)
             outputMode[i] = tag.getString("outputMode_" + i);
+        owner = tag.getString("owner");
+        isPrivate = tag.getBoolean("isPrivate");
         linkedId = tag.getInteger("linkId");
 
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
@@ -131,6 +143,8 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
             if(!outputMode[i].isEmpty())
                 tag.setString("outputMode_" + i, outputMode[i]);
         tag.setInteger("storedPower", storedPower);
+        tag.setString("owner", owner);
+        tag.setBoolean("isPrivate", isPrivate);
         tag.setInteger("linkId", linkedId);
         if(linkedId != 0)
             tag.setInteger("linkId_storedPower", Main.linkBoxNetwork.getNetworkPower(linkedId));
@@ -311,7 +325,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         if(!Main.ICSupplied)
             return;
 
-        if(addedToENet == false) {
+        if(!addedToENet) {
             addedToENet = true;
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
         }
@@ -321,7 +335,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         if(!Main.ICSupplied)
             return;
 
-        if(addedToENet == true) {
+        if(addedToENet) {
             addedToENet = false;
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
@@ -496,7 +510,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
 
         int drainPower = 0;
         for(int i=0; i<6; i++) {
-            if(conSides[i] != false) {
+            if(conSides[i]) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
                 if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable) && !Main.isInvalidPowerTile(tmptile)) {

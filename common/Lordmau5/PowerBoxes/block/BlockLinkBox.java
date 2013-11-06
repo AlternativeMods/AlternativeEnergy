@@ -9,7 +9,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -46,15 +49,43 @@ public class BlockLinkBox extends BlockContainer {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world)
-    {
+    public TileEntity createNewTileEntity(World world) {
         return null;
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int meta)
-    {
+    public TileEntity createTileEntity(World world, int meta) {
         return new TileEntityLinkBox();
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+        if(world.isRemote)
+            return;
+        if(!(entity instanceof EntityPlayer))
+            return;
+
+        TileEntity tempTile = world.getBlockTileEntity(x, y, z);
+        if(tempTile == null || !(tempTile instanceof TileEntityLinkBox))
+            return;
+        TileEntityLinkBox linkBox = (TileEntityLinkBox) tempTile;
+        linkBox.setOwner(((EntityPlayer)entity).username);
+    }
+
+    @Override
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+    {
+        TileEntity tempTile = world.getBlockTileEntity(x, y, z);
+        if(tempTile == null || !(tempTile instanceof TileEntityLinkBox))
+            return world.setBlockToAir(x, y, z);
+
+        TileEntityLinkBox linkBox = (TileEntityLinkBox) tempTile;
+        if(linkBox.getOwner().equals(player.username) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username))
+            return world.setBlockToAir(x, y, z);
+
+        if(!world.isRemote)
+            player.addChatMessage("This Link Box belongs to " + linkBox.getOwner() + "!");
+        return false;
     }
 
     @Override
@@ -67,31 +98,37 @@ public class BlockLinkBox extends BlockContainer {
         if(tempTile == null)
             return false;
 
+        if(!(tempTile instanceof TileEntityLinkBox))
+            return false;
+
+        TileEntityLinkBox linkBox = (TileEntityLinkBox) tempTile;
+        if(!linkBox.getOwner().equals(player.username) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username)) {
+            player.addChatMessage("This Link Box belongs to " + linkBox.getOwner() + "!");
+            return false;
+        }
+
+        System.out.println(linkBox.getOwner());
+
         if(player.getHeldItem() != null)
             return false;
 
-        if(tempTile instanceof TileEntityLinkBox) {
-            TileEntityLinkBox pBox = (TileEntityLinkBox) tempTile;
-
-            if(player.getHeldItem() != null && Main.isWrench(player.getHeldItem().itemID) || (!Main.BCSupplied && !Main.ICSupplied && player.getHeldItem() == null)) {
-                if(player.isSneaking()) {
-                    pBox.setMode(side, pBox.getNextMode(pBox.getMode(side)));
-                    player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is now set to " + pBox.getMode(side));
-                    return true;
-                }
-                else {
-                    player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is set to " + pBox.getMode(side));
-                    return true;
-                }
+        if(player.getHeldItem() != null && Main.isWrench(player.getHeldItem().itemID) || (!Main.BCSupplied && !Main.ICSupplied && player.getHeldItem() == null)) {
+            if(player.isSneaking()) {
+                linkBox.setMode(side, linkBox.getNextMode(linkBox.getMode(side)));
+                player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is now set to " + linkBox.getMode(side));
+                return true;
             }
             else {
-                if(player.isSneaking())
-                    return false;
-                player.openGui(Main.instance, GUIHandler.ID_GUI_LinkBox, world, x, y, z);
+                player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is set to " + linkBox.getMode(side));
                 return true;
             }
         }
-        return false;
+        else {
+            if(player.isSneaking())
+                return false;
+            player.openGui(Main.instance, GUIHandler.ID_GUI_LinkBox, world, x, y, z);
+            return true;
+        }
     }
 
     @Override

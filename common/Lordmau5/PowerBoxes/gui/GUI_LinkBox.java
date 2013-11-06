@@ -4,6 +4,8 @@ import Lordmau5.PowerBoxes.core.Config;
 import Lordmau5.PowerBoxes.core.Main;
 import Lordmau5.PowerBoxes.core.PacketHandler;
 import Lordmau5.PowerBoxes.tile.TileEntityLinkBox;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -24,12 +26,51 @@ public class GUI_LinkBox extends GuiContainer {
 
     TileEntityLinkBox tileEntity;
     GuiTextField linkId;
+    GuiButtonLock lock;
 
     public GUI_LinkBox(InventoryPlayer inventoryPlayer, TileEntityLinkBox tileEntity) {
         super(new ContainerLinkBox(inventoryPlayer));
-        this.tileEntity = Main.linkBoxNetwork.getFirstOfLink(tileEntity.getLinkId());
-        if(this.tileEntity == null)
-            this.tileEntity = tileEntity;
+        this.tileEntity = tileEntity;
+    }
+
+    class GuiButtonLock extends GuiButton {
+        ResourceLocation texture;
+
+        public GuiButtonLock(int par1, int par2, int par3)
+        {
+            super(par1, par2, par3, 20, 20, "");
+            texture = new ResourceLocation(Main.modid.toLowerCase(), "textures/gui/lock.png");
+        }
+
+        public void drawButton(Minecraft par1Minecraft, int par2, int par3)
+        {
+            par2 -= guiLeft;
+            par3 -= guiTop;
+
+            par1Minecraft.getTextureManager().bindTexture(texture);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            this.field_82253_i = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
+            int hoverState = getHoverStateThis(this.field_82253_i);
+            int privateState = getPrivateStateThis();
+            this.drawTexturedModalRect(this.xPosition, this.yPosition, privateState * 128, hoverState * 128, this.width, this.height);
+            this.mouseDragged(par1Minecraft, par2, par3);
+        }
+
+        int getHoverStateThis(boolean par1) {
+            byte b0 = 0;
+
+            if (par1)
+                b0 = 1;
+
+            return b0;
+        }
+
+        int getPrivateStateThis() {
+            byte b = 1;
+            if(tileEntity.getOwner().equals("public"))
+                b = 0;
+            return b;
+        }
     }
 
     public void initGui() {
@@ -41,6 +82,8 @@ public class GUI_LinkBox extends GuiContainer {
         if(tileEntity.getLinkId() != 0) {
             linkId.setText(String.valueOf(tileEntity.getLinkId()));
         }
+
+        lock = new GuiButtonLock(0, 131, 35);
     }
 
     public void keyTyped(char c, int i){
@@ -85,6 +128,8 @@ public class GUI_LinkBox extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int posX, int posY) {
         fontRenderer.drawString("Link Box", 6, 4, 0x000000);
         fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6, ySize - 96 + 4, 0x000000);
+
+        lock.drawButton(mc, posX, posY);
     }
 
     @Override
