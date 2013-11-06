@@ -1,4 +1,15 @@
-Power Boxes.iml
+.gradle
+build
+minecraft
+*.iml
+*.ipr
+*.iws
+
+#Remove these in the future
 common_103
 common_104_pre
 commonWUBWORKING
+*.gradle
+gradlew
+gradlew.bat
+gradle
