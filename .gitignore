@@ -4,6 +4,7 @@ minecraft
 *.iml
 *.ipr
 *.iws
+Power-Boxes.iml
 out
 runtime
 
