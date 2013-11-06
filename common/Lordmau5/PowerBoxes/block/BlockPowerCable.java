@@ -2,6 +2,7 @@ package Lordmau5.PowerBoxes.block;
 
 import Lordmau5.PowerBoxes.core.Main;
 import Lordmau5.PowerBoxes.core.Render;
+import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
@@ -16,7 +17,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class BlockPowerCable extends BlockContainer {
 
     public BlockPowerCable(int par1, Material par2Material) {
         super(par1, par2Material);
-        setUnlocalizedName("block_PowerCable");
+        setUnlocalizedName("powerCable");
         setHardness(5.0F);
         setStepSound(soundMetalFootstep);
         setCreativeTab(Main.tabPowerBox);

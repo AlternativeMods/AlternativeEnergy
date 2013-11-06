@@ -36,6 +36,8 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
 
     int euForNetwork;
 
+    private CableConnectionMatrix connectionMatrix;
+
     public TileEntityPowerCable() {
         initializeNetwork();
 
@@ -61,14 +63,21 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
             TileEntity tile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
             if(tile != null) {
+                boolean connect = false;
                 if(tile instanceof TileEntityPowerCable) {
                     network = network.mergeNetworks(((TileEntityPowerCable)tile).network, network);
-                }
-                else if(Main.isValidPowerTile(tile)) {
+                    connect = true;
+                }else if(Main.isValidPowerTile(tile)) {
                     getEnergyNetwork().addInput(this, tile);
+                    connect = true;
                 }
+                this.connectionMatrix.setConnected(dr, connect);
             }
         }
+    }
+
+    public CableConnectionMatrix getConnectionMatrix() {
+        return connectionMatrix;
     }
 
     public void updateEntity() {

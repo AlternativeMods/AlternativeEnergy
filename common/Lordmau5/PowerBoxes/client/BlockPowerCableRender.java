@@ -1,12 +1,13 @@
 package Lordmau5.PowerBoxes.client;
 
 import Lordmau5.PowerBoxes.core.Render;
+import Lordmau5.PowerBoxes.tile.TileEntityPowerCable;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Author: Lordmau5
@@ -15,68 +16,50 @@ import org.lwjgl.opengl.GL11;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class BlockPowerCableRender implements ISimpleBlockRenderingHandler
-{
-    Tessellator tes = Tessellator.instance;
+public class BlockPowerCableRender implements ISimpleBlockRenderingHandler {
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderblocks)
-    {
-        if(modelID == Render.RENDER_BLOCKPOWERCABLE)
-        {
-            renderblocks.setRenderBounds(-0.25D, -0.25D, -0.25D, 0.25D, 0.25D, 0.25D);
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 
-            GL11.glTranslatef(0F, 0F, 0F);
-            tes.startDrawingQuads();
-            tes.setNormal(0.0F, -1.0F, 0.0F);
-            renderblocks.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(0));
-            tes.draw();
-            tes.startDrawingQuads();
-            tes.setNormal(0.0F, 1.0F, 0.0F);
-            renderblocks.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(1));
-            tes.draw();
-            tes.startDrawingQuads();
-            tes.setNormal(0.0F, 0.0F, -1.0F);
-            tes.addTranslation(0.0F, 0.0F, 0);
-            renderblocks.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(2));
-            tes.addTranslation(0.0F, 0.0F, 0);
-            tes.draw();
-            tes.startDrawingQuads();
-            tes.setNormal(0.0F, 0.0F, 1.0F);
-            tes.addTranslation(0.0F, 0.0F, 0);
-            renderblocks.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(3));
-            tes.addTranslation(0.0F, 0.0F, 0);
-            tes.draw();
-            tes.startDrawingQuads();
-            tes.setNormal(-1.0F, 0.0F, 0.0F);
-            tes.addTranslation(0, 0.0F, 0.0F);
-            renderblocks.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(4));
-            tes.addTranslation(0, 0.0F, 0.0F);
-            tes.draw();
-            tes.startDrawingQuads();
-            tes.setNormal(1.0F, 0.0F, 0.0F);
-            tes.addTranslation(0, 0.0F, 0.0F);
-            renderblocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(5));
-            tes.addTranslation(0, 0.0F, 0.0F);
-            tes.draw();
-            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+    }
+
+    @Override
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer){
+        float min = 0.355F;
+        float max = 0.645F;
+        renderer.setRenderBounds(min, min, min, max, max, max);
+        renderer.renderStandardBlock(block, x, y, z);
+        TileEntity tile = world.getBlockTileEntity(x, y, z);
+        if(tile != null && tile instanceof TileEntityPowerCable){
+            TileEntityPowerCable cable = (TileEntityPowerCable) tile;
+            for(ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS){
+                if(cable.getConnectionMatrix().isConnected(direction)){
+                    if(direction == ForgeDirection.UP){
+                        renderer.setRenderBounds(min, max, min, max, 1, max);
+                    }else if(direction == ForgeDirection.DOWN){
+                        renderer.setRenderBounds(min, 0, min, max, min, max);
+                    }else if(direction == ForgeDirection.NORTH){
+                        renderer.setRenderBounds(min, min, 0, max, max, min);
+                    }else if(direction == ForgeDirection.SOUTH){
+                        renderer.setRenderBounds(min, min, max, max, max, 1);
+                    }else if(direction == ForgeDirection.EAST){
+                        renderer.setRenderBounds(max, min, min, 1, max, max);
+                    }else if(direction == ForgeDirection.WEST){
+                        renderer.setRenderBounds(0, min, min, min, max, max);
+                    }
+                    renderer.renderStandardBlock(block, x, y, z);
+                }
+            }
         }
-    }
-
-    @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
-    {
-        return false;
-    }
-
-    public boolean shouldRender3DInInventory()
-    {
         return true;
     }
 
+    public boolean shouldRender3DInInventory(){
+        return false;
+    }
+
     @Override
-    public int getRenderId()
-    {
-        return 0;
+    public int getRenderId(){
+        return Render.RENDER_BLOCKPOWERCABLE;
     }
 }
