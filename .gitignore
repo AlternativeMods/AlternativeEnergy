@@ -4,6 +4,8 @@ minecraft
 *.iml
 *.ipr
 *.iws
+out
+runtime
 
 #Remove these in the future
 common_103
