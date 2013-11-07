@@ -31,9 +31,7 @@ public class GUI_LinkBox extends GuiContainer {
 
     public GUI_LinkBox(InventoryPlayer inventoryPlayer, TileEntityLinkBox tileEntity) {
         super(new ContainerLinkBox(inventoryPlayer));
-        this.tileEntity = PowerBoxes.linkBoxNetwork.getFirstOfLink(tileEntity.getLinkId());
-        if(this.tileEntity == null)
-            this.tileEntity = tileEntity;
+        this.tileEntity = tileEntity;
     }
 
     class GuiButtonLock extends GuiButton {
@@ -42,7 +40,7 @@ public class GUI_LinkBox extends GuiContainer {
         public GuiButtonLock(int par1, int par2, int par3)
         {
             super(par1, par2, par3, 20, 20, "");
-            texture = new ResourceLocation(Main.modid.toLowerCase(), "textures/gui/lock.png");
+            texture = new ResourceLocation(PowerBoxes.modid.toLowerCase(), "textures/gui/lock.png");
         }
 
         public void drawButton(Minecraft par1Minecraft, int par2, int par3)

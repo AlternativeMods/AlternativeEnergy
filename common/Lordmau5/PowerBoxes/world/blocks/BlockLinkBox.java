@@ -2,7 +2,6 @@ package lordmau5.powerboxes.world.blocks;
 
 import lordmau5.powerboxes.PowerBoxes;
 import lordmau5.powerboxes.Config;
-import lordmau5.powerboxes.core.GUIHandler;
 import lordmau5.powerboxes.world.tileentity.TileEntityLinkBox;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -127,14 +126,14 @@ public class BlockLinkBox extends BlockContainer {
             else {
                 if(player.isSneaking())
                     return false;
-                player.openGui(PowerBoxes.instance, GUIHandler.ID_GUI_LinkBox, world, x, y, z);
+                player.openGui(PowerBoxes.instance, PowerBoxes.commonProxy.ID_GUI_LinkBox, world, x, y, z);
                 return true;
             }
         }
         else {
             if(player.isSneaking())
                 return false;
-            player.openGui(Main.instance, GUIHandler.ID_GUI_LinkBox, world, x, y, z);
+            player.openGui(PowerBoxes.instance, PowerBoxes.commonProxy.ID_GUI_LinkBox, world, x, y, z);
             return true;
         }
     }

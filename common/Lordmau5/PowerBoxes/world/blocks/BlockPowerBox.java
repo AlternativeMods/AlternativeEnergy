@@ -1,7 +1,6 @@
 package lordmau5.powerboxes.world.blocks;
 
 import lordmau5.powerboxes.Config;
-import lordmau5.powerboxes.core.GUIHandler;
 import lordmau5.powerboxes.PowerBoxes;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -175,7 +174,7 @@ public class BlockPowerBox extends BlockContainer {
             else {
                 if(player.isSneaking())
                     return false;
-                player.openGui(PowerBoxes.instance, GUIHandler.ID_GUI_PowerBox, world, x, y, z);
+                player.openGui(PowerBoxes.instance, PowerBoxes.commonProxy.ID_GUI_PowerBox, world, x, y, z);
                 return true;
             }
         }
