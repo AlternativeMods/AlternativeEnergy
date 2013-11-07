@@ -4,7 +4,6 @@ minecraft
 *.iml
 *.ipr
 *.iws
-Power-Boxes.iml
 out
 runtime
 
@@ -12,4 +11,3 @@ runtime
 common_103
 common_104_pre
 commonWUBWORKING
-Power-Boxes.iml
