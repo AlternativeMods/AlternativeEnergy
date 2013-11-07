@@ -1,4 +1,4 @@
-package Lordmau5.PowerBoxes.compatibility.buildCraft;
+package lordmau5.powerboxes.compatibility.buildCraft;
 
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
