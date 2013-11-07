@@ -62,6 +62,25 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         isPrivate = false;
     }
 
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void togglePrivate() {
+        isPrivate = !isPrivate;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    public String getLinkIdentifier() {
+        return getLinkIdentifier(linkedId);
+    }
+
+    public String getLinkIdentifier(int id) {
+        if(isPrivate)
+            return owner + ":" + id;
+        return "public:" + id;
+    }
+
     public void setLinkId(int linkId) {
         int oldLinkedId = linkedId;
         linkedId = linkId;
@@ -69,8 +88,8 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
             return;
 
-        PowerBoxes.linkBoxNetwork.removeFromLink(this, oldLinkedId);
-        PowerBoxes.linkBoxNetwork.addLinkBoxToNetwork(this, linkedId);
+        PowerBoxes.linkBoxNetwork.removeFromLink(this, getLinkIdentifier(oldLinkedId));
+        PowerBoxes.linkBoxNetwork.addLinkBoxToNetwork(this, getLinkIdentifier());
         PacketHandler.sendPacketToPlayers(PacketHandler.NETWORKID_UPDATE, xCoord, yCoord, zCoord, linkedId);
     }
 
@@ -80,7 +99,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
 
     public int getPowerStored() {
         if(linkedId != 0)
-            return PowerBoxes.linkBoxNetwork.getNetworkPower(linkedId);
+            return PowerBoxes.linkBoxNetwork.getNetworkPower(getLinkIdentifier());
         return storedPower;
     }
 
@@ -92,7 +111,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
 
     public void setPowerStored(int power) {
         if(linkedId != 0) {
-            PowerBoxes.linkBoxNetwork.setNetworkPower(linkedId, power);
+            PowerBoxes.linkBoxNetwork.setNetworkPower(getLinkIdentifier(), power);
             return;
         }
 
@@ -103,7 +122,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
 
     public int neededPower() {
         if(linkedId != 0)
-            return PowerBoxes.linkBoxNetwork.neededPower(linkedId);
+            return PowerBoxes.linkBoxNetwork.neededPower(getLinkIdentifier());
         return maxStoredPower - storedPower;
     }
 
@@ -114,6 +133,12 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
     public String getOwner() {
         if(owner == null || !isPrivate)
             return "public";
+        return owner;
+    }
+
+    public String getRealOwner() {
+        if(owner == null)
+            return "CORRUPTED";
         return owner;
     }
 
@@ -147,7 +172,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
         tag.setBoolean("isPrivate", isPrivate);
         tag.setInteger("linkId", linkedId);
         if(linkedId != 0)
-            tag.setInteger("linkId_storedPower", PowerBoxes.linkBoxNetwork.getNetworkPower(linkedId));
+            tag.setInteger("linkId_storedPower", PowerBoxes.linkBoxNetwork.getNetworkPower(getLinkIdentifier()));
     }
 
     @Override
@@ -159,8 +184,8 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
 
         if(needsToInit) {
             needsToInit = false;
-            PowerBoxes.linkBoxNetwork.addLinkBoxToNetwork(this, linkedId);
-            PowerBoxes.linkBoxNetwork.initiateNetworkPower(linkedId, needsToInit_Power);
+            PowerBoxes.linkBoxNetwork.addLinkBoxToNetwork(this, getLinkIdentifier());
+            PowerBoxes.linkBoxNetwork.initiateNetworkPower(getLinkIdentifier(), needsToInit_Power);
         }
 
         loadTile();

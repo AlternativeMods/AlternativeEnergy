@@ -27,10 +27,13 @@ import java.io.*;
  */
 public class PacketHandler implements IPacketHandler {
 
+    public static int UNDEFINED = -1;
+
     public static int CAPACITY_UPGRADE = 0;
     public static int OUTPUTSPEED_UPGRADE = 1;
     public static int NETWORKID_UPDATE = 2;
     public static int NETWORKID_UPDATE_SERVER = 3;
+    public static int PRIVATE_UPDATE_SERVER = 4;
 
     @Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -92,6 +95,8 @@ public class PacketHandler implements IPacketHandler {
                 linkBox.setLinkId((int) var);
             else if(ID == NETWORKID_UPDATE_SERVER && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
                 linkBox.setLinkId((int) var);
+            else if(ID == PRIVATE_UPDATE_SERVER && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+                linkBox.togglePrivate();
         }
     }
 

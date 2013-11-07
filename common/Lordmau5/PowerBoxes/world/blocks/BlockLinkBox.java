@@ -80,7 +80,7 @@ public class BlockLinkBox extends BlockContainer {
             return world.setBlockToAir(x, y, z);
 
         TileEntityLinkBox linkBox = (TileEntityLinkBox) tempTile;
-        if(linkBox.getOwner().equals(player.username) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username))
+        if(!linkBox.isPrivate() && linkBox.getRealOwner().equals(player.username)|| MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username) || linkBox.isPrivate() && linkBox.getRealOwner().equals(player.username))
             return world.setBlockToAir(x, y, z);
 
         if(!world.isRemote)
@@ -102,12 +102,10 @@ public class BlockLinkBox extends BlockContainer {
             return false;
 
         TileEntityLinkBox linkBox = (TileEntityLinkBox) tempTile;
-        if(!linkBox.getOwner().equals(player.username) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username)) {
+        if(linkBox.isPrivate() && !linkBox.getOwner().equals(player.username) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username)) {
             player.addChatMessage("This Link Box belongs to " + linkBox.getOwner() + "!");
             return false;
         }
-
-        System.out.println(linkBox.getOwner());
 
         if(player.getHeldItem() != null)
             return false;

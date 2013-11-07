@@ -16,21 +16,21 @@ import java.util.Map;
  */
 public class LinkBoxNetwork {
 
-    public Map<Integer, ArrayList<TileEntityLinkBox>> linkBoxes;
-    public Map<Integer, Boolean> initiatedNBTPower;
-    public Map<Integer, Integer> networkPower;
+    public Map<String, ArrayList<TileEntityLinkBox>> linkBoxes;
+    public Map<String, Boolean> initiatedNBTPower;
+    public Map<String, Integer> networkPower;
 
     public LinkBoxNetwork() {
         initNetwork();
     }
 
     public void initNetwork() {
-        linkBoxes = new HashMap<Integer, ArrayList<TileEntityLinkBox>>();
-        initiatedNBTPower = new HashMap<Integer, Boolean>();
-        networkPower = new HashMap<Integer, Integer>();
+        linkBoxes = new HashMap<String, ArrayList<TileEntityLinkBox>>();
+        initiatedNBTPower = new HashMap<String, Boolean>();
+        networkPower = new HashMap<String, Integer>();
     }
 
-    public void addLinkBoxToNetwork(TileEntityLinkBox linkBox, int id) {
+    public void addLinkBoxToNetwork(TileEntityLinkBox linkBox, String id) {
         ArrayList<TileEntityLinkBox> list = linkBoxes.get(id);
         if(list == null) {
             list = new ArrayList<TileEntityLinkBox>();
@@ -39,20 +39,14 @@ public class LinkBoxNetwork {
         linkBoxes.put(id, list);
     }
 
-    public void initiateNetworkPower(int linkId, int power) {
+    public void initiateNetworkPower(String linkId, int power) {
         if(initiatedNBTPower.get(linkId) == null || initiatedNBTPower.get(linkId) == false) {
             initiatedNBTPower.put(linkId, true);
             setNetworkPower(linkId, power);
         }
     }
 
-    public TileEntityLinkBox getFirstOfLink(int linkId) {
-        if(linkBoxes.get(linkId) == null || linkBoxes.get(linkId).isEmpty())
-            return null;
-        return linkBoxes.get(linkId).get(0);
-    }
-
-    public void removeFromLink(TileEntityLinkBox linkBox, int oldLinkID) {
+    public void removeFromLink(TileEntityLinkBox linkBox, String oldLinkID) {
         ArrayList<TileEntityLinkBox> list = linkBoxes.get(oldLinkID);
         if(list == null)
             return;
@@ -62,18 +56,18 @@ public class LinkBoxNetwork {
             setNetworkPower(oldLinkID, 0);
     }
 
-    public int neededPower(int linkId) {
+    public int neededPower(String linkId) {
         int power = getNetworkPower(linkId);
         return Config.powerBox_capacity - power;
     }
 
-    public void setNetworkPower(int linkId, int power) {
+    public void setNetworkPower(String linkId, int power) {
         if(power > Config.powerBox_capacity)
             power = Config.powerBox_capacity;
         networkPower.put(linkId, power);
     }
 
-    public int getNetworkPower(int linkId) {
+    public int getNetworkPower(String linkId) {
         if(networkPower.get(linkId) == null)
             return 0;
         return networkPower.get(linkId);
