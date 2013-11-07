@@ -61,6 +61,8 @@ public class GUI_LinkBox extends GuiContainer {
 
             if (par1)
                 b0 = 1;
+            if (!enabled)
+                b0 = 2;
 
             return b0;
         }
@@ -84,6 +86,8 @@ public class GUI_LinkBox extends GuiContainer {
         }
 
         lock = new GuiButtonLock(0, 131, 35);
+        if(!tileEntity.getRealOwner().equals(mc.thePlayer.username))
+            lock.enabled = false;
     }
 
     public void keyTyped(char c, int i){
@@ -114,6 +118,8 @@ public class GUI_LinkBox extends GuiContainer {
     public void mouseClicked(int i, int j, int k){
         super.mouseClicked(i, j, k);
         linkId.mouseClicked(i, j, k);
+        if(lock.mousePressed(mc, i - guiLeft, j - guiTop))
+            PacketHandler.sendPacketToServer(PacketHandler.PRIVATE_UPDATE_SERVER, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, PacketHandler.UNDEFINED);
     }
 
     @Override
