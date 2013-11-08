@@ -126,14 +126,14 @@ public class BlockLinkBox extends BlockContainer {
             else {
                 if(player.isSneaking())
                     return false;
-                player.openGui(AlternativeEnergy.instance, AlternativeEnergy.commonProxy.ID_GUI_LinkBox, world, x, y, z);
+                player.openGui(AlternativeEnergy.instance, AlternativeEnergy.proxy.ID_GUI_LinkBox, world, x, y, z);
                 return true;
             }
         }
         else {
             if(player.isSneaking())
                 return false;
-            player.openGui(AlternativeEnergy.instance, AlternativeEnergy.commonProxy.ID_GUI_LinkBox, world, x, y, z);
+            player.openGui(AlternativeEnergy.instance, AlternativeEnergy.proxy.ID_GUI_LinkBox, world, x, y, z);
             return true;
         }
     }

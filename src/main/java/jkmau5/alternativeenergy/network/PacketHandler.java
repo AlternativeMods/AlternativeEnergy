@@ -6,11 +6,8 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.AlternativeEnergy;
-import jkmau5.alternativeenergy.world.item.Items;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
-import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
@@ -69,31 +66,10 @@ public class PacketHandler implements IPacketHandler {
         if(tmpTile == null)
             return;
 
-        if(tmpTile instanceof TileEntityPowerBox) {
-            TileEntityPowerBox pBox = (TileEntityPowerBox) tmpTile;
-
-            if(ID == CAPACITY_UPGRADE) {
-                if(var == 0)
-                    pBox.capacitySlot.put(null);
-                else
-                    pBox.capacitySlot.put(new ItemStack(Items.upgrade_Item, (int) var, 0));
-                pBox.forceMaxPowersUpdate();
-            }
-
-            else if(ID == OUTPUTSPEED_UPGRADE) {
-                if(var == 0)
-                    pBox.outputSpeedSlot.put(null);
-                else
-                    pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, (int) var, 1));
-                pBox.forceOutputSpeedUpdate();
-            }
-        }
-        else if(tmpTile instanceof TileEntityLinkBox) {
+        if(tmpTile instanceof TileEntityLinkBox) {
             TileEntityLinkBox linkBox = (TileEntityLinkBox) tmpTile;
 
-            if(ID == NETWORKID_UPDATE)
-                linkBox.setLinkId((int) var);
-            else if(ID == NETWORKID_UPDATE_SERVER && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+            if(ID == NETWORKID_UPDATE_SERVER && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
                 linkBox.setLinkId((int) var);
             else if(ID == PRIVATE_UPDATE_SERVER && FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
                 linkBox.togglePrivate();

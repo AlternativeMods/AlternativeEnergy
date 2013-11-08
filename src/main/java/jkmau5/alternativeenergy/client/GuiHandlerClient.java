@@ -1,10 +1,8 @@
-package jkmau5.alternativeenergy.proxy;
+package jkmau5.alternativeenergy.client;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import jkmau5.alternativeenergy.client.gui.GUI_LinkBox;
 import jkmau5.alternativeenergy.client.gui.GUI_PowerBox;
-import jkmau5.alternativeenergy.client.render.BlockPowerCableRender;
-import jkmau5.alternativeenergy.client.render.Render;
+import jkmau5.alternativeenergy.server.GuiHandlerServer;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,19 +10,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 /**
- * Author: Lordmau5
- * Date: 28.10.13
- * Time: 10:57
- * You are allowed to change this code,
- * however, not to publish it without my permission.
+ * No description given
+ *
+ * @author jk-5
  */
-public class ClientProxy extends CommonProxy {
-
-    @Override
-    public void initRendering(){
-        Render.RENDER_BLOCKPOWERCABLE = RenderingRegistry.getNextAvailableRenderId();
-        RenderingRegistry.registerBlockHandler(Render.RENDER_BLOCKPOWERCABLE, new BlockPowerCableRender());
-    }
+public class GuiHandlerClient extends GuiHandlerServer {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

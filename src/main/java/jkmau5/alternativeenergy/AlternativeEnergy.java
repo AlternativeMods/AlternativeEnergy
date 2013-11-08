@@ -5,13 +5,13 @@ import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -20,9 +20,8 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.compatibility.buildCraft.BuildCraftCompatibility;
-import jkmau5.alternativeenergy.network.PacketHandler;
 import jkmau5.alternativeenergy.power.LinkBoxNetwork;
-import jkmau5.alternativeenergy.proxy.CommonProxy;
+import jkmau5.alternativeenergy.server.ProxyCommon;
 import jkmau5.alternativeenergy.world.blocks.*;
 import jkmau5.alternativeenergy.world.item.ItemUpgrade;
 import jkmau5.alternativeenergy.world.item.Items;
@@ -49,7 +48,7 @@ import java.util.List;
  * however, not to publish it without my permission.
  */
 @Mod(modid = AlternativeEnergy.modid, dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
-@NetworkMod(channels = {"AltEnergy"}, packetHandler = PacketHandler.class)
+@NetworkMod
 public class AlternativeEnergy {
 
     public static final String modid = "AlternativeEnergy";
@@ -59,14 +58,14 @@ public class AlternativeEnergy {
     public static boolean ICSupplied = false;
     public static boolean CCSupplied = false;
 
-    @SidedProxy(clientSide = "jkmau5.alternativeenergy.proxy.ClientProxy", serverSide = "jkmau5.alternativeenergy.proxy.CommonProxy")
-    public static CommonProxy commonProxy;
+    @SidedProxy(modId = modid, clientSide = "jkmau5.alternativeenergy.client.ProxyClient", serverSide = "jkmau5.alternativeenergy.server.ProxyCommon")
+    public static ProxyCommon proxy;
 
     public static BuildCraftCompatibility bcComp;
 
     public static LinkBoxNetwork linkBoxNetwork;
 
-    @Mod.Instance(modid)
+    @Instance(modid)
     public static AlternativeEnergy instance;
 
     public static int bcWrenchId = 0;
@@ -99,6 +98,9 @@ public class AlternativeEnergy {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         doConfig(event);
+
+        proxy.registerNetworkHandlers();
+        proxy.registerEventHandlers();
 
         instance = this;
         linkBoxNetwork = new LinkBoxNetwork();
@@ -202,10 +204,6 @@ public class AlternativeEnergy {
         registerTiles();
 
         addNames();
-
-        NetworkRegistry.instance().registerGuiHandler(this, commonProxy);
-
-        commonProxy.initRendering();
     }
 
     private static List<Integer> wrenches = new ArrayList<Integer>();

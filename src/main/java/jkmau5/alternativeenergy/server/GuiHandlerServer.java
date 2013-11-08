@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.proxy;
+package jkmau5.alternativeenergy.server;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 import jkmau5.alternativeenergy.inventory.container.ContainerLinkBox;
@@ -10,20 +10,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 /**
- * Author: Lordmau5
- * Date: 28.10.13
- * Time: 10:57
- * You are allowed to change this code,
- * however, not to publish it without my permission.
+ * No description given
+ *
+ * @author jk-5
  */
-public class CommonProxy implements IGuiHandler {
+public class GuiHandlerServer implements IGuiHandler {
 
     public static int ID_GUI_PowerBox = 0;
     public static int ID_GUI_LinkBox = 1;
-
-    public void initRendering(){
-
-    }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

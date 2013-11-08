@@ -174,7 +174,7 @@ public class BlockPowerBox extends BlockContainer {
             else {
                 if(player.isSneaking())
                     return false;
-                player.openGui(AlternativeEnergy.instance, AlternativeEnergy.commonProxy.ID_GUI_PowerBox, world, x, y, z);
+                player.openGui(AlternativeEnergy.instance, AlternativeEnergy.proxy.ID_GUI_PowerBox, world, x, y, z);
                 return true;
             }
         }
