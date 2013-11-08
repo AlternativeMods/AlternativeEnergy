@@ -33,7 +33,6 @@ public class BlockPowerCableRender implements ISimpleBlockRenderingHandler {
             TileEntityPowerCable cable = (TileEntityPowerCable) tile;
             for(ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS){
                 if(cable.getConnectionMatrix().isConnected(direction)){
-                    System.out.println("I'm connected, biatch!");
                     if(direction == ForgeDirection.UP){
                         renderer.setRenderBounds(min, max, min, max, 1, max);
                     }else if(direction == ForgeDirection.DOWN){

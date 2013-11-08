@@ -17,6 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class BlockPowerCable extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
-        if(world.isRemote)
+        if(!world.isRemote)
             return;
 
         TileEntityPowerCable pCable = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
@@ -96,15 +97,31 @@ public class BlockPowerCable extends BlockContainer {
         return world.setBlockToAir(x, y, z);
     }
 
+    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int par5) {
+        if(!world.isRemote)
+            return;
+
+        for(int i=0; i<6; i++) {
+            ForgeDirection dr = ForgeDirection.getOrientation(i);
+            TileEntity tmpTile = world.getBlockTileEntity(x + dr.offsetX, y + dr.offsetY, z + dr.offsetZ);
+            if(tmpTile == null || !(tmpTile instanceof TileEntityPowerCable))
+                continue;
+
+            ((TileEntityPowerCable)tmpTile).getConnectionMatrix().setConnected(dr.getOpposite(), false);
+        }
+    }
+
     @Override
     public void onNeighborTileChange(World world, int x, int y, int z, int tileX, int tileY, int tileZ)
     {
-        if(world.isRemote)
-            return;
-
         TileEntityPowerCable me = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
         if(me == null)
             return;
+
+        if(world.isRemote) {
+            me.onNeighborChange();
+            return;
+        }
 
         TileEntity xTile = world.getBlockTileEntity(tileX, tileY, tileZ);
         if(xTile == null || AlternativeEnergy.isInvalidPowerTile(xTile))
@@ -112,7 +129,6 @@ public class BlockPowerCable extends BlockContainer {
         else
             if(AlternativeEnergy.isInvalidPowerTile(xTile))
                 me.getEnergyNetwork().addInput(me, xTile);
-        me.onNeighborChange();
     }
 
     @Override

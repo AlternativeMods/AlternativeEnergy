@@ -83,17 +83,19 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
     }
 
     public void updateEntity() {
-        if(worldObj == null || worldObj.isRemote)
+        if(worldObj == null)
             return;
+        if(worldObj.isRemote) {
+            if(getConnectionMatrix().shouldUpdate()) {
+                onNeighborChange();
+                getConnectionMatrix().onUpdated();
+            }
+            return;
+        }
 
         if(initialized == false) {
             onNeighborChange();
             initialized = true;
-        }
-
-        if(getConnectionMatrix().shouldUpdate()) {
-            onNeighborChange();
-            getConnectionMatrix().onUpdated();
         }
 
         loadTile();
