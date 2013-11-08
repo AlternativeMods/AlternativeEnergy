@@ -75,6 +75,9 @@ public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, 
                 }
                 getConnectionMatrix().setConnected(dr, connect);
             }
+            else {
+                getConnectionMatrix().setConnected(dr, false);
+            }
         }
     }
 
