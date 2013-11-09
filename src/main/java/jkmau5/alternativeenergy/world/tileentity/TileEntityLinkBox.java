@@ -4,6 +4,7 @@ import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
@@ -15,7 +16,7 @@ import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
-import jkmau5.alternativeenergy.network.PacketHandler;
+import jkmau5.alternativeenergy.network.PacketLinkboxFrequencyServerUpdate;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
 import net.minecraft.nbt.NBTTagCompound;
@@ -90,7 +91,7 @@ public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnerg
 
         AlternativeEnergy.linkBoxNetwork.removeFromLink(this, getLinkIdentifier(oldLinkedId));
         AlternativeEnergy.linkBoxNetwork.addLinkBoxToNetwork(this, getLinkIdentifier());
-        PacketHandler.sendPacketToPlayers(PacketHandler.NETWORKID_UPDATE, xCoord, yCoord, zCoord, linkedId);
+        PacketDispatcher.sendPacketToAllPlayers(new PacketLinkboxFrequencyServerUpdate(this, linkedId).getPacket());
     }
 
     public int getLinkId() {

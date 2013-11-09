@@ -1,9 +1,10 @@
 package jkmau5.alternativeenergy.client.gui;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.inventory.container.ContainerLinkBox;
-import jkmau5.alternativeenergy.network.PacketHandler;
+import jkmau5.alternativeenergy.network.PacketLinkboxFrequencyServerUpdate;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -113,14 +114,16 @@ public class GUI_LinkBox extends GuiContainer {
     public void updateNetworkID() {
         if(linkId.getText().isEmpty() || Integer.parseInt(linkId.getText()) == tileEntity.getLinkId())
             return;
-        PacketHandler.sendPacketToServer(PacketHandler.NETWORKID_UPDATE_SERVER, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, Integer.parseInt(linkId.getText()));
+        PacketDispatcher.sendPacketToServer(new PacketLinkboxFrequencyServerUpdate(tileEntity, Integer.parseInt(linkId.getText())).getPacket());
     }
 
     public void mouseClicked(int i, int j, int k){
         super.mouseClicked(i, j, k);
         linkId.mouseClicked(i, j, k);
-        if(lock.mousePressed(mc, i - guiLeft, j - guiTop))
-            PacketHandler.sendPacketToServer(PacketHandler.PRIVATE_UPDATE_SERVER, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, PacketHandler.UNDEFINED);
+        if(lock.mousePressed(mc, i - guiLeft, j - guiTop)){
+            //TODO!
+            //PacketHandler.sendPacketToServer(PacketHandler.PRIVATE_UPDATE_SERVER, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, PacketHandler.UNDEFINED);
+        }
     }
 
     @Override
