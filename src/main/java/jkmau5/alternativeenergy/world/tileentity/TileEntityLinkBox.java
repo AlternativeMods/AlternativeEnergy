@@ -42,7 +42,7 @@ import net.minecraftforge.common.MinecraftForge;
         @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
 
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
-public class TileEntityLinkBox extends TileEntity implements IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
+public class TileEntityLinkBox extends AltEngTileEntity implements IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
     int linkedId;
     String owner;
     boolean isPrivate;

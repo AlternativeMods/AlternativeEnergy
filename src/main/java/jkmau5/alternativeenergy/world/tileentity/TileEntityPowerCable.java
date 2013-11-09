@@ -29,7 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
 
-public class TileEntityPowerCable extends TileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
+public class TileEntityPowerCable extends AltEngTileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
