@@ -27,6 +27,7 @@ public class BlockPowerCableRender implements ISimpleBlockRenderingHandler {
         float min = 0.355F;
         float max = 0.645F;
         renderer.setRenderBounds(min, min, min, max, max, max);
+        renderer.renderAllFaces = true;
         renderer.renderStandardBlock(block, x, y, z);
         TileEntity tile = world.getBlockTileEntity(x, y, z);
         if(tile != null && tile instanceof TileEntityPowerCable){
