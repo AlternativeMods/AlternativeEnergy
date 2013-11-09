@@ -7,6 +7,10 @@ buildscript {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 apply plugin: 'gmcp'
 
 group = 'lordmau5.powerboxes'
@@ -21,9 +25,5 @@ minecraft {
 }
 
 dependencies {
-    
-}
-
-repositories {
-    mavenCentral()
+    compile 'org.projectlombok:lombok:1.12.2'
 }

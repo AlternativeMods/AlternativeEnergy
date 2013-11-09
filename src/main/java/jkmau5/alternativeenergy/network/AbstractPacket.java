@@ -30,6 +30,7 @@ public abstract class AbstractPacket {
         registerPacket(2, PacketLinkboxFrequencyUpdate.class);
         registerPacket(3, PacketLinkboxFrequencyServerUpdate.class);
         registerPacket(4, PacketLinkboxPrivateUpdate.class);
+        registerPacket(5, PacketElementUpdate.class);
     }
 
     public final Packet250CustomPayload getPacket(){
