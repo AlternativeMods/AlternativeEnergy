@@ -201,9 +201,9 @@ public class BlockPowerBox extends BlockContainer {
     {
         icons = new Icon[3];
 
-        icons[0] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_Input");
-        icons[1] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_Output");
-        icons[2] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_Disabled");
+        icons[0] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_Input");
+        icons[1] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_Output");
+        icons[2] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_Disabled");
     }
 
     @SideOnly(Side.CLIENT)

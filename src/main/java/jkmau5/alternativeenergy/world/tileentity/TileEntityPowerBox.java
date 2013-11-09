@@ -64,8 +64,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     int euToConvert;
 
     int oldEnergy;
-    float oldMaxPowers;
-    int oldMaxOutput;
 
     public final List<InvSlot> invSlots = new ArrayList();
 
@@ -224,9 +222,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             tryOutputtingEnergy();
         }
 
-        forceMaxPowersUpdate();
-        forceOutputSpeedUpdate();
-
         if(storedPower > maxPowers)
             storedPower = maxPowers;
         if(storedPower == 1)
@@ -243,26 +238,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(oldEnergy != getPowerStored())
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         oldEnergy = getPowerStored();
-
-        if(oldMaxPowers != maxPowers) {
-            if(capacitySlot.get() == null)
-                PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, 0).getPacket());
-            else
-                PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, this.capacitySlot.get().stackSize).getPacket());
-
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        oldMaxPowers = maxPowers;
-
-        if(oldMaxOutput != maxOutput) {
-            if(outputSpeedSlot.get() == null)
-                PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, 0).getPacket());
-            else
-                PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, this.outputSpeedSlot.get().stackSize).getPacket());
-
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        oldMaxOutput = maxOutput;
     }
 
     public void forceMaxPowersUpdate() {
@@ -815,12 +790,12 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(capacitySlot.get() == null)
             PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, 0).getPacket());
         else
-            PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, this.capacitySlot.get().stackSize).getPacket());
+            PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, capacitySlot.get().stackSize).getPacket());
 
         if(outputSpeedSlot.get() == null)
             PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, 0).getPacket());
         else
-            PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, this.outputSpeedSlot.get().stackSize).getPacket());
+            PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, outputSpeedSlot.get().stackSize).getPacket());
     }
     //---------------------------------
 }

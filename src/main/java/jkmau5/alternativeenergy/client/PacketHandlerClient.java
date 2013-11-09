@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.client;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import jkmau5.alternativeenergy.network.AbstractPacket;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
@@ -15,6 +16,6 @@ public class PacketHandlerClient implements IPacketHandler {
 
     @Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-        AbstractPacket.readPacket(packet).processPacket(manager, null);
+        AbstractPacket.readPacket(packet).processPacket(manager, (EntityPlayer) player);
     }
 }

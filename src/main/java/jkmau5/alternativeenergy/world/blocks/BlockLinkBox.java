@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
-import jkmau5.alternativeenergy.server.GuiHandlerServer;
+import jkmau5.alternativeenergy.client.GuiHandlerClient;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -110,31 +110,23 @@ public class BlockLinkBox extends BlockContainer {
         if(player.getHeldItem() != null)
             return false;
 
-        if(tempTile instanceof TileEntityLinkBox) {
-            TileEntityLinkBox pBox = (TileEntityLinkBox) tempTile;
+        TileEntityLinkBox pBox = (TileEntityLinkBox) tempTile;
 
-            if(player.getHeldItem() != null && AlternativeEnergy.isWrench(player.getHeldItem().itemID) || (!AlternativeEnergy.BCSupplied && !AlternativeEnergy.ICSupplied && player.getHeldItem() == null)) {
-                if(player.isSneaking()) {
-                    pBox.setMode(side, pBox.getNextMode(pBox.getMode(side)));
-                    player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is now set to " + pBox.getMode(side));
-                    return true;
-                }
-                else {
-                    player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is set to " + pBox.getMode(side));
-                    return true;
-                }
+        if(player.getHeldItem() != null && AlternativeEnergy.isWrench(player.getHeldItem().itemID) || (!AlternativeEnergy.BCSupplied && !AlternativeEnergy.ICSupplied && player.getHeldItem() == null)) {
+            if(player.isSneaking()) {
+                pBox.setMode(side, pBox.getNextMode(pBox.getMode(side)));
+                player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is now set to " + pBox.getMode(side));
+                return true;
             }
             else {
-                if(player.isSneaking())
-                    return false;
-                player.openGui(AlternativeEnergy.instance, GuiHandlerServer.ID_GUI_LinkBox, world, x, y, z);
+                player.addChatMessage("Side \"" + ForgeDirection.getOrientation(side).toString() + "\" is set to " + pBox.getMode(side));
                 return true;
             }
         }
         else {
             if(player.isSneaking())
                 return false;
-            player.openGui(AlternativeEnergy.instance, GuiHandlerServer.ID_GUI_LinkBox, world, x, y, z);
+            player.openGui(AlternativeEnergy.instance, GuiHandlerClient.ID_GUI_LinkBox, world, x, y, z);
             return true;
         }
     }
@@ -158,9 +150,9 @@ public class BlockLinkBox extends BlockContainer {
     {
         icons = new Icon[3];
 
-        icons[0] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_Input");
-        icons[1] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_Output");
-        icons[2] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_Disabled");
+        icons[0] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_Input");
+        icons[1] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_Output");
+        icons[2] = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_Disabled");
     }
 
     @SideOnly(Side.CLIENT)
