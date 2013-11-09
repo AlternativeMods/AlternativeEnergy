@@ -19,7 +19,7 @@ import jkmau5.alternativeenergy.inventory.slot.InvSlotDisCharge;
 import jkmau5.alternativeenergy.network.PacketHandler;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
-import jkmau5.alternativeenergy.world.item.Items;
+import jkmau5.alternativeenergy.world.item.AltEngItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -75,8 +75,8 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
 
     //--- Basic functions
     public TileEntityPowerBox() {
-        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Item, 1, 0));
-        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(Items.upgrade_Item, 1, 1));
+        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 0));
+        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 1));
         if(AlternativeEnergy.ICSupplied) {
             chargeSlot = new InvSlotCharge(this, 2);
             dischargeSlot = new InvSlotDisCharge(this, 3);
@@ -153,9 +153,9 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         }
 
         if(tag.hasKey("capacityUpgrade"))
-            capacitySlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("capacityUpgrade"), 0));
+            capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, tag.getInteger("capacityUpgrade"), 0));
         if(tag.hasKey("outputSpeedUpgrade"))
-            outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, tag.getInteger("outputSpeedUpgrade"), 1));
+            outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, tag.getInteger("outputSpeedUpgrade"), 1));
 
         if(AlternativeEnergy.ICSupplied) {
             if(tag.hasKey("chargeSlot")) {

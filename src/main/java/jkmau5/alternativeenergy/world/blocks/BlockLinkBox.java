@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.server.GuiHandlerServer;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -32,7 +33,7 @@ public class BlockLinkBox extends BlockContainer {
 
     public BlockLinkBox(int par1, Material par2Material) {
         super(par1, par2Material);
-        setUnlocalizedName("LinkBox");
+        setUnlocalizedName("altEng.linkBox");
         setHardness(5.0F);
         if(Config.unbreakable)
             setResistance(25000.0F);
@@ -126,14 +127,14 @@ public class BlockLinkBox extends BlockContainer {
             else {
                 if(player.isSneaking())
                     return false;
-                player.openGui(AlternativeEnergy.instance, AlternativeEnergy.proxy.ID_GUI_LinkBox, world, x, y, z);
+                player.openGui(AlternativeEnergy.instance, GuiHandlerServer.ID_GUI_LinkBox, world, x, y, z);
                 return true;
             }
         }
         else {
             if(player.isSneaking())
                 return false;
-            player.openGui(AlternativeEnergy.instance, AlternativeEnergy.proxy.ID_GUI_LinkBox, world, x, y, z);
+            player.openGui(AlternativeEnergy.instance, GuiHandlerServer.ID_GUI_LinkBox, world, x, y, z);
             return true;
         }
     }

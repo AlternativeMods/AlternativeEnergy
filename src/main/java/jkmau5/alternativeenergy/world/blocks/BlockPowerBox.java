@@ -4,7 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
-import jkmau5.alternativeenergy.world.item.Items;
+import jkmau5.alternativeenergy.server.GuiHandlerServer;
+import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -34,7 +35,7 @@ public class BlockPowerBox extends BlockContainer {
 
     public BlockPowerBox(int par1, Material par2Material) {
         super(par1, par2Material);
-        setUnlocalizedName("PowerBox");
+        setUnlocalizedName("altEng.powerBox");
         setHardness(5.0F);
         if(Config.unbreakable)
             setResistance(25000.0F);
@@ -68,14 +69,14 @@ public class BlockPowerBox extends BlockContainer {
                 TileEntityPowerBox pBox = new TileEntityPowerBox();
 
                 if(is.getTagCompound().hasKey("capacityUpgrade")) {
-                    pBox.capacitySlot.put(new ItemStack(Items.upgrade_Item, is.getTagCompound().getInteger("capacityUpgrade"), 0));
+                    pBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, is.getTagCompound().getInteger("capacityUpgrade"), 0));
 
                     for(int i=1; i<=pBox.capacitySlot.get().stackSize; i++) {
                         pBox.maxPowers += i * Config.powerBox_capacity_multiplier;
                     }
                 }
                 if(is.getTagCompound().hasKey("outputSpeedUpgrade")) {
-                    pBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, is.getTagCompound().getInteger("outputSpeedUpgrade"), 1));
+                    pBox.outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, is.getTagCompound().getInteger("outputSpeedUpgrade"), 1));
 
                     int tmpOutput = 32 * (4 ^ pBox.outputSpeedSlot.get().stackSize);
                     if(tmpOutput > 512) tmpOutput = 512;
@@ -174,7 +175,7 @@ public class BlockPowerBox extends BlockContainer {
             else {
                 if(player.isSneaking())
                     return false;
-                player.openGui(AlternativeEnergy.instance, AlternativeEnergy.proxy.ID_GUI_PowerBox, world, x, y, z);
+                player.openGui(AlternativeEnergy.instance, GuiHandlerServer.ID_GUI_PowerBox, world, x, y, z);
                 return true;
             }
         }

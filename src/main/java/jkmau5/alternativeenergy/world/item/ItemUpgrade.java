@@ -1,6 +1,5 @@
 package jkmau5.alternativeenergy.world.item;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
@@ -26,18 +25,17 @@ public class ItemUpgrade extends Item {
 
     public ItemUpgrade(int par1) {
         super(par1);
-        setUnlocalizedName("upgrade");
+        setUnlocalizedName("altEng.upgrade");
         setCreativeTab(AlternativeEnergy.tabPowerBox);
         setMaxStackSize(16);
         setHasSubtypes(true);
     }
 
     private String[] upgradeNames = {"capacity", "outputSpeed"};
-    private String[] upgrades_Names = {"Capacity", "Output Speed"};
 
-    public void addNames() {
-        for(int i=0; i<upgrades_Names.length; i++)
-            LanguageRegistry.addName(new ItemStack(this, 1, i), upgrades_Names[i] + " Upgrade");
+    @Override
+    public String getUnlocalizedName(ItemStack itemStack){
+        return "item.altEng.upgrade." + upgradeNames[itemStack.getItemDamage()];
     }
 
     @SideOnly(Side.CLIENT)
@@ -64,11 +62,4 @@ public class ItemUpgrade extends Item {
             par3List.add(new ItemStack(this, 1, x));
         }
     }
-
-    public String getUnlocalizedName(ItemStack par1ItemStack)
-    {
-        int i = par1ItemStack.getItemDamage();
-        return super.getUnlocalizedName() + "." + upgradeNames[i];
-    }
-
 }

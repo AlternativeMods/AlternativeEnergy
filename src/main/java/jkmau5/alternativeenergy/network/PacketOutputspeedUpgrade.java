@@ -1,6 +1,6 @@
 package jkmau5.alternativeenergy.network;
 
-import jkmau5.alternativeenergy.world.item.Items;
+import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -55,7 +55,7 @@ public class PacketOutputspeedUpgrade extends AbstractPacket {
         if(this.numUpgrades == 0){
             powerBox.outputSpeedSlot.put(null);
         }else{
-            powerBox.outputSpeedSlot.put(new ItemStack(Items.upgrade_Item, this.numUpgrades, 1));
+            powerBox.outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, this.numUpgrades, 1));
         }
         powerBox.forceOutputSpeedUpdate();
     }

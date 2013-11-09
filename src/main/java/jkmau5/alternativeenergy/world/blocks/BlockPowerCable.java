@@ -32,7 +32,7 @@ public class BlockPowerCable extends BlockContainer {
 
     public BlockPowerCable(int par1, Material par2Material) {
         super(par1, par2Material);
-        setUnlocalizedName("powerCable");
+        setUnlocalizedName("altEng.powerCable");
         setHardness(5.0F);
         setStepSound(soundMetalFootstep);
         setCreativeTab(AlternativeEnergy.tabPowerBox);

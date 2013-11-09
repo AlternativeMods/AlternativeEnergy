@@ -7,13 +7,11 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
@@ -22,14 +20,10 @@ import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.compatibility.buildCraft.BuildCraftCompatibility;
 import jkmau5.alternativeenergy.power.LinkBoxNetwork;
 import jkmau5.alternativeenergy.server.ProxyCommon;
-import jkmau5.alternativeenergy.world.blocks.*;
-import jkmau5.alternativeenergy.world.item.ItemUpgrade;
-import jkmau5.alternativeenergy.world.item.Items;
-import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
-import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
-import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerCable;
+import jkmau5.alternativeenergy.world.blocks.AltEngBlocks;
+import jkmau5.alternativeenergy.world.item.AltEngItems;
+import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntities;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,7 +66,7 @@ public class AlternativeEnergy {
 
     public static CreativeTabs tabPowerBox = new CreativeTabs("tabPowerBox") {
         public ItemStack getIconItemStack() {
-            return new ItemStack(Blocks.powerBox_block, 1, 0);
+            return new ItemStack(AltEngBlocks.blockPowerBox, 1, 0);
         }
     };
 
@@ -98,48 +92,13 @@ public class AlternativeEnergy {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         doConfig(event);
-
         proxy.registerNetworkHandlers();
         proxy.registerEventHandlers();
-
-        instance = this;
         linkBoxNetwork = new LinkBoxNetwork();
-    }
 
-    public void createBlocks() {
-        Blocks.powerBox_block = new BlockPowerBox(Config.powerBox_blockId, Material.iron);
-        Blocks.powerCable_block = new BlockPowerCable(Config.powerCable_blockId, Material.iron);
-        Blocks.linkBox_block = new BlockLinkBox(Config.linkBox_blockId, Material.iron);
-    }
-
-    public void createItems() {
-        Items.upgrade_Item = new ItemUpgrade(Config.upgrade_ItemId);
-    }
-
-    public void registerBlocks() {
-        GameRegistry.registerBlock(Blocks.powerBox_block, ItemBlockPowerBox.class, "PowerBox_Block");
-        GameRegistry.registerBlock(Blocks.powerCable_block, "PowerCable_Block");
-        GameRegistry.registerBlock(Blocks.linkBox_block, "LinkBox_Block");
-    }
-
-    public void registerItems() {
-        GameRegistry.registerItem(Items.upgrade_Item, "Upgrades");
-    }
-
-    public void registerTiles() {
-        GameRegistry.registerTileEntity(TileEntityPowerBox.class, "PowerBox_Tile");
-        GameRegistry.registerTileEntity(TileEntityPowerCable.class, "PowerCable_Tile");
-        GameRegistry.registerTileEntity(TileEntityLinkBox.class, "LinkBox_Tile");
-    }
-
-    public void addNames() {
-        LanguageRegistry.addName(Blocks.powerBox_block, "Power Box");
-        LanguageRegistry.addName(Blocks.powerCable_block, "Power Cable");
-        LanguageRegistry.addName(Blocks.linkBox_block, "Link Box");
-
-        Items.upgrade_Item.addNames();
-
-        LanguageRegistry.instance().addStringLocalization("itemGroup.tabPowerBox", "en_US", "Power Boxes");
+        AltEngBlocks.init(); //In 1.7, block registration should be in preInit. So, here we are!
+        AltEngItems.init(); //In 1.7, item registration should be in preInit. So, here we are!
+        AltEngTileEntities.init(); //In 1.7, tileEntity registration should be in preInit. So, here we are!
     }
 
     public void checkForMods() {
@@ -175,13 +134,13 @@ public class AlternativeEnergy {
 
         //------------------------------------------------------------------------------------------------------------------
 
-        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerBox_block), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
+        GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerBox), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
 
-        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 0), new Object[] {" A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal});
+        GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 0), new Object[] {" A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal});
 
-        GameRegistry.addShapedRecipe(new ItemStack(Items.upgrade_Item, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
+        GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
 
-        GameRegistry.addShapedRecipe(new ItemStack(Blocks.powerCable_block, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', Blocks.powerBox_block});
+        GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerCable, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', AltEngBlocks.blockPowerBox});
     }
 
     public void addRecipes() {
@@ -191,19 +150,6 @@ public class AlternativeEnergy {
         if(ICSupplied && BCSupplied)
             addBCandICRecipies();
         //------------------------------------------------------
-    }
-
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        createBlocks();
-        createItems();
-
-        registerBlocks();
-        registerItems();
-        registerTiles();
-
-        addNames();
     }
 
     private static List<Integer> wrenches = new ArrayList<Integer>();
