@@ -28,6 +28,8 @@ public abstract class AbstractPacket {
         registerPacket(0, PacketCapacityUpgrade.class);
         registerPacket(1, PacketOutputspeedUpgrade.class);
         registerPacket(2, PacketLinkboxFrequencyUpdate.class);
+        registerPacket(3, PacketLinkboxFrequencyServerUpdate.class);
+        registerPacket(4, PacketLinkboxPrivateUpdate.class);
     }
 
     public final Packet250CustomPayload getPacket(){
