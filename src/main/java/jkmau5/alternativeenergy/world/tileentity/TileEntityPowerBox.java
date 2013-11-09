@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.world.tileentity;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
@@ -16,7 +17,8 @@ import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.inventory.slot.InvSlot;
 import jkmau5.alternativeenergy.inventory.slot.InvSlotCharge;
 import jkmau5.alternativeenergy.inventory.slot.InvSlotDisCharge;
-import jkmau5.alternativeenergy.network.PacketHandler;
+import jkmau5.alternativeenergy.network.PacketCapacityUpgrade;
+import jkmau5.alternativeenergy.network.PacketOutputspeedUpgrade;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
 import jkmau5.alternativeenergy.world.item.AltEngItems;
@@ -62,8 +64,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
     int euToConvert;
 
     int oldEnergy;
-    float oldMaxPowers;
-    int oldMaxOutput;
 
     public final List<InvSlot> invSlots = new ArrayList();
 
@@ -222,9 +222,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             tryOutputtingEnergy();
         }
 
-        forceMaxPowersUpdate();
-        forceOutputSpeedUpdate();
-
         if(storedPower > maxPowers)
             storedPower = maxPowers;
         if(storedPower == 1)
@@ -241,26 +238,6 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
         if(oldEnergy != getPowerStored())
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         oldEnergy = getPowerStored();
-
-        if(oldMaxPowers != maxPowers) {
-            if(capacitySlot.get() == null)
-                PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, 0);
-            else
-                PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, capacitySlot.get().stackSize);
-
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        oldMaxPowers = maxPowers;
-
-        if(oldMaxOutput != maxOutput) {
-            if(outputSpeedSlot.get() == null)
-                PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, 0);
-            else
-                PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, outputSpeedSlot.get().stackSize);
-
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        oldMaxOutput = maxOutput;
     }
 
     public void forceMaxPowersUpdate() {
@@ -811,14 +788,14 @@ public class TileEntityPowerBox extends TileEntity implements IInventory, IPerip
             return;
 
         if(capacitySlot.get() == null)
-            PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, 0);
+            PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, 0).getPacket());
         else
-            PacketHandler.sendPacketToPlayers(PacketHandler.CAPACITY_UPGRADE, xCoord, yCoord, zCoord, capacitySlot.get().stackSize);
+            PacketDispatcher.sendPacketToAllPlayers(new PacketCapacityUpgrade(this, capacitySlot.get().stackSize).getPacket());
 
         if(outputSpeedSlot.get() == null)
-            PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, 0);
+            PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, 0).getPacket());
         else
-            PacketHandler.sendPacketToPlayers(PacketHandler.OUTPUTSPEED_UPGRADE, xCoord, yCoord, zCoord, outputSpeedSlot.get().stackSize);
+            PacketDispatcher.sendPacketToAllPlayers(new PacketOutputspeedUpgrade(this, outputSpeedSlot.get().stackSize).getPacket());
     }
     //---------------------------------
 }

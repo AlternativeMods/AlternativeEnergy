@@ -45,7 +45,7 @@ public class ItemUpgrade extends Item {
         icons = new Icon[2];
         for(int i = 0; i < icons.length; i++)
         {
-            icons[i] = iR.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(5) + "_" + upgradeNames[i]);
+            icons[i] = iR.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_" + upgradeNames[i]);
         }
     }
 

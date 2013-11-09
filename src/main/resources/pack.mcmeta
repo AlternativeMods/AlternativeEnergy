@@ -2,5 +2,11 @@
     "pack": {
         "description": "The default look of minecraft",
         "pack_format": 1
-    }
+    },
+	"language": {
+     "en_US": {
+        "name": "English",
+        "region": "United States"
+     }
+  }
 }
