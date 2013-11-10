@@ -102,7 +102,7 @@ public class BlockPowerStorage extends BlockTileEntity {
                 }
             }else{
                 if(player.isSneaking()) return false;
-                player.openGui(AlternativeEnergy.instance, storageTile.getGuiID(), world, x, y, z);
+                if(!world.isRemote) player.openGui(AlternativeEnergy.instance, storageTile.getGuiID(), world, x, y, z);
                 return true;
             }
         }
