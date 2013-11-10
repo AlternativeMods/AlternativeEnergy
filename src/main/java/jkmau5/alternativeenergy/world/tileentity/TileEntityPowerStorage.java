@@ -61,9 +61,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     @Override
-    public void onSynced(List<ISynchronized> changes) {
+    public void onSynced(List<ISynchronized> changes){}
 
-    }
+    public abstract int getGuiID();
 
     public void setMode(ForgeDirection side, EnumOutputMode var) {
         if(side == ForgeDirection.UNKNOWN) return;
@@ -397,6 +397,10 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         this.setPowerStored(getPowerStored() + (int) Math.floor(AlternativeEnergy.bcComp.getPowerHandler(this).useEnergy(1, AlternativeEnergy.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
+    public int getOutputSpeedMultiplier(){
+        return 1;
+    }
+
     @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
         if(!AlternativeEnergy.BCSupplied) return;
@@ -417,12 +421,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         }
         if(connected == 0) return;
 
-        int xPower = 25;
-        if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
-            int tmpStackSize = outputSpeedSlot.get().stackSize;
-            tmpStackSize = Math.min(tmpStackSize, 2);
-            xPower *= (Math.pow(2, tmpStackSize));
-        }
+        int xPower = 25 * this.getOutputSpeedMultiplier();
         if(xPower > this.storedPower.getValue()){
             xPower = this.storedPower.getValue();
         }

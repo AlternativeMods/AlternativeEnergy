@@ -2,6 +2,7 @@ package jkmau5.alternativeenergy.world.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.world.item.ItemBlockPowerStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
@@ -14,17 +15,14 @@ import net.minecraft.block.material.Material;
  */
 public class AltEngBlocks {
 
-    public static Block blockPowerBox;
     public static Block blockPowerCable;
-    public static Block blockLinkBox;
+    public static Block blockPowerStorage;
 
     public static void init(){
-        blockPowerBox = new BlockPowerBox(Config.powerBox_blockId, Material.iron);
         blockPowerCable = new BlockPowerCable(Config.powerCable_blockId, Material.iron);
-        blockLinkBox = new BlockLinkBox(Config.linkBox_blockId, Material.iron);
+        blockPowerStorage = new BlockPowerStorage(Config.powerBox_blockId);
 
-        GameRegistry.registerBlock(AltEngBlocks.blockPowerBox, ItemBlockPowerBox.class, "powerBox");
+        GameRegistry.registerBlock(AltEngBlocks.blockPowerStorage, ItemBlockPowerStorage.class, "powerStorage");
         GameRegistry.registerBlock(AltEngBlocks.blockPowerCable, "powerCable");
-        GameRegistry.registerBlock(AltEngBlocks.blockLinkBox, "linkBox");
     }
 }

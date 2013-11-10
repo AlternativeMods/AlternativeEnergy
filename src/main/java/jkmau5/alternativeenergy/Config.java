@@ -28,7 +28,7 @@ public class Config {
 
     public static int upgrade_ItemId = 5760;
 
-    public static boolean unbreakable = false;
+    public static boolean powerBoxExplosionResistant = false;
 
     /**
      * Converting energy from EU to MJ and vice-versa.

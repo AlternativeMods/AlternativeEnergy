@@ -13,7 +13,8 @@ public enum Ratios {
     EU(Config.eu),
     MJ(Config.mj);
 
-    public final int conversion = 0;
+    public final int conversion;
+
     private Ratios(int ratio) {
         conversion = ratio;
     }

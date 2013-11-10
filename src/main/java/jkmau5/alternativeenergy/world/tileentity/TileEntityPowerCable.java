@@ -12,6 +12,7 @@ import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
 import jkmau5.alternativeenergy.util.CableConnectionMatrix;
+import jkmau5.alternativeenergy.util.EnumOutputMode;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -232,10 +233,10 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
             if(tmpTile == null)
                 continue;
 
-            if(tmpTile instanceof TileEntityPowerBox) {
+            if(tmpTile instanceof TileEntityPowerStorage) {
                 TileEntityPowerBox pBox = (TileEntityPowerBox) tmpTile;
 
-                if(!pBox.getMode(dr.getOpposite().ordinal()).equalsIgnoreCase("input")) continue;
+                if(pBox.getMode(dr.getOpposite()) != EnumOutputMode.INPUT) continue;
 
                 if(network.getNetworkPower() < 1) return;
 
@@ -248,24 +249,6 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                     toInsert = network.getNetworkPower();
 
                 pBox.setPowerStored(pBox.getPowerStored() + toInsert);
-                network.drainPower(toInsert);
-            }
-            else if(tmpTile instanceof TileEntityLinkBox) {
-                TileEntityLinkBox linkBox = (TileEntityLinkBox) tmpTile;
-
-                if(!linkBox.getMode(dr.getOpposite().ordinal()).equalsIgnoreCase("input")) continue;
-
-                if(network.getNetworkPower() < 1) return;
-
-                if(linkBox.getNeededPower() < 1) continue;
-
-                int toInsert = 25;
-                if(toInsert > linkBox.getMaxPower() - linkBox.getPowerStored())
-                    toInsert = linkBox.getMaxPower() - linkBox.getPowerStored();
-                if(toInsert > network.getNetworkPower())
-                    toInsert = network.getNetworkPower();
-
-                linkBox.setPowerStored(linkBox.getPowerStored() + toInsert);
                 network.drainPower(toInsert);
             }
         }

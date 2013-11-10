@@ -48,6 +48,10 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory 
      */
     public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity){}
 
+    public boolean removeBlockByPlayer(EntityPlayer player){
+        return true;
+    }
+
     public boolean isOwner(String username){
         return this.owner.equals(username);
     }

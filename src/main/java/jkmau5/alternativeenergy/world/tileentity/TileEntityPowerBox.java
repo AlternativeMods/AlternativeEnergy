@@ -8,8 +8,10 @@ import jkmau5.alternativeenergy.inventory.slot.InvSlot;
 import jkmau5.alternativeenergy.inventory.slot.InvSlotCharge;
 import jkmau5.alternativeenergy.inventory.slot.InvSlotDisCharge;
 import jkmau5.alternativeenergy.power.Ratios;
+import jkmau5.alternativeenergy.server.GuiHandlerServer;
 import jkmau5.alternativeenergy.world.item.AltEngItems;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,8 +39,30 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
     public InvSlotCharge chargeSlot;
     public InvSlotDisCharge dischargeSlot;
 
+    @Override
+    public int getGuiID() {
+        return GuiHandlerServer.ID_GUI_PowerBox;
+    }
 
-    //--- Basic functions
+    @Override
+    public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity) {
+        if(itemStack.getTagCompound() == null || !itemStack.getTagCompound().hasKey("storedPower")) return;
+        if(itemStack.getTagCompound().hasKey("capacityUpgrade")) {
+            /*pBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, itemStack.getTagCompound().getInteger("capacityUpgrade"), 0));
+
+            for(int i=1; i<=pBox.capacitySlot.get().stackSize; i++) {
+                pBox.maxPowers += i * Config.powerBox_capacity_multiplier;
+            }*/
+        }
+        if(itemStack.getTagCompound().hasKey("outputSpeedUpgrade")) {
+            /*pBox.outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, itemStack.getTagCompound().getInteger("outputSpeedUpgrade"), 1));
+
+            int tmpOutput = 32 * (4 ^ pBox.outputSpeedSlot.get().stackSize);
+            if(tmpOutput > 512) tmpOutput = 512;
+            pBox.maxOutput = tmpOutput;*/
+        }
+        this.setPowerStored(itemStack.getTagCompound().getInteger("storedPower"));
+    }
 
     public String getType(){
         return "powerBox";

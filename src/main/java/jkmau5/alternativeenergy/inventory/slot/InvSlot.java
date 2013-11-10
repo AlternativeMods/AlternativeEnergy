@@ -44,7 +44,7 @@ public class InvSlot
 
         this.acceptIS = allowedIS;
 
-        base.addInvSlot(this);
+        //base.addInvSlot(this);
     }
 
     public void readFromNbt(NBTTagCompound nbtTagCompound) {

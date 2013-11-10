@@ -10,7 +10,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -73,7 +72,7 @@ public class AlternativeEnergy {
 
     public static CreativeTabs tabPowerBox = new CreativeTabs("tabPowerBox") {
         public ItemStack getIconItemStack() {
-            return new ItemStack(AltEngBlocks.blockPowerBox, 1, 0);
+            return new ItemStack(AltEngBlocks.blockPowerCable, 1, 0);
         }
     };
 
@@ -81,10 +80,10 @@ public class AlternativeEnergy {
         Configuration config = new Configuration(e.getSuggestedConfigurationFile());
         config.load();
 
-        Config.eu = config.get(Configuration.CATEGORY_GENERAL, "EU Conversion", Config.eu).getDouble(Config.eu);
-        Config.mj = config.get(Configuration.CATEGORY_GENERAL, "MJ Conversion", Config.mj).getDouble(Config.mj);
+        Config.eu = config.get(Configuration.CATEGORY_GENERAL, "EU Conversion", Config.eu).getInt(Config.eu);
+        Config.mj = config.get(Configuration.CATEGORY_GENERAL, "MJ Conversion", Config.mj).getInt(Config.mj);
         Config.powerBox_capacity = config.get(Configuration.CATEGORY_GENERAL, "Power Box Capacity", Config.powerBox_capacity).getInt(Config.powerBox_capacity);
-        Config.unbreakable = config.get(Configuration.CATEGORY_GENERAL, "Indestructable Power Box", Config.unbreakable).getBoolean(Config.unbreakable);
+        Config.powerBoxExplosionResistant = config.get(Configuration.CATEGORY_GENERAL, "Indestructable Power Box", Config.powerBoxExplosionResistant).getBoolean(Config.powerBoxExplosionResistant);
         Config.powerBox_capacity_multiplier = config.get(Configuration.CATEGORY_GENERAL, "Capacity Upgrade Multiplier", Config.powerBox_capacity_multiplier).getInt(Config.powerBox_capacity_multiplier);
 
         Config.powerBox_blockId = config.get(Configuration.CATEGORY_BLOCK, "Power Box", Config.powerBox_blockId).getInt(Config.powerBox_blockId);
@@ -145,13 +144,13 @@ public class AlternativeEnergy {
 
         //------------------------------------------------------------------------------------------------------------------
 
-        GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerBox), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
+        //GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerBox), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
 
         GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 0), new Object[] {" A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal});
 
         GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
 
-        GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerCable, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', AltEngBlocks.blockPowerBox});
+        //GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerCable, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', AltEngBlocks.blockPowerBox});
     }
 
     public void addRecipes() {
@@ -192,11 +191,6 @@ public class AlternativeEnergy {
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         linkBoxNetwork.loadNetworkData();
-    }
-
-    @Mod.EventHandler
-    public void serverStopping(FMLServerStoppingEvent event) {
-        linkBoxNetwork.saveNetworkData();
     }
 
     private static String[] invalidTiles_Classes = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};

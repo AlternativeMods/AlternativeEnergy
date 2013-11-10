@@ -4,6 +4,9 @@ import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedBoolean;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedInteger;
+import jkmau5.alternativeenergy.server.GuiHandlerServer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 /**
  * Author: Lordmau5
@@ -16,6 +19,11 @@ public class TileEntityLinkBox extends TileEntityPowerStorage {
 
     public SynchronizedInteger linkedID;
     public SynchronizedBoolean isPrivate;
+
+    @Override
+    public int getGuiID() {
+        return GuiHandlerServer.ID_GUI_LinkBox;
+    }
 
     @Override
     protected void createSynchronizedFields() {
@@ -56,6 +64,16 @@ public class TileEntityLinkBox extends TileEntityPowerStorage {
             this.linkedID.setValue(linkId);
             AlternativeEnergy.linkBoxNetwork.addLinkBoxToNetwork(this, this.getLinkIdentifier());
         }
+    }
+
+    @Override
+    public boolean removeBlockByPlayer(EntityPlayer player) {
+        if(!this.isPrivate() && this.getEnergyOwner().equals(player.username)|| MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username) || this.isPrivate() && this.getEnergyOwner().equals(player.username))
+            return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+        if(!this.worldObj.isRemote){
+            player.addChatMessage("This Link Box belongs to " + this.getOwner() + "!"); //TODO: localize!
+        }
+        return false;
     }
 
     public int getLinkId() {

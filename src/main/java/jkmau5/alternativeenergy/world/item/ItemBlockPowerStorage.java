@@ -1,6 +1,7 @@
-package jkmau5.alternativeenergy.world.blocks;
+package jkmau5.alternativeenergy.world.item;
 
 import jkmau5.alternativeenergy.Config;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -11,16 +12,17 @@ import org.lwjgl.input.Keyboard;
 import java.util.List;
 
 /**
- * Author: Lordmau5
- * Date: 22.08.13
- * Time: 00:10
- * You are allowed to change this code,
- * however, not to publish it without my permission.
+ * No description given
+ *
+ * @author jk-5
  */
-public class ItemBlockPowerBox extends ItemBlock {
+public class ItemBlockPowerStorage extends ItemBlock {
 
-    public ItemBlockPowerBox(int par1) {
-        super(par1);
+    public ItemBlockPowerStorage(int id){
+        super(id);
+        this.setHasSubtypes(true);
+        this.setMaxDamage(0);
+        this.setNoRepair();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class ItemBlockPowerBox extends ItemBlock {
 
     public void addInformation(ItemStack is, EntityPlayer player, List list, boolean par4) {
         if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            if(is.hasTagCompound() == false) {
+            if(!is.hasTagCompound()){
                 is.setTagCompound(new NBTTagCompound());
                 is.getTagCompound().setInteger("storedPower", 0);
             }
@@ -63,15 +65,21 @@ public class ItemBlockPowerBox extends ItemBlock {
             list.add("Stored Power: " + Config.convertNumber(storedPower) + "/" + Config.convertNumber(pBoxCapacity));
             if(gotUpgrade) {
                 list.add(" ");
-                if(capacityAmount > 0)
+                if(capacityAmount > 0){
                     list.add("Capacity increased by " + capacityAmount);
-                if(outputSpeedUpgrades > 0)
+                }
+                if(outputSpeedUpgrades > 0){
                     list.add("Output Speed increased by " + outputSpeedUpgrades);
+                }
             }
-
-        }
-        else {
+        }else {
             list.add("Hold shift to get more information");
         }
+    }
+
+    @Override
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+        par3List.add(new ItemStack(par1, 1, 0));
+        par3List.add(new ItemStack(par1, 1, 1));
     }
 }

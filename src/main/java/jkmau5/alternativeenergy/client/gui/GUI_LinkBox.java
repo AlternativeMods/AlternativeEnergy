@@ -88,7 +88,7 @@ public class GUI_LinkBox extends GuiContainer {
         }
 
         lock = new GuiButtonLock(0, 131, 35);
-        if(!tileEntity.getRealOwner().equals(mc.thePlayer.username))
+        if(!tileEntity.getEnergyOwner().equals(mc.thePlayer.username))
             lock.enabled = false;
     }
 
@@ -159,7 +159,7 @@ public class GUI_LinkBox extends GuiContainer {
 
             for(int i=1; i<54; i++)
             {
-                if(tileEntity.getPowerStored() >= i * (tileEntity.getMaxPower() / 54))
+                if(tileEntity.getPowerStored() >= i * (tileEntity.getMaxStoredPower() / 54))
                 {
                     showUntil = i;
                 }
@@ -173,7 +173,7 @@ public class GUI_LinkBox extends GuiContainer {
     {
         if(mouseX >= 7 && mouseY >= 16)
             if(mouseX <= 23 && mouseY <= 69)
-                func_102021_a(Arrays.asList(new String[]{"Energy: " + Config.convertNumber(tileEntity.getPowerStored()) + "/" + Config.convertNumber(tileEntity.getMaxPower()), "Linked ID: " + tileEntity.getLinkId()}), mouseX + guiLeft, mouseY + guiTop);
+                func_102021_a(Arrays.asList(new String[]{"Energy: " + Config.convertNumber(tileEntity.getPowerStored()) + "/" + Config.convertNumber(tileEntity.getMaxStoredPower()), "Linked ID: " + tileEntity.getLinkId()}), mouseX + guiLeft, mouseY + guiTop);
     }
 
 }
