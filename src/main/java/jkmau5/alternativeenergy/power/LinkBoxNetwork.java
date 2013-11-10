@@ -1,7 +1,13 @@
 package jkmau5.alternativeenergy.power;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.util.interfaces.ISaveNBT;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.storage.MapStorage;
+import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,20 +20,35 @@ import java.util.Map;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class LinkBoxNetwork {
+public class LinkBoxNetwork implements ISaveNBT {
 
     public Map<String, ArrayList<TileEntityLinkBox>> linkBoxes;
     public Map<String, Boolean> initiatedNBTPower;
     public Map<String, Integer> networkPower;
 
-    public LinkBoxNetwork() {
-        initNetwork();
+    public MapStorage getStorage(){
+        if(FMLCommonHandler.instance().getEffectiveSide().isClient()) return null;
+        return DimensionManager.getWorld(0).mapStorage;
     }
 
-    public void initNetwork() {
+    public void loadNetworkData() {
+        MinecraftServer server = MinecraftServer.getServer();
+        if(server == null) return;
+        LinkBoxWorldData data = (LinkBoxWorldData) this.getStorage().loadData(LinkBoxWorldData.class, "AltEng-LinkBoxData");
+
         linkBoxes = new HashMap<String, ArrayList<TileEntityLinkBox>>();
         initiatedNBTPower = new HashMap<String, Boolean>();
         networkPower = new HashMap<String, Integer>();
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+
     }
 
     public void addLinkBoxToNetwork(TileEntityLinkBox linkBox, String id) {

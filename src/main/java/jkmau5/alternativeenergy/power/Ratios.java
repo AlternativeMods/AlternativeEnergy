@@ -12,9 +12,9 @@ import jkmau5.alternativeenergy.Config;
 public enum Ratios {
     EU(Config.eu),
     MJ(Config.mj);
-    public double conversion = 0;
 
-    private Ratios(double ratio) {
+    public final int conversion = 0;
+    private Ratios(int ratio) {
         conversion = ratio;
     }
 }

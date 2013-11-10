@@ -11,6 +11,7 @@ import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
+import jkmau5.alternativeenergy.util.CableConnectionMatrix;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -238,11 +239,11 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
                 if(network.getNetworkPower() < 1) return;
 
-                if(pBox.neededPower() < 1) continue;
+                if(pBox.getNeededPower() < 1) continue;
 
                 int toInsert = 25;
-                if(toInsert > pBox.getMaxPower() - pBox.getPowerStored())
-                    toInsert = pBox.getMaxPower() - pBox.getPowerStored();
+                if(toInsert > pBox.getMaxStoredPower() - pBox.getPowerStored())
+                    toInsert = pBox.getMaxStoredPower() - pBox.getPowerStored();
                 if(toInsert > network.getNetworkPower())
                     toInsert = network.getNetworkPower();
 
@@ -256,7 +257,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
                 if(network.getNetworkPower() < 1) return;
 
-                if(linkBox.neededPower() < 1) continue;
+                if(linkBox.getNeededPower() < 1) continue;
 
                 int toInsert = 25;
                 if(toInsert > linkBox.getMaxPower() - linkBox.getPowerStored())

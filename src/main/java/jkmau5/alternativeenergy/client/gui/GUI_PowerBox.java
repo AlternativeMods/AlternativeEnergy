@@ -57,7 +57,7 @@ public class GUI_PowerBox extends GuiContainer {
 
             for(int i=1; i<54; i++)
             {
-                if(tileEntity.getPowerStored() >= i * (tileEntity.getMaxPower() / 54))
+                if(tileEntity.getPowerStored() >= i * (tileEntity.getMaxStoredPower() / 54))
                 {
                     showUntil = i;
                 }
@@ -72,7 +72,7 @@ public class GUI_PowerBox extends GuiContainer {
         if(mouseX >= 7 && mouseY >= 16)
         {
             if(mouseX <= 23 && mouseY <= 69)
-                drawCreativeTabHoveringText("Energy: " + Config.convertNumber(tileEntity.getPowerStored()) + "/" + Config.convertNumber(tileEntity.getMaxPower()), mouseX + guiLeft, mouseY + guiTop);
+                drawCreativeTabHoveringText("Energy: " + Config.convertNumber(tileEntity.getPowerStored()) + "/" + Config.convertNumber(tileEntity.getMaxStoredPower()), mouseX + guiLeft, mouseY + guiTop);
         }
         if(mouseX >= 130 && mouseY >= 16 && mouseX <= 148 && mouseY <= 33 && tileEntity.capacitySlot.get() == null)  // Capacity Slot
             func_102021_a(Arrays.asList(new String[] {"This is the Capacity Slot.", "", "Put Capacity upgrades in", "to increase the maximum capacity."}),

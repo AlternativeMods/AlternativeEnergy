@@ -10,6 +10,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -33,6 +34,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,8 @@ public class AlternativeEnergy {
     public static boolean BCSupplied = false;
     public static boolean ICSupplied = false;
     public static boolean CCSupplied = false;
+
+    public static File configFolder;
 
     @SidedProxy(modId = modid, clientSide = "jkmau5.alternativeenergy.client.ProxyClient", serverSide = "jkmau5.alternativeenergy.server.ProxyCommon")
     public static ProxyCommon proxy;
@@ -94,6 +98,8 @@ public class AlternativeEnergy {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        configFolder = new File(event.getModConfigurationDirectory(), "AlternativeEnergy");
+
         doConfig(event);
         proxy.registerNetworkHandlers();
         proxy.registerEventHandlers();
@@ -185,7 +191,12 @@ public class AlternativeEnergy {
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        linkBoxNetwork.initNetwork();
+        linkBoxNetwork.loadNetworkData();
+    }
+
+    @Mod.EventHandler
+    public void serverStopping(FMLServerStoppingEvent event) {
+        linkBoxNetwork.saveNetworkData();
     }
 
     private static String[] invalidTiles_Classes = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};

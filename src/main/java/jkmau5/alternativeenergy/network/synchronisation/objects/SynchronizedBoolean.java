@@ -44,11 +44,13 @@ public class SynchronizedBoolean extends SynchronizedBase {
 
     @Override
     public void writeToNBT(NBTTagCompound tag, String prefix) {
+        if(!this.saveToNBT) return;
         tag.setBoolean(prefix, value);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag, String prefix) {
+        if(!this.saveToNBT) return;
         value = tag.getBoolean(prefix);
     }
 

@@ -15,8 +15,8 @@ import java.util.Locale;
  * however, not to publish it without my permission.
  */
 public class Config {
-    public static double eu = 5;
-    public static double mj = 2;
+    public static int eu = 5;
+    public static int mj = 2;
 
     public static int powerBox_blockId = 2000;
     public static int powerBox_capacity = 100000;

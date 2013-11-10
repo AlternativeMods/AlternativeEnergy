@@ -1,6 +1,7 @@
 package jkmau5.alternativeenergy.network.synchronisation;
 
 import jkmau5.alternativeenergy.AlternativeEnergy;
+import lombok.Setter;
 import net.minecraft.world.World;
 
 /**
@@ -12,6 +13,7 @@ public abstract class SynchronizedBase implements ISynchronized {
 
     protected long lastChangeTime = 0;
     protected boolean dirty = false;
+    @Setter protected boolean saveToNBT = true;
 
     @Override
     public boolean isDirty() {

@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.world.tileentity;
+package jkmau5.alternativeenergy.util;
 
 import net.minecraftforge.common.ForgeDirection;
 

@@ -24,10 +24,10 @@ import java.util.Set;
  *
  * @author jk-5
  */
-public abstract class SynchronisedTileEntity extends AltEngTileEntity implements ISynchronisationHandler, ISaveNBT {
+public abstract class SynchronizedTileEntity extends AltEngTileEntity implements ISynchronisationHandler, ISaveNBT {
 
-    protected SynchronisationMapTileEntity<SynchronisedTileEntity> syncMap;
-    private static final Map<Class<? extends SynchronisedTileEntity>, List<Field>> syncedFields = Maps.newIdentityHashMap();
+    protected SynchronisationMapTileEntity<SynchronizedTileEntity> syncMap;
+    private static final Map<Class<? extends SynchronizedTileEntity>, List<Field>> syncedFields = Maps.newIdentityHashMap();
 
     private static final Comparator<Field> FIELD_NAME_COMPARATOR = new Comparator<Field>() {
         @Override
@@ -36,8 +36,8 @@ public abstract class SynchronisedTileEntity extends AltEngTileEntity implements
         }
     };
 
-    public SynchronisedTileEntity() {
-        syncMap = new SynchronisationMapTileEntity<SynchronisedTileEntity>(this);
+    public SynchronizedTileEntity() {
+        syncMap = new SynchronisationMapTileEntity<SynchronizedTileEntity>(this);
         this.createSynchronizedFields();
         this.registerFields();
     }
@@ -87,7 +87,7 @@ public abstract class SynchronisedTileEntity extends AltEngTileEntity implements
     }
 
     @Override
-    public SynchronsiationMap<SynchronisedTileEntity> getSyncMap() {
+    public SynchronsiationMap<SynchronizedTileEntity> getSyncMap() {
         return syncMap;
     }
 
