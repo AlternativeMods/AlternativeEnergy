@@ -7,7 +7,6 @@ import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.server.GuiHandlerServer;
 import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,7 +27,7 @@ import net.minecraftforge.common.ForgeDirection;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class BlockPowerBox extends BlockContainer {
+public class BlockPowerBox extends BlockTileEntity {
 
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
@@ -51,12 +50,6 @@ public class BlockPowerBox extends BlockContainer {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world)
-    {
-        return null;
-    }
-
-    @Override
     public TileEntity createTileEntity(World world, int meta)
     {
         return new TileEntityPowerBox();
@@ -64,6 +57,7 @@ public class BlockPowerBox extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
+        super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(is.getTagCompound() != null) {
             if(is.getTagCompound().hasKey("storedPower")) {
                 TileEntityPowerBox pBox = new TileEntityPowerBox();

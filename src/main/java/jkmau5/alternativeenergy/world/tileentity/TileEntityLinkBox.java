@@ -42,7 +42,7 @@ import net.minecraftforge.common.MinecraftForge;
         @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
 
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
-public class TileEntityLinkBox extends AltEngTileEntity implements IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
+public class TileEntityLinkBox extends TileEntityPowerStorage implements IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
     int linkedId;
     String owner;
     boolean isPrivate;
@@ -55,7 +55,6 @@ public class TileEntityLinkBox extends AltEngTileEntity implements IPeripheral, 
     int maxStoredPower = Config.powerBox_capacity;
 
     int euToConvert;
-    boolean addedToENet;
 
     String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
 

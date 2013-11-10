@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.server;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.AlternativeEnergy;
+import net.minecraft.world.World;
 
 /**
  * No description given
@@ -21,5 +22,9 @@ public class ProxyCommon {
 
     public void registerSideSensitiveHandlers(){
         NetworkRegistry.instance().registerGuiHandler(AlternativeEnergy.instance, new GuiHandlerServer());
+    }
+
+    public long getTicks(World world){
+        return world.getTotalWorldTime();
     }
 }

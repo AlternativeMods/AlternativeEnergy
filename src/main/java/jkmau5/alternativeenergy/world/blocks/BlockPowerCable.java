@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.client.render.Render;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerCable;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -28,7 +27,7 @@ import java.util.List;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class BlockPowerCable extends BlockContainer {
+public class BlockPowerCable extends BlockTileEntity {
 
     public BlockPowerCable(int par1, Material par2Material) {
         super(par1, par2Material);
@@ -41,12 +40,6 @@ public class BlockPowerCable extends BlockContainer {
     @Override
     public boolean hasTileEntity(int meta) {
         return true;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World world)
-    {
-        return null;
     }
 
     @Override
@@ -75,6 +68,7 @@ public class BlockPowerCable extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
+        super.onBlockPlacedBy(world, x, y, z, ent, is);
         if(!world.isRemote)
             return;
 

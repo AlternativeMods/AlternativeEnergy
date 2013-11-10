@@ -53,9 +53,8 @@ import java.util.List;
 
         @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
 
-public class TileEntityPowerBox extends AltEngTileEntity implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
+public class TileEntityPowerBox extends TileEntityPowerStorage implements IInventory, IPeripheral, IEnergyStorage, IEnergySink, IEnergySource, IPowerReceptor {
     public String[] outputMode = new String[]{"disabled", "disabled", "disabled", "disabled", "disabled", "disabled"};
-    public boolean addedToENet;
 
     public int storedPower;
     public int maxPowers = Config.powerBox_capacity;

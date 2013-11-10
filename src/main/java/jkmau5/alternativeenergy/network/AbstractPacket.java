@@ -2,6 +2,8 @@ package jkmau5.alternativeenergy.network;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import jkmau5.alternativeenergy.AltEngLog;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,21 +33,18 @@ public abstract class AbstractPacket {
         registerPacket(3, PacketLinkboxFrequencyServerUpdate.class);
         registerPacket(4, PacketLinkboxPrivateUpdate.class);
         registerPacket(5, PacketElementUpdate.class);
+        registerPacket(6, PacketSynchronisation.class);
     }
 
     public final Packet250CustomPayload getPacket(){
         Packet250CustomPayload ret = null;
-        ByteArrayOutputStream arrayStream = new ByteArrayOutputStream();
-        DataOutputStream stream = new DataOutputStream(arrayStream);
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
         try {
-            stream.write(this.getID());
-            this.writePacket(stream);
-            ret = PacketDispatcher.getPacket("AltEng", arrayStream.toByteArray());
+            output.write(this.getID());
+            this.writePacket(output);
+            ret = PacketDispatcher.getPacket("AltEng", output.toByteArray());
         }catch(IOException e) {
             AltEngLog.severe(e, "Error while writing packet data for packet " + this.getID());
-        }finally {
-            IOUtils.closeQuietly(arrayStream);
-            IOUtils.closeQuietly(stream);
         }
         return ret;
     }

@@ -6,7 +6,6 @@ import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.client.GuiHandlerClient;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,7 +25,7 @@ import net.minecraftforge.common.ForgeDirection;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class BlockLinkBox extends BlockContainer {
+public class BlockLinkBox extends BlockTileEntity {
 
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
@@ -49,17 +48,13 @@ public class BlockLinkBox extends BlockContainer {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world) {
-        return null;
-    }
-
-    @Override
     public TileEntity createTileEntity(World world, int meta) {
         return new TileEntityLinkBox();
     }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+        super.onBlockPlacedBy(world, x, y, z, entity, itemStack);
         if(world.isRemote)
             return;
         if(!(entity instanceof EntityPlayer))
