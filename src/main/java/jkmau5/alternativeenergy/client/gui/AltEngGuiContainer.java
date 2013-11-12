@@ -3,9 +3,9 @@ package jkmau5.alternativeenergy.client.gui;
 import jkmau5.alternativeenergy.client.render.RenderState;
 import jkmau5.alternativeenergy.client.render.ToolTip;
 import jkmau5.alternativeenergy.client.render.ToolTipLine;
-import jkmau5.alternativeenergy.inventory.container.AltEngContainer;
-import jkmau5.alternativeenergy.inventory.container.element.Element;
-import jkmau5.alternativeenergy.inventory.container.slot.AltEngSlot;
+import jkmau5.alternativeenergy.gui.container.AltEngContainer;
+import jkmau5.alternativeenergy.gui.container.element.Element;
+import jkmau5.alternativeenergy.gui.container.slot.AltEngSlot;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -96,10 +96,10 @@ public abstract class AltEngGuiContainer extends GuiContainer {
         GL11.glColor4f(1, 1, 1, 1);
         RenderState.bindTexture(this.backgroundTexture);
 
-        int x = (this.width / this.xSize) / 2;
-        int y = (this.height / this.ySize) / 2;
+        int x = (this.width - this.xSize) / 2;
+        int y = (this.height - this.ySize) / 2;
 
-        this.drawTexturedModalRect(x, y, 0, 0, this.width, this.height);
+        this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 
         int mX = mouseX - this.guiLeft;
         int mY = mouseY - this.guiTop;

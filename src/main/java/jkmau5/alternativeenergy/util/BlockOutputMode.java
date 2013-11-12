@@ -18,7 +18,6 @@ import java.io.IOException;
 public class BlockOutputMode extends SynchronizedBase {
 
     private EnumOutputMode[] modes = new EnumOutputMode[ForgeDirection.VALID_DIRECTIONS.length];
-    private boolean shouldUpdate = false;
 
     public BlockOutputMode(){
         for(int i = 0; i < this.modes.length; i++){
@@ -33,21 +32,9 @@ public class BlockOutputMode extends SynchronizedBase {
     public EnumOutputMode setMode(ForgeDirection direction, EnumOutputMode mode){
         if(this.getMode(direction) != mode){
             this.modes[direction.ordinal()] = mode;
-            this.shouldUpdate = true;
+            this.markDirty();
         }
         return this.modes[direction.ordinal()];
-    }
-
-    public void setShouldUpdate(boolean shouldUpdate){
-        this.shouldUpdate = shouldUpdate;
-    }
-
-    public boolean shouldUpdate(){
-        return this.shouldUpdate;
-    }
-
-    public void onUpdated(){
-        this.shouldUpdate = false;
     }
 
     @Override

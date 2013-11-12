@@ -1,6 +1,6 @@
 package jkmau5.alternativeenergy.network;
 
-import jkmau5.alternativeenergy.inventory.container.AltEngContainer;
+import jkmau5.alternativeenergy.gui.container.AltEngContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;

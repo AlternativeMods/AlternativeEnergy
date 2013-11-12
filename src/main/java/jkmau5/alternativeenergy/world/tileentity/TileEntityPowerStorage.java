@@ -63,8 +63,6 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Override
     public void onSynced(List<ISynchronized> changes){}
 
-    public abstract int getGuiID();
-
     public void setMode(ForgeDirection side, EnumOutputMode var) {
         if(side == ForgeDirection.UNKNOWN) return;
         this.outputMode.setMode(side, var);

@@ -49,7 +49,7 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory 
     public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity){}
 
     public boolean removeBlockByPlayer(EntityPlayer player){
-        return true;
+        return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
     }
 
     public boolean isOwner(String username){
@@ -62,6 +62,19 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory 
 
     public final void notifyBlocksOfNeighborChange(){
         this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord));
+    }
+
+    public boolean blockActivated(EntityPlayer player, int side){
+        if(player.isSneaking()) return false;
+        ItemStack holding = player.getCurrentEquippedItem();
+        if(holding != null){
+            //Do something item specific here
+        }
+        return this.openGui(player);
+    }
+
+    public boolean openGui(EntityPlayer player){
+        return false;
     }
 
 

@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.inventory.slot;
+package jkmau5.alternativeenergy.gui.slot;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

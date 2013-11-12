@@ -2,13 +2,13 @@ package jkmau5.alternativeenergy.world.item;
 
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.world.blocks.BlockPowerStorage;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ItemBlockPowerStorage extends ItemBlock {
     }
 
     public void addInformation(ItemStack is, EntityPlayer player, List list, boolean par4) {
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if(GuiScreen.isShiftKeyDown()){
             if(!is.hasTagCompound()){
                 is.setTagCompound(new NBTTagCompound());
                 is.getTagCompound().setInteger("storedPower", 0);

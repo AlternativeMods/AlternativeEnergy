@@ -58,4 +58,12 @@ public abstract class BlockTileEntity extends BlockContainer {
         }
         return true;
     }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        TileEntity tile = world.getBlockTileEntity(x, y, z);
+        if(tile instanceof AltEngTileEntity){
+            return ((AltEngTileEntity) tile).blockActivated(player, side);
+        }else return false;
+    }
 }

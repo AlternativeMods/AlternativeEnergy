@@ -11,14 +11,12 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import ic2.api.energy.tile.IEnergyConductor;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
-import jkmau5.alternativeenergy.client.GuiHandlerClient;
 import jkmau5.alternativeenergy.compatibility.buildCraft.BuildCraftCompatibility;
 import jkmau5.alternativeenergy.power.LinkBoxNetwork;
 import jkmau5.alternativeenergy.server.ProxyCommon;
@@ -100,15 +98,15 @@ public class AlternativeEnergy {
         configFolder = new File(event.getModConfigurationDirectory(), "AlternativeEnergy");
 
         doConfig(event);
+
         proxy.registerNetworkHandlers();
         proxy.registerEventHandlers();
+
         linkBoxNetwork = new LinkBoxNetwork();
 
         AltEngBlocks.init(); //In 1.7, block registration should be in preInit. So, here we are!
         AltEngItems.init(); //In 1.7, item registration should be in preInit. So, here we are!
         AltEngTileEntities.init(); //In 1.7, tileEntity registration should be in preInit. So, here we are!
-
-        NetworkRegistry.instance().registerGuiHandler(this, new GuiHandlerClient());
     }
 
     public void checkForMods() {

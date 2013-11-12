@@ -3,7 +3,7 @@ package jkmau5.alternativeenergy.client.gui;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
-import jkmau5.alternativeenergy.inventory.container.ContainerLinkBox;
+import jkmau5.alternativeenergy.gui.container.ContainerLinkBox;
 import jkmau5.alternativeenergy.network.PacketLinkboxFrequencyServerUpdate;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,7 @@ public class GUI_LinkBox extends GuiContainer {
     GuiButtonLock lock;
 
     public GUI_LinkBox(InventoryPlayer inventoryPlayer, TileEntityLinkBox tileEntity) {
-        super(new ContainerLinkBox(inventoryPlayer));
+        super(new ContainerLinkBox(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
     }
 

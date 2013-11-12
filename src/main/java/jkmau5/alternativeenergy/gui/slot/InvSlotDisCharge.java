@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.inventory.slot;
+package jkmau5.alternativeenergy.gui.slot;
 
 
 import ic2.api.info.Info;

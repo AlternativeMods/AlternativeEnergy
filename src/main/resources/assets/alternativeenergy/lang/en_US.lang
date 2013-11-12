@@ -3,3 +3,5 @@ itemGroup.tabPowerBox=AlternativeEnergy
 tile.altEng.powerCable.name=Power Cable
 tile.altEng.powerBox.name=Power Box
 tile.altEng.linkBox.name=Link Box
+
+altEng.chatmessage.storageSideModeChanged=Changed side mode to %s

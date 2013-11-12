@@ -87,6 +87,14 @@ public abstract class SynchronizedTileEntity extends AltEngTileEntity implements
     }
 
     @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if(!this.worldObj.isRemote) {
+            this.sync();
+        }
+    }
+
+    @Override
     public SynchronsiationMap<SynchronizedTileEntity> getSyncMap() {
         return syncMap;
     }

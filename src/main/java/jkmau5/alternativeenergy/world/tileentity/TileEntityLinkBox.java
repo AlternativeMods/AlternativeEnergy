@@ -2,9 +2,10 @@ package jkmau5.alternativeenergy.world.tileentity;
 
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.gui.EnumGui;
+import jkmau5.alternativeenergy.gui.GuiHandler;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedBoolean;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedInteger;
-import jkmau5.alternativeenergy.server.GuiHandlerServer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
@@ -19,11 +20,6 @@ public class TileEntityLinkBox extends TileEntityPowerStorage {
 
     public SynchronizedInteger linkedID;
     public SynchronizedBoolean isPrivate;
-
-    @Override
-    public int getGuiID() {
-        return GuiHandlerServer.ID_GUI_LinkBox;
-    }
 
     @Override
     protected void createSynchronizedFields() {
@@ -48,6 +44,12 @@ public class TileEntityLinkBox extends TileEntityPowerStorage {
 
     public String getType(){
         return "linkBox";
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        GuiHandler.openGui(EnumGui.LINKBOX, player, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return true;
     }
 
     public String getLinkIdentifier() {

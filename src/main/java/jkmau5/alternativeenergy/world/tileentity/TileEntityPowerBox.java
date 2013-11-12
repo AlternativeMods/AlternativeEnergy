@@ -4,17 +4,21 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Optional;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
-import jkmau5.alternativeenergy.inventory.slot.InvSlot;
-import jkmau5.alternativeenergy.inventory.slot.InvSlotCharge;
-import jkmau5.alternativeenergy.inventory.slot.InvSlotDisCharge;
+import jkmau5.alternativeenergy.gui.EnumGui;
+import jkmau5.alternativeenergy.gui.GuiHandler;
+import jkmau5.alternativeenergy.gui.slot.InvSlot;
+import jkmau5.alternativeenergy.gui.slot.InvSlotCharge;
+import jkmau5.alternativeenergy.gui.slot.InvSlotDisCharge;
+import jkmau5.alternativeenergy.inventory.InventoryObject;
 import jkmau5.alternativeenergy.power.Ratios;
-import jkmau5.alternativeenergy.server.GuiHandlerServer;
 import jkmau5.alternativeenergy.world.item.AltEngItems;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraftforge.common.ForgeDirection;
 
 import java.util.List;
 
@@ -39,9 +43,15 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
     public InvSlotCharge chargeSlot;
     public InvSlotDisCharge dischargeSlot;
 
-    @Override
-    public int getGuiID() {
-        return GuiHandlerServer.ID_GUI_PowerBox;
+    public TileEntityPowerBox() {
+        this.setInventory(new InventoryObject(4, "Power Box", 64));
+
+        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 0));
+        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 1));
+        if(AlternativeEnergy.ICSupplied) {
+            chargeSlot = new InvSlotCharge(this, 2);
+            dischargeSlot = new InvSlotDisCharge(this, 3);
+        }
     }
 
     @Override
@@ -68,54 +78,35 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
         return "powerBox";
     }
 
-    public TileEntityPowerBox() {
-        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 0));
-        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 1));
-        if(AlternativeEnergy.ICSupplied) {
-            chargeSlot = new InvSlotCharge(this, 2);
-            dischargeSlot = new InvSlotDisCharge(this, 3);
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        GuiHandler.openGui(EnumGui.POWERBOX, player, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return true;
+    }
+
+    @Override
+    public boolean blockActivated(EntityPlayer player, int sideHit) {
+        if(player.getHeldItem() != null && AlternativeEnergy.isWrench(player.getHeldItem().itemID)) {
+            ForgeDirection side = ForgeDirection.getOrientation(sideHit);
+            if(this.worldObj.isRemote) return true;
+            if(player.isSneaking()) {
+                return false;
+            }else{
+                this.setMode(side, this.getNextMode(this.getMode(side)));
+                ChatMessageComponent component = ChatMessageComponent.createFromTranslationWithSubstitutions("altEng.chatmessage.storageSideModeChanged", this.getMode(side).toString().toLowerCase());
+                player.sendChatToPlayer(component);
+                return true;
+            }
         }
+        return super.blockActivated(player, sideHit);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
 
-        if(tag.hasKey("capacityUpgrade"))
-            capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, tag.getInteger("capacityUpgrade"), 0));
-        if(tag.hasKey("outputSpeedUpgrade"))
-            outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, tag.getInteger("outputSpeedUpgrade"), 1));
-
-        if(AlternativeEnergy.ICSupplied) {
-            if(tag.hasKey("chargeSlot")) {
-                chargeSlot.put(new ItemStack(Block.stone));
-                chargeSlot.get().readFromNBT(tag.getCompoundTag("chargeSlot"));
-            }
-            if(tag.hasKey("dischargeSlot")) {
-                dischargeSlot.put(new ItemStack(Block.stone));
-                dischargeSlot.get().readFromNBT(tag.getCompoundTag("dischargeSlot"));
-            }
-        }
-
         forceMaxPowersUpdate();
         forceOutputSpeedUpdate();
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-
-        if(capacitySlot.get() != null)
-            tag.setInteger("capacityUpgrade", capacitySlot.get().stackSize);
-        if(outputSpeedSlot.get() != null)
-            tag.setInteger("outputSpeedUpgrade", outputSpeedSlot.get().stackSize);
-
-        if(AlternativeEnergy.ICSupplied) {
-            if(chargeSlot.get() != null)
-                tag.setCompoundTag("chargeSlot", chargeSlot.get().writeToNBT(new NBTTagCompound()));
-            if(dischargeSlot.get() != null)
-                tag.setCompoundTag("dischargeSlot", dischargeSlot.get().writeToNBT(new NBTTagCompound()));
-        }
     }
 
     @Override

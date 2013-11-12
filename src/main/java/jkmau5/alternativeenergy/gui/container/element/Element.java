@@ -1,10 +1,10 @@
-package jkmau5.alternativeenergy.inventory.container.element;
+package jkmau5.alternativeenergy.gui.container.element;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.client.gui.AltEngGuiContainer;
 import jkmau5.alternativeenergy.client.render.ToolTip;
-import jkmau5.alternativeenergy.inventory.container.AltEngContainer;
+import jkmau5.alternativeenergy.gui.container.AltEngContainer;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.minecraft.inventory.ICrafting;

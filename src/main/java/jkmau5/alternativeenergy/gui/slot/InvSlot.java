@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.inventory.slot;
+package jkmau5.alternativeenergy.gui.slot;
 
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.item.ItemStack;

@@ -1,13 +1,13 @@
-package jkmau5.alternativeenergy.inventory.container;
+package jkmau5.alternativeenergy.gui.container;
 
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jkmau5.alternativeenergy.gui.container.element.Element;
+import jkmau5.alternativeenergy.gui.container.slot.AltEngSlot;
 import jkmau5.alternativeenergy.inventory.InventoryUtils;
-import jkmau5.alternativeenergy.inventory.container.element.Element;
-import jkmau5.alternativeenergy.inventory.container.slot.AltEngSlot;
 import jkmau5.alternativeenergy.network.PacketElementUpdate;
 import lombok.Getter;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,7 +68,7 @@ public abstract class AltEngContainer extends Container {
     }
 
     public void sendElementDataToClient(Element element, ICrafting crafter, byte[] data){
-        PacketDispatcher.sendPacketToPlayer(new PacketElementUpdate(this.windowId, this.elements.indexOf(element), data).getPacket(), (Player) crafter); //FIXME: cast to EntityPlayer first? Shouldn't matter
+        PacketDispatcher.sendPacketToPlayer(new PacketElementUpdate(this.windowId, this.elements.indexOf(element), data).getPacket(), (Player) crafter);
     }
 
     public void handleElementDataClient(int widgetId, DataInput data) throws IOException {
@@ -82,6 +82,17 @@ public abstract class AltEngContainer extends Container {
     public boolean canInteractWith(EntityPlayer entityplayer) {
         if(this.inventory == null) return true;
         return this.inventory.isUseableByPlayer(entityplayer);
+    }
+
+    protected void addPlayerInventory(InventoryPlayer inventoryPlayer) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                this.addSlot(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            }
+        }
+        for (int i = 0; i < 9; i++) {
+            this.addSlot(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+        }
     }
 
     public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player){

@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.inventory.container.slot;
+package jkmau5.alternativeenergy.gui.container.slot;
 
 import jkmau5.alternativeenergy.client.render.ToolTip;
 import lombok.Getter;

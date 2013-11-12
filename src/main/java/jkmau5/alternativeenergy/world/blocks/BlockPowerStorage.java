@@ -10,7 +10,6 @@ import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerStorage;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -65,9 +64,9 @@ public class BlockPowerStorage extends BlockTileEntity {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister register) {
         for(int i = 0; i < iconNames.length; i++){
-            icon_input[i] = register.registerIcon(iconNames[i] + "_input");
-            icon_output[i] = register.registerIcon(iconNames[i] + "_output");
-            icon_disabled[i] = register.registerIcon(iconNames[i] + "_disabled");
+            icon_input[i] = register.registerIcon("alternativeenergy:" + iconNames[i] + "_input");
+            icon_output[i] = register.registerIcon("alternativeenergy:" + iconNames[i] + "_output");
+            icon_disabled[i] = register.registerIcon("alternativeenergy:" + iconNames[i] + "_disabled");
         }
     }
 
@@ -84,30 +83,5 @@ public class BlockPowerStorage extends BlockTileEntity {
             if(mode == EnumOutputMode.DISABLED) return icon_disabled[meta];
         }
         return icon_disabled[0];
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int sideInt, float hitX, float hitY, float hitZ) {
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
-        if(tile == null) return false;
-        if(tile instanceof TileEntityPowerStorage) {
-            TileEntityPowerStorage storageTile = (TileEntityPowerStorage) tile;
-            ForgeDirection side = ForgeDirection.getOrientation(sideInt);
-            if(player.getHeldItem() != null && AlternativeEnergy.isWrench(player.getHeldItem().itemID) || (!AlternativeEnergy.BCSupplied && !AlternativeEnergy.ICSupplied && player.getHeldItem() == null)) {
-                if(player.isSneaking()) {
-                    storageTile.setMode(side, storageTile.getNextMode(storageTile.getMode(ForgeDirection.getOrientation(sideInt))));
-                    player.addChatMessage("Side \"" + side.toString().toLowerCase() + "\" is now set to " + storageTile.getMode(side).toString().toLowerCase());
-                    return true;
-                }else {
-                    player.addChatMessage("Side \"" + side.toString().toLowerCase() + "\" is set to " + storageTile.getMode(side).toString().toLowerCase());
-                    return true;
-                }
-            }else{
-                if(player.isSneaking()) return false;
-                if(!world.isRemote) player.openGui(AlternativeEnergy.instance, storageTile.getGuiID(), world, x, y, z);
-                return true;
-            }
-        }
-        return false;
     }
 }

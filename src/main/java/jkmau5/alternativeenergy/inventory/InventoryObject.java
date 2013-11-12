@@ -92,7 +92,7 @@ public class InventoryObject implements IInventory, ISaveNBT {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return false;
+        return true; //TODO: something with this?
     }
 
     @Override
