@@ -1,6 +1,7 @@
 package jkmau5.alternativeenergy.world.item;
 
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.world.blocks.BlockPowerStorage;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -75,6 +76,11 @@ public class ItemBlockPowerStorage extends ItemBlock {
         }else {
             list.add("Hold shift to get more information");
         }
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return "tile.altEng." + BlockPowerStorage.iconNames[stack.getItemDamage()];
     }
 
     @Override

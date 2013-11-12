@@ -24,7 +24,7 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public class BlockPowerStorage extends BlockTileEntity {
 
-    public String[] iconNames = new String[]{"powerBox", "linkBox"};
+    public static String[] iconNames = new String[]{"powerBox", "linkBox"};
     @SideOnly(Side.CLIENT) public Icon[] icon_input = new Icon[iconNames.length];
     @SideOnly(Side.CLIENT) public Icon[] icon_output = new Icon[iconNames.length];
     @SideOnly(Side.CLIENT) public Icon[] icon_disabled = new Icon[iconNames.length];
@@ -58,6 +58,8 @@ public class BlockPowerStorage extends BlockTileEntity {
     public int damageDropped(int meta) {
         return meta;
     }
+
+
 
     @Override
     @SideOnly(Side.CLIENT)
