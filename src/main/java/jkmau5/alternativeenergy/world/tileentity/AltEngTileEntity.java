@@ -67,9 +67,9 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory 
     public boolean blockActivated(EntityPlayer player, int side){
         if(player.isSneaking()) return false;
         ItemStack holding = player.getCurrentEquippedItem();
-        if(holding != null){
+        /*if(holding != null){
             //Do something item specific here
-        }
+        }*/
         return this.openGui(player);
     }
 

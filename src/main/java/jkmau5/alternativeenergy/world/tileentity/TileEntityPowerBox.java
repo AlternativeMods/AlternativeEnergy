@@ -44,6 +44,7 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
     public InvSlotDisCharge dischargeSlot;
 
     public TileEntityPowerBox() {
+        super();
         this.setInventory(new InventoryObject(4, "Power Box", 64));
 
         capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 0));
