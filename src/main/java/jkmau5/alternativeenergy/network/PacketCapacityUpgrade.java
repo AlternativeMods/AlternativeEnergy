@@ -4,7 +4,6 @@ import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.INetworkManager;
 import net.minecraft.tileentity.TileEntity;
 
 import java.io.DataInput;
@@ -23,7 +22,7 @@ public class PacketCapacityUpgrade extends AbstractPacket {
 
     private int x, y, z;
 
-    public PacketCapacityUpgrade(){} //We need the empty constructor here!
+    public PacketCapacityUpgrade(EntityPlayer sender){} //We need the empty constructor here!
     public PacketCapacityUpgrade(TileEntityPowerBox tile, int numUpgrades){
         this.x = tile.xCoord;
         this.y = tile.yCoord;
@@ -45,11 +44,8 @@ public class PacketCapacityUpgrade extends AbstractPacket {
         this.x = data.readInt();
         this.y = data.readInt();
         this.z = data.readInt();
-    }
 
-    @Override
-    public void processPacket(INetworkManager manager, EntityPlayer player) {
-        TileEntity tile = player.worldObj.getBlockTileEntity(this.x, this.y, this.z);
+        TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
         if(tile == null || !(tile instanceof TileEntityPowerBox)) return;
         TileEntityPowerBox powerBox = (TileEntityPowerBox) tile;
         if(this.numUpgrades == 0){
@@ -57,7 +53,6 @@ public class PacketCapacityUpgrade extends AbstractPacket {
         }else{
             powerBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, this.numUpgrades, 0));
         }
-        System.out.println(numUpgrades);
         powerBox.forceMaxPowersUpdate();
     }
 }

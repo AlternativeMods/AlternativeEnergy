@@ -3,8 +3,6 @@ package jkmau5.alternativeenergy.network;
 import jkmau5.alternativeenergy.gui.container.AltEngContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -43,10 +41,5 @@ public class PacketElementUpdate extends AbstractPacket {
         if(player.openContainer instanceof AltEngContainer && player.openContainer.windowId == this.windowID){
             ((AltEngContainer) player.openContainer).handleElementDataClient(this.widgetID, data);
         }
-    }
-
-    @Override
-    public void processPacket(INetworkManager manager, EntityPlayer player) {
-        //NOOP
     }
 }

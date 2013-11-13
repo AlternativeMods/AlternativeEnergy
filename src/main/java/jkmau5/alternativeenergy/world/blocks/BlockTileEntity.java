@@ -1,8 +1,10 @@
 package jkmau5.alternativeenergy.world.blocks;
 
+import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntity;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -62,5 +64,10 @@ public abstract class BlockTileEntity extends BlockContainer {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
         return tile instanceof AltEngTileEntity && ((AltEngTileEntity) tile).blockActivated(player, side);
+    }
+
+    @Override
+    public CreativeTabs getCreativeTabToDisplayOn() {
+        return AlternativeEnergy.tabPowerBox;
     }
 }

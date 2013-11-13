@@ -6,8 +6,9 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import jkmau5.alternativeenergy.AltEngLog;
+import lombok.AccessLevel;
+import lombok.Getter;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import org.apache.commons.io.IOUtils;
 
@@ -21,6 +22,7 @@ import java.io.*;
 public abstract class AbstractPacket {
 
     private static BiMap<Integer, Class<? extends AbstractPacket>> packets = HashBiMap.create();
+    @Getter(AccessLevel.PROTECTED) private EntityPlayer sender;
 
     private static void registerPacket(int id, Class<? extends AbstractPacket> cl){
         packets.put(id, cl);
@@ -34,6 +36,8 @@ public abstract class AbstractPacket {
         registerPacket(4, PacketLinkboxPrivateUpdate.class);
         registerPacket(5, PacketElementUpdate.class);
         registerPacket(6, PacketSynchronisation.class);
+        registerPacket(7, PacketGuiString.class);
+        registerPacket(8, PacketGuiCloseSaveData.class);
     }
 
     public final Packet250CustomPayload getPacket(){
@@ -49,7 +53,7 @@ public abstract class AbstractPacket {
         return ret;
     }
 
-    public static AbstractPacket readPacket(Packet250CustomPayload packet){
+    public static AbstractPacket readPacket(Packet250CustomPayload packet, EntityPlayer player){
         AbstractPacket ret = null;
         ByteArrayInputStream arrayStream = null;
         DataInputStream stream = null;
@@ -59,6 +63,7 @@ public abstract class AbstractPacket {
 
             int packetID = stream.read();
             AbstractPacket nPacket = packets.get(packetID).newInstance();
+            nPacket.sender = player;
             if(nPacket != null){
                 nPacket.readPacket(stream);
             }
@@ -78,5 +83,4 @@ public abstract class AbstractPacket {
 
     public abstract void writePacket(DataOutput data) throws IOException;
     public abstract void readPacket(DataInput data) throws  IOException;
-    public abstract void processPacket(INetworkManager manager, EntityPlayer player);
 }

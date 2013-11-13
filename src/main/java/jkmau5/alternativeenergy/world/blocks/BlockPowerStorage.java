@@ -2,7 +2,6 @@ package jkmau5.alternativeenergy.world.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.util.EnumOutputMode;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
@@ -38,7 +37,6 @@ public class BlockPowerStorage extends BlockTileEntity {
             this.setResistance(10.0F);
         }
         this.setStepSound(soundMetalFootstep);
-        this.setCreativeTab(AlternativeEnergy.tabPowerBox);
     }
 
     @Override

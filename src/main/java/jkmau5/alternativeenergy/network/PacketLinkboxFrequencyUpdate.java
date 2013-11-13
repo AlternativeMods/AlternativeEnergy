@@ -1,8 +1,6 @@
 package jkmau5.alternativeenergy.network;
 
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 import net.minecraft.tileentity.TileEntity;
 
 import java.io.DataInput;
@@ -16,9 +14,7 @@ import java.io.IOException;
  */
 public class PacketLinkboxFrequencyUpdate extends AbstractPacket {
 
-    private TileEntityLinkBox tile;
     private int linkID;
-
     private int x, y, z;
 
     public PacketLinkboxFrequencyUpdate(){} //We need the empty constructor here!
@@ -26,7 +22,6 @@ public class PacketLinkboxFrequencyUpdate extends AbstractPacket {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;
-        this.tile = tile;
         this.linkID = linkID;
     }
 
@@ -43,11 +38,8 @@ public class PacketLinkboxFrequencyUpdate extends AbstractPacket {
         this.x = data.readInt();
         this.y = data.readInt();
         this.z = data.readInt();
-    }
 
-    @Override
-    public void processPacket(INetworkManager manager, EntityPlayer player) {
-        TileEntity tile = player.worldObj.getBlockTileEntity(this.x, this.y, this.z);
+        TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
         if(tile == null || !(tile instanceof TileEntityLinkBox)) return;
         ((TileEntityLinkBox) tile).setLinkId(this.linkID);
     }

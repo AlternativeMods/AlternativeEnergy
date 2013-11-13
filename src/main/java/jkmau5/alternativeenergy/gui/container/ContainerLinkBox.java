@@ -8,10 +8,12 @@ import net.minecraft.entity.player.InventoryPlayer;
  *
  * @author jk-5
  */
-public class ContainerLinkBox extends AltEngContainer {
+public class ContainerLinkBox extends ContainerLockable {
+
+    public boolean canLock = false;
 
     public ContainerLinkBox(InventoryPlayer inventoryPlayer, TileEntityLinkBox te) {
-        super(te);
+        super(inventoryPlayer, te);
         this.addPlayerInventory(inventoryPlayer);
     }
 }

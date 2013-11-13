@@ -1,8 +1,6 @@
 package jkmau5.alternativeenergy.network;
 
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 import net.minecraft.tileentity.TileEntity;
 
 import java.io.DataInput;
@@ -18,8 +16,6 @@ import java.io.IOException;
  */
 public class PacketLinkboxPrivateUpdate extends AbstractPacket {
 
-    private TileEntityLinkBox tile;
-
     private int x, y, z;
 
     public PacketLinkboxPrivateUpdate(){} //We need the empty constructor here!
@@ -27,7 +23,6 @@ public class PacketLinkboxPrivateUpdate extends AbstractPacket {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;
-        this.tile = tile;
     }
 
     @Override
@@ -42,11 +37,7 @@ public class PacketLinkboxPrivateUpdate extends AbstractPacket {
         this.x = data.readInt();
         this.y = data.readInt();
         this.z = data.readInt();
-    }
-
-    @Override
-    public void processPacket(INetworkManager manager, EntityPlayer player) {
-        TileEntity tile = player.worldObj.getBlockTileEntity(this.x, this.y, this.z);
+        TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
         if(tile == null || !(tile instanceof TileEntityLinkBox)) return;
         TileEntityLinkBox linkBox = (TileEntityLinkBox) tile;
         linkBox.togglePrivate();

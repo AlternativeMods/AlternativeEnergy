@@ -1,6 +1,8 @@
 package jkmau5.alternativeenergy.world.tileentity;
 
 import jkmau5.alternativeenergy.inventory.InventoryObject;
+import jkmau5.alternativeenergy.util.interfaces.IOwnable;
+import jkmau5.alternativeenergy.util.interfaces.ISaveNBT;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
  *
  * @author jk-5
  */
-public abstract class AltEngTileEntity extends TileEntity implements IInventory {
+public abstract class AltEngTileEntity extends TileEntity implements IInventory, IOwnable, ISaveNBT {
 
     @Getter
     @Setter(AccessLevel.PROTECTED)

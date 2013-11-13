@@ -4,10 +4,20 @@ import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.EnumGui;
 import jkmau5.alternativeenergy.gui.GuiHandler;
+import jkmau5.alternativeenergy.gui.button.LockButtonState;
+import jkmau5.alternativeenergy.gui.button.MultiButtonController;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedBoolean;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedInteger;
+import jkmau5.alternativeenergy.util.Utils;
+import jkmau5.alternativeenergy.util.interfaces.IGuiCloseSaveDataHandler;
+import jkmau5.alternativeenergy.util.interfaces.ILockable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
  * Author: Lordmau5
@@ -16,10 +26,35 @@ import net.minecraft.server.MinecraftServer;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class TileEntityLinkBox extends TileEntityPowerStorage {
+public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockable, IGuiCloseSaveDataHandler {
 
     public SynchronizedInteger linkedID;
     public SynchronizedBoolean isPrivate;
+
+    private final MultiButtonController lockController = MultiButtonController.getController(0, LockButtonState.VALUES);
+
+    @Override
+    public MultiButtonController getLockController() {
+        return this.lockController;
+    }
+
+    @Override
+    public boolean isLocked() {
+        return this.lockController.getButtonState() == LockButtonState.LOCKED;
+    }
+
+    @Override
+    public void writeGuiCloseData(DataOutput output) throws IOException {
+        output.writeByte(this.lockController.getCurrentState());
+    }
+
+    @Override
+    public void readGuiCloseData(DataInput input, EntityPlayer player) throws IOException {
+        byte lock = input.readByte();
+        if(player == null || !this.isLocked() || Utils.isOwnerOrOp(this, player.username)){
+            this.lockController.setCurrentState(lock);
+        }
+    }
 
     @Override
     protected void createSynchronizedFields() {
@@ -127,5 +162,22 @@ public class TileEntityLinkBox extends TileEntityPowerStorage {
             AlternativeEnergy.linkBoxNetwork.addLinkBoxToNetwork(this, getLinkIdentifier());
             AlternativeEnergy.linkBoxNetwork.initiateNetworkPower(getLinkIdentifier(), needsToInit_Power);
         }
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        this.lockController.readFromNBT(tag, "lock");
+        super.readFromNBT(tag);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        this.lockController.writeToNBT(tag, "lock");
+        super.writeToNBT(tag);
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+        return true;
     }
 }

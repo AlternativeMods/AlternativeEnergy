@@ -1,7 +1,6 @@
 package jkmau5.alternativeenergy.server;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.gui.GuiHandler;
 import net.minecraft.world.World;
@@ -18,7 +17,7 @@ public class ProxyCommon {
     }
 
     public void registerNetworkHandlers(){
-        NetworkRegistry.instance().registerChannel(new PacketHandlerServer(), "AltEng", Side.SERVER);
+        NetworkRegistry.instance().registerChannel(new PacketHandler(), "AltEng");
         NetworkRegistry.instance().registerGuiHandler(AlternativeEnergy.instance, new GuiHandler());
     }
 

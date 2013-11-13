@@ -35,7 +35,6 @@ public class BlockPowerCable extends BlockTileEntity {
         setUnlocalizedName("altEng.powerCable");
         setHardness(5.0F);
         setStepSound(soundMetalFootstep);
-        setCreativeTab(AlternativeEnergy.tabPowerBox);
     }
 
     @Override

@@ -4,8 +4,6 @@ import jkmau5.alternativeenergy.network.synchronisation.ISynchronisationHandler;
 import jkmau5.alternativeenergy.network.synchronisation.ISynchronized;
 import jkmau5.alternativeenergy.network.synchronisation.SynchronsiationMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
@@ -48,10 +46,5 @@ public class PacketSynchronisation extends AbstractPacket {
             List<ISynchronized> changes = handler.getSyncMap().readFromStream(data);
             handler.onSynced(changes);
         }
-    }
-
-    @Override
-    public void processPacket(INetworkManager manager, EntityPlayer player) {
-
     }
 }

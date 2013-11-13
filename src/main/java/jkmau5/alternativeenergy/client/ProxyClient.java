@@ -1,7 +1,6 @@
 package jkmau5.alternativeenergy.client;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.client.render.BlockPowerCableRender;
@@ -27,8 +26,6 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public void registerNetworkHandlers() {
         super.registerNetworkHandlers();
-
-        NetworkRegistry.instance().registerChannel(new PacketHandlerClient(), "AltEng", Side.CLIENT);
 
         TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
     }

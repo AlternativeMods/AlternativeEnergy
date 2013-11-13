@@ -1,6 +1,7 @@
 package jkmau5.alternativeenergy.world.item;
 
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.world.blocks.AltEngBlocks;
 import jkmau5.alternativeenergy.world.blocks.BlockPowerStorage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -24,6 +26,16 @@ public class ItemBlockPowerStorage extends ItemBlock {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setNoRepair();
+    }
+
+    @Override
+    public Icon getIconFromDamage(int par1) {
+        return AltEngBlocks.blockPowerStorage.getIcon(2, par1);
+    }
+
+    @Override
+    public int getMetadata(int par1) {
+        return par1;
     }
 
     @Override

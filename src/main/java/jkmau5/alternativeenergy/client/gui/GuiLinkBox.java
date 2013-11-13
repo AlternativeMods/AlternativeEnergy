@@ -1,8 +1,11 @@
 package jkmau5.alternativeenergy.client.gui;
 
 import jkmau5.alternativeenergy.Constants;
+import jkmau5.alternativeenergy.client.gui.button.GuiMultiButton;
 import jkmau5.alternativeenergy.gui.container.ContainerLinkBox;
+import jkmau5.alternativeenergy.gui.container.ContainerLockable;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -14,14 +17,46 @@ import net.minecraft.util.StatCollector;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class GuiLinkBox extends AltEngGuiContainer {
+public class GuiLinkBox extends TileEntityGuiContainer {
 
     private static final ResourceLocation background = new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/powerBox.png");
     private final TileEntityLinkBox tileEntity;
 
+    private GuiMultiButton lockButton;
+
     public GuiLinkBox(InventoryPlayer inventoryPlayer, TileEntityLinkBox tileEntity) {
-        super(new ContainerLinkBox(inventoryPlayer, tileEntity), background);
+        super(new ContainerLinkBox(inventoryPlayer, tileEntity), background, tileEntity);
         this.tileEntity = tileEntity;
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        if(this.tileEntity == null) return;
+        int w = (this.width - this.xSize) / 2;
+        int h = (this.height - this.ySize) / 2;
+        this.buttonList.clear();
+
+        this.lockButton = new GuiMultiButton(1, w + 150, h + 8, 16, this.tileEntity.getLockController());
+        this.buttonList.add(this.lockButton);
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton par1GuiButton) {
+        if(this.tileEntity == null) return;
+        this.updateButtons();
+    }
+
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        this.updateButtons();
+
+    }
+
+    private void updateButtons(){
+        this.lockButton.enabled = ((ContainerLockable) this.getContainer()).isCanLock();
+        //TODO: update lockbutton tooltips from here
     }
 
     @Override
