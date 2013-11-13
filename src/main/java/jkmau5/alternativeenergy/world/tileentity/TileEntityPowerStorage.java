@@ -61,7 +61,13 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     @Override
-    public void onSynced(List<ISynchronized> changes){}
+    public void onSynced(List<ISynchronized> changes){
+        for(ISynchronized sync : changes){
+            if(sync instanceof BlockOutputMode){
+                this.markBlockForUpdate();
+            }
+        }
+    }
 
     public void setMode(ForgeDirection side, EnumOutputMode var) {
         if(side == ForgeDirection.UNKNOWN) return;
