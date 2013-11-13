@@ -20,12 +20,11 @@ import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.compatibility.buildCraft.BuildCraftCompatibility;
 import jkmau5.alternativeenergy.power.LinkBoxNetwork;
 import jkmau5.alternativeenergy.server.ProxyCommon;
+import jkmau5.alternativeenergy.world.AltEngRecipes;
 import jkmau5.alternativeenergy.world.blocks.AltEngBlocks;
 import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntities;
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
@@ -35,22 +34,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: Lordmau5
- * Date: 21.08.13
- * Time: 16:10
- * You are allowed to change this code,
- * however, not to publish it without my permission.
- */
-@Mod(modid = AlternativeEnergy.modid, dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = Constants.MODID, dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
 @NetworkMod
 public class AlternativeEnergy {
-
-    public static final String modid = "AlternativeEnergy";
-
-    public static String getModid() {
-        return modid.toLowerCase();
-    }
 
     public static boolean BCSupplied = false;
     public static boolean ICSupplied = false;
@@ -58,14 +44,14 @@ public class AlternativeEnergy {
 
     public static File configFolder;
 
-    @SidedProxy(modId = modid, clientSide = "jkmau5.alternativeenergy.client.ProxyClient", serverSide = "jkmau5.alternativeenergy.server.ProxyCommon")
+    @SidedProxy(modId = Constants.MODID, clientSide = "jkmau5.alternativeenergy.client.ProxyClient", serverSide = "jkmau5.alternativeenergy.server.ProxyCommon")
     public static ProxyCommon proxy;
 
     public static BuildCraftCompatibility bcComp;
 
     public static LinkBoxNetwork linkBoxNetwork;
 
-    @Instance(modid)
+    @Instance(Constants.MODID)
     public static AlternativeEnergy instance;
 
     public static CreativeTabs tabPowerBox = new CreativeTabs("tabPowerBox") {
@@ -107,6 +93,7 @@ public class AlternativeEnergy {
         AltEngBlocks.init(); //In 1.7, block registration should be in preInit. So, here we are!
         AltEngItems.init(); //In 1.7, item registration should be in preInit. So, here we are!
         AltEngTileEntities.init(); //In 1.7, tileEntity registration should be in preInit. So, here we are!
+        AltEngRecipes.init();
     }
 
     public void checkForMods() {
@@ -127,37 +114,6 @@ public class AlternativeEnergy {
         }
         if(BCSupplied)
             bcComp = new BuildCraftCompatibility();
-    }
-
-    public void addBCandICRecipies() {
-        Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
-        Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
-        ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);
-
-        ItemStack hvTransformer = ic2.api.item.Items.getItem("hvTransformer");
-        ItemStack goldCable = ic2.api.item.Items.getItem("insulatedGoldCableItem");
-        ItemStack energyCrystal = ic2.api.item.Items.getItem("energyCrystal");
-
-        ItemStack glassFiber = ic2.api.item.Items.getItem("glassFiberCableItem");
-
-        //------------------------------------------------------------------------------------------------------------------
-
-        //GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerBox), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
-
-        GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 0), new Object[] {" A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal});
-
-        GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 1), new Object[] {"DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone});
-
-        //GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerCable, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', AltEngBlocks.blockPowerBox});
-    }
-
-    public void addRecipes() {
-        //------------------------------------------------------
-        //------- Power Box ------------------------------------
-
-        if(ICSupplied && BCSupplied)
-            addBCandICRecipies();
-        //------------------------------------------------------
     }
 
     private static List<Integer> wrenches = new ArrayList<Integer>();
@@ -182,8 +138,6 @@ public class AlternativeEnergy {
         checkForMods();
 
         findWrenchIds();
-
-        addRecipes();
     }
 
     @Mod.EventHandler

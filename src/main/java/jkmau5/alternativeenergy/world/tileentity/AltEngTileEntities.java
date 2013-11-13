@@ -13,5 +13,6 @@ public class AltEngTileEntities {
         GameRegistry.registerTileEntity(TileEntityPowerBox.class, "AltEng.PowerBox");
         GameRegistry.registerTileEntity(TileEntityPowerCable.class, "AltEng.PowerCable");
         GameRegistry.registerTileEntity(TileEntityLinkBox.class, "AltEng.LinkBox");
+        GameRegistry.registerTileEntity(TileEntityConveyor.class, "AltEng.Conveyor");
     }
 }

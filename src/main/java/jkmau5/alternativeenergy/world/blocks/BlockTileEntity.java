@@ -1,7 +1,6 @@
 package jkmau5.alternativeenergy.world.blocks;
 
 import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntity;
-import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerStorage;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -53,17 +52,15 @@ public abstract class BlockTileEntity extends BlockContainer {
     @Override
     public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
-        if(tile != null && tile instanceof TileEntityPowerStorage){
-            return ((TileEntityPowerStorage) tile).removeBlockByPlayer(player);
+        if(tile != null && tile instanceof AltEngTileEntity){
+            return ((AltEngTileEntity) tile).removeBlockByPlayer(player);
         }
-        return true;
+        return world.setBlockToAir(x, y, z);
     }
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
-        if(tile instanceof AltEngTileEntity){
-            return ((AltEngTileEntity) tile).blockActivated(player, side);
-        }else return false;
+        return tile instanceof AltEngTileEntity && ((AltEngTileEntity) tile).blockActivated(player, side);
     }
 }

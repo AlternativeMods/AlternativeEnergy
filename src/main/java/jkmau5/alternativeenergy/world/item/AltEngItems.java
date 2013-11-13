@@ -17,6 +17,6 @@ public class AltEngItems {
     public static void init(){
         itemUpgrade = new ItemUpgrade(Config.upgrade_ItemId);
 
-        GameRegistry.registerItem(itemUpgrade, "AltEng.Upgrade");
+        GameRegistry.registerItem(itemUpgrade, "powerUpgrade");
     }
 }

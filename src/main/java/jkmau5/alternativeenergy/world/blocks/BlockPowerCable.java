@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.world.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.client.render.Render;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerCable;
 import net.minecraft.block.material.Material;
@@ -51,7 +52,7 @@ public class BlockPowerCable extends BlockTileEntity {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12));
+        this.blockIcon = par1IconRegister.registerIcon(Constants.TEXTURE_DOMAIN + ":" + this.getUnlocalizedName().substring(12));
     }
 
     @Override

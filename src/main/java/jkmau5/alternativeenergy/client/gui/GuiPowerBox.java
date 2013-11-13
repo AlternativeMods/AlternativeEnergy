@@ -1,6 +1,6 @@
 package jkmau5.alternativeenergy.client.gui;
 
-import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.gui.container.ContainerPowerBox;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,11 +16,11 @@ import net.minecraft.util.StatCollector;
  */
 public class GuiPowerBox extends AltEngGuiContainer {
 
-    private static final ResourceLocation background = new ResourceLocation(AlternativeEnergy.modid.toLowerCase(), "textures/gui/powerBox.png");
+    private static final ResourceLocation background = new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/powerBox.png");
     private final TileEntityPowerBox tileEntity;
 
     public GuiPowerBox(InventoryPlayer inventoryPlayer, TileEntityPowerBox tileEntity) {
-        super(new ContainerPowerBox(inventoryPlayer, tileEntity), new ResourceLocation(AlternativeEnergy.modid.toLowerCase(), "textures/gui/powerBox.png"));
+        super(new ContainerPowerBox(inventoryPlayer, tileEntity), new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/powerBox.png"));
         this.tileEntity = tileEntity;
     }
 

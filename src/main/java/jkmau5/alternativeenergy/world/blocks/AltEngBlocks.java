@@ -17,12 +17,15 @@ public class AltEngBlocks {
 
     public static Block blockPowerCable;
     public static Block blockPowerStorage;
+    public static Block blockConveyor;
 
     public static void init(){
         blockPowerCable = new BlockPowerCable(Config.powerCable_blockId, Material.iron);
         blockPowerStorage = new BlockPowerStorage(Config.powerBox_blockId);
+        blockConveyor = new BlockConveyor(2005);
 
         GameRegistry.registerBlock(AltEngBlocks.blockPowerStorage, ItemBlockPowerStorage.class, "powerStorage");
         GameRegistry.registerBlock(AltEngBlocks.blockPowerCable, "powerCable");
+        GameRegistry.registerBlock(AltEngBlocks.blockConveyor, "conveyor");
     }
 }

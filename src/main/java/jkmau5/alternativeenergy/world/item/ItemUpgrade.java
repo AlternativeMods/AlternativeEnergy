@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.world.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.Constants;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -45,7 +46,7 @@ public class ItemUpgrade extends Item {
         icons = new Icon[2];
         for(int i = 0; i < icons.length; i++)
         {
-            icons[i] = iR.registerIcon(AlternativeEnergy.modid + ":" + this.getUnlocalizedName().substring(12) + "_" + upgradeNames[i]);
+            icons[i] = iR.registerIcon(Constants.TEXTURE_DOMAIN + ":" + this.getUnlocalizedName().substring(12) + "_" + upgradeNames[i]);
         }
     }
 
