@@ -7,13 +7,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-/**
- * Author: Lordmau5
- * Date: 21.08.13
- * Time: 16:17
- * You are allowed to change this code,
- * however, not to publish it without my permission.
- */
 public class Config {
     public static int eu = 5;
     public static int mj = 2;

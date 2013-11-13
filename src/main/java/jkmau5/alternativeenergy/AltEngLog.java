@@ -6,24 +6,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * No description given
+ * The main logger for AlternativeEnergy. Don't use System.out, because it's ugly, use this!
  *
  * @author jk-5
  */
 public class AltEngLog {
 
-    private static final Logger nailedLogger = Logger.getLogger("AlternativeEnergy");
+    private static final Logger altEngLogger = Logger.getLogger("AlternativeEnergy");
 
     static {
-        nailedLogger.setParent(FMLRelaunchLog.log.getLogger());
+        altEngLogger.setParent(FMLRelaunchLog.log.getLogger());
     }
 
     public static void log(Level level, String format, Object... data) {
-        nailedLogger.log(level, String.format(format, data));
+        altEngLogger.log(level, String.format(format, data));
     }
 
     public static void log(Level level, Throwable ex, String format, Object... data) {
-        nailedLogger.log(level, String.format(format, data), ex);
+        altEngLogger.log(level, String.format(format, data), ex);
     }
 
     public static void severe(Throwable ex, String format, Object... data) {
@@ -59,6 +59,6 @@ public class AltEngLog {
     }
 
     public static Logger getLogger() {
-        return nailedLogger;
+        return altEngLogger;
     }
 }
