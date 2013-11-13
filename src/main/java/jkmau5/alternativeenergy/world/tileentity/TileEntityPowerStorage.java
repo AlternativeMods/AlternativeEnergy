@@ -188,7 +188,6 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     /************************ IPeripheral ************************/
 
     @Override
-    //@Optional.Method(modid = "ComputerCraft") //TODO: Keep this one ?
     public abstract String getType();
 
     @Override
@@ -304,6 +303,12 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
     /************************ IEnergyStorage ************************/
 
+    /**
+     * DO NOT USE THIS TO GET THE STORED POWER
+     * It will crash when IC2 is not installed!
+     *
+     * @return The amount of stored EU
+     */
     @Override
     @Optional.Method(modid = "IC2")
     public int getStored() {

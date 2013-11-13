@@ -1,4 +1,4 @@
-package jkmau5.alternativeenergy.gui.container.element;
+package jkmau5.alternativeenergy.gui.element;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -1,6 +1,6 @@
 package jkmau5.alternativeenergy.gui;
 
-import jkmau5.alternativeenergy.client.gui.GUI_LinkBox;
+import jkmau5.alternativeenergy.client.gui.GuiLinkBox;
 import jkmau5.alternativeenergy.client.gui.GuiPowerBox;
 import jkmau5.alternativeenergy.gui.container.ContainerLinkBox;
 import jkmau5.alternativeenergy.gui.container.ContainerPowerBox;
@@ -22,7 +22,7 @@ public class GuiFactory {
         if(owner == null) return null;
         switch (gui.ordinal()){
             case 0: return new GuiPowerBox(inventory, (TileEntityPowerBox) owner);
-            case 1: return new GUI_LinkBox(inventory, (TileEntityLinkBox) owner);
+            case 1: return new GuiLinkBox(inventory, (TileEntityLinkBox) owner);
         }
         return null;
     }
