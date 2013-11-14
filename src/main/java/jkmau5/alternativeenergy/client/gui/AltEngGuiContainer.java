@@ -1,5 +1,6 @@
 package jkmau5.alternativeenergy.client.gui;
 
+import jkmau5.alternativeenergy.client.gui.button.AltEngGuiButton;
 import jkmau5.alternativeenergy.client.render.RenderState;
 import jkmau5.alternativeenergy.client.render.ToolTip;
 import jkmau5.alternativeenergy.client.render.ToolTipLine;
@@ -60,14 +61,25 @@ public abstract class AltEngGuiContainer extends GuiContainer {
                         boolean mouseOver = element.isMouseOver(mX, mY);
                         toolTip.onTick(mouseOver);
                         if(mouseOver && toolTip.isReady()){
-                            //TODO: callback to the tooltip maybe?
+                            toolTip.refresh();
                             this.drawToolTip(toolTip, mouseX, mouseY);
                         }
                     }
                 }
             }
             for(GuiButton button : (List<GuiButton>) this.buttonList){
-                //TODO: tooltip buttons!
+                if(button instanceof AltEngGuiButton && button.drawButton){
+                    AltEngGuiButton altEngButton = (AltEngGuiButton) button;
+                    ToolTip toolTip = altEngButton.getToolTip();
+                    if(toolTip != null){
+                        boolean mouseOver = altEngButton.isMouseOverButton(mouseX, mouseY);
+                        toolTip.onTick(mouseOver);
+                        if(mouseOver && toolTip.isReady()){
+                            toolTip.refresh();
+                            this.drawToolTip(toolTip, mouseX, mouseY);
+                        }
+                    }
+                }
             }
             for(Slot s : (List<Slot>) this.inventorySlots.inventorySlots){
                 if(s instanceof AltEngSlot){
@@ -78,6 +90,7 @@ public abstract class AltEngGuiContainer extends GuiContainer {
                             boolean mouseOver = this.isMouseOverSlot(slot, mouseX, mouseY);
                             toolTip.onTick(mouseOver);
                             if(mouseOver && toolTip.isReady()){
+                                toolTip.refresh();
                                 this.drawToolTip(toolTip, mouseX, mouseY);
                             }
                         }

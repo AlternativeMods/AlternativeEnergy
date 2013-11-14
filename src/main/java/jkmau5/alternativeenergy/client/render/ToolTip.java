@@ -52,4 +52,6 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         for(ToolTipLine line : this) ret.add(line.getText());
         return ret;
     }
+
+    public void refresh(){}
 }

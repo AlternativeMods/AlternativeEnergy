@@ -3,6 +3,8 @@ package jkmau5.alternativeenergy.world.tileentity;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
@@ -13,6 +15,9 @@ import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.client.render.ToolTip;
+import jkmau5.alternativeenergy.gui.element.AbstractIndicatorController;
+import jkmau5.alternativeenergy.gui.element.IIndicatorController;
 import jkmau5.alternativeenergy.network.synchronisation.ISynchronized;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedInteger;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
@@ -46,6 +51,10 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     protected boolean addedToEnet = false;
     protected int euToConvert = 0;
     private int oldEnergy = 0;
+    @SideOnly(Side.CLIENT)
+    public int guiPower = 0; //The amount of energy to display in the gui
+
+    @Getter private IIndicatorController energyIndicator = new EnergyIndicatorController();
 
     @Setter(AccessLevel.PROTECTED) private int maxOutput = 32;
     @Getter @Setter(AccessLevel.PROTECTED) private int maxStoredPower = Config.powerBox_capacity;
@@ -489,5 +498,20 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Optional.Method(modid = "BuildCraft|Energy")
     public World getWorld() {
         return this.worldObj;
+    }
+
+    private class EnergyIndicatorController extends AbstractIndicatorController{
+        private EnergyIndicatorController(){}
+
+        @Override
+        protected void refreshToolTip() {
+            this.tipLine.setText(String.format("%d/%d", TileEntityPowerStorage.this.guiPower, TileEntityPowerStorage.this.getMaxStoredPower()));
+        }
+
+        @Override
+        public int getScaledLevel(int scale) {
+            float f = Math.min(TileEntityPowerStorage.this.guiPower, 500);
+            return (int)(f * scale / 500);
+        }
     }
 }

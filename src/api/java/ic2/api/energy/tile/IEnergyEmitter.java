@@ -7,7 +7,7 @@ import net.minecraftforge.common.ForgeDirection;
 /**
  * For internal/multi-block usage only.
  *
- * @see IEnergySource
+ * @see ic2.api.energy.tile.IEnergySource
  * @see IEnergyConductor
  * 
  * See ic2/api/energy/usage.txt for an overall description of the energy net api.
