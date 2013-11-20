@@ -12,8 +12,9 @@ repositories {
 }
 
 apply plugin: 'gmcp'
+apply plugin: 'scala'
 
-group = 'lordmau5.powerboxes'
+group = 'jkmau5.powerboxes'
 version = '1.1.3'
 archivesBaseName = 'PowerBoxes'
 targetCompatibility = '1.6'

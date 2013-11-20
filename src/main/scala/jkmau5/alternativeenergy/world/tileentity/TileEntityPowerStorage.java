@@ -15,7 +15,6 @@ import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
-import jkmau5.alternativeenergy.client.render.ToolTip;
 import jkmau5.alternativeenergy.gui.element.AbstractIndicatorController;
 import jkmau5.alternativeenergy.gui.element.IIndicatorController;
 import jkmau5.alternativeenergy.network.synchronisation.ISynchronized;

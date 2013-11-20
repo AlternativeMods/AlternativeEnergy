@@ -5,7 +5,6 @@ import jkmau5.alternativeenergy.gui.container.slot.SlotCapacityUpgrade;
 import jkmau5.alternativeenergy.gui.container.slot.SlotElectricItemCharge;
 import jkmau5.alternativeenergy.gui.container.slot.SlotOutputSpeedUpgrade;
 import jkmau5.alternativeenergy.gui.element.ElementIndicator;
-import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
