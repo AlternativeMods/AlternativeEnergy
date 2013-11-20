@@ -1,15 +1,11 @@
 package jkmau5.alternativeenergy;
 
-import jkmau5.alternativeenergy.power.Ratios;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class Config {
-    public static int eu = 5;
-    public static int mj = 2;
 
     public static int powerBox_blockId = 2000;
     public static int powerBox_capacity = 100000;
@@ -22,20 +18,6 @@ public class Config {
     public static int upgrade_ItemId = 5760;
 
     public static boolean powerBoxExplosionResistant = false;
-
-    /**
-     * Converting energy from EU to MJ and vice-versa.
-     * The first param, "ratio", is the unit that is being used.
-     * E.g.: EU -> MJ ==> Ratios.EU
-     *       MJ -> EU ==> Ratios.MJ
-     *
-     * @param ratio
-     * @return
-     */
-    public static double convertInput(Ratios ratio, double input) {
-        if(ratio == Ratios.EU) return Math.ceil(input / Ratios.EU.conversion);
-        else                   return Math.ceil(input / Ratios.MJ.conversion);
-    }
 
     public static String convertNumber(int number) {
         DecimalFormat df = new DecimalFormat("#,##0");

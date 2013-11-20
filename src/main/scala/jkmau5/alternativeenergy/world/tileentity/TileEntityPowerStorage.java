@@ -13,6 +13,7 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
+import jkmau5.alternativeenergy.AltEngProxy;
 import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.element.AbstractIndicatorController;
@@ -61,6 +62,8 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     //Synchronized variables
     public BlockOutputMode outputMode;
     public SynchronizedInteger storedPower;
+
+    private PowerHandler bcPowerHandler;
 
     @Override
     protected void createSynchronizedFields() {
@@ -121,7 +124,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     private void onUnload() {
-        if(AlternativeEnergy.ICSupplied){
+        if(AltEngProxy.hasIC2()){
             if(this.addedToEnet) {
                 MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
                 this.addedToEnet = false;
@@ -134,7 +137,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         super.updateEntity();
         if(worldObj == null || worldObj.isRemote) return;
 
-        if(AlternativeEnergy.ICSupplied){
+        if(AltEngProxy.hasIC2()){
             if(!this.addedToEnet){
                 MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
                 this.addedToEnet = true;
@@ -147,7 +150,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
             this.euToConvert = 0;
         }
 
-        if(AlternativeEnergy.BCSupplied) {
+        if(AltEngProxy.hasBC()) {
             this.convertBC();
             this.tryOutputtingEnergy();
         }
@@ -405,13 +408,13 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
-        if(!AlternativeEnergy.BCSupplied) return;
+        if(!AltEngProxy.hasBC()) return;
 
-        if(AlternativeEnergy.bcComp.getPowerHandler(this) == null){
-            this.getPowerProvider();
+        if(this.bcPowerHandler == null){
+            this.getPowerHandler();
         }
-        if(AlternativeEnergy.bcComp.getPowerHandler(this).getEnergyStored() <= 0) return;
-        this.setPowerStored(getPowerStored() + (int) Math.floor(AlternativeEnergy.bcComp.getPowerHandler(this).useEnergy(1, AlternativeEnergy.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+        if(this.bcPowerHandler.getEnergyStored() <= 0) return;
+        this.setPowerStored(getPowerStored() + (int) Math.floor(this.bcPowerHandler.useEnergy(1, this.bcPowerHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
     public int getOutputSpeedMultiplier(){
@@ -420,8 +423,6 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
-        if(!AlternativeEnergy.BCSupplied) return;
-
         if(this.storedPower.getValue() <= 0) return;
         boolean[] conSides = new boolean[ForgeDirection.VALID_DIRECTIONS.length];
         int connected = 0;
@@ -470,30 +471,31 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
-    public PowerHandler getPowerProvider() {
-        if(AlternativeEnergy.bcComp.getPowerHandler(this) == null){
-            AlternativeEnergy.bcComp.addPowerHandler(this, PowerHandler.Type.MACHINE);
-            if (AlternativeEnergy.bcComp.getPowerHandler(this) != null) {
-                AlternativeEnergy.bcComp.configurePowerHandler(AlternativeEnergy.bcComp.getPowerHandler(this), 25, 500, 1337, 1000);
-                AlternativeEnergy.bcComp.configurePerdition(AlternativeEnergy.bcComp.getPowerHandler(this), 0, 0);
-            }
+    public PowerHandler getPowerHandler() {
+        if(this.bcPowerHandler == null){
+            this.bcPowerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
+            this.bcPowerHandler.configure(25, 500, 1337, 1000);
+            this.bcPowerHandler.configurePowerPerdition(0, 0);
         }
-        return AlternativeEnergy.bcComp.getPowerHandler(this);
+        return this.bcPowerHandler;
     }
 
+    @Override
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
         if(this.outputMode.getMode(side) != EnumOutputMode.DISABLED && tmpTile != null && !AlternativeEnergy.isInvalidPowerTile(tmpTile))
-            return getPowerProvider().getPowerReceiver();
+            return getPowerHandler().getPowerReceiver();
         return null;
     }
 
+    @Override
     @Optional.Method(modid = "BuildCraft|Energy")
     public void doWork(PowerHandler workProvider) {
 
     }
 
+    @Override
     @Optional.Method(modid = "BuildCraft|Energy")
     public World getWorld() {
         return this.worldObj;
