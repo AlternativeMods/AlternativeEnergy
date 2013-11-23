@@ -10,6 +10,7 @@ import java.util.logging.Logger;
  *
  * @author jk-5
  */
+@SuppressWarnings("unused")
 public class AltEngLog {
 
     private static final Logger logger = Logger.getLogger("AlternativeEnergy");

@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.world.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.util.EnumOutputMode;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
@@ -61,9 +62,9 @@ public class BlockPowerStorage extends BlockTileEntity {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister register) {
         for(int i = 0; i < iconNames.length; i++){
-            icon_input[i] = register.registerIcon("alternativeenergy:" + iconNames[i] + "_input");
-            icon_output[i] = register.registerIcon("alternativeenergy:" + iconNames[i] + "_output");
-            icon_disabled[i] = register.registerIcon("alternativeenergy:" + iconNames[i] + "_disabled");
+            icon_input[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":" + iconNames[i] + "_input");
+            icon_output[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":" + iconNames[i] + "_output");
+            icon_disabled[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":" + iconNames[i] + "_disabled");
         }
     }
 

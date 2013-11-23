@@ -6,7 +6,6 @@ import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Constants;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
@@ -19,14 +18,13 @@ import java.util.List;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class ItemUpgrade extends Item {
+public class ItemUpgrade extends AltEngItem {
 
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
 
-    public ItemUpgrade(int par1) {
-        super(par1);
-        setUnlocalizedName("altEng.upgrade");
+    public ItemUpgrade() {
+        super("upgrade");
         setCreativeTab(AlternativeEnergy.getInstance().getCreativeTab());
         setMaxStackSize(16);
         setHasSubtypes(true);

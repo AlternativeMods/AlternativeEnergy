@@ -7,6 +7,7 @@ import jkmau5.alternativeenergy.util.interfaces.IOwnable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.world.WorldServer;
 
@@ -61,5 +62,14 @@ public class Utils {
             }
         }
         throw new RuntimeException("No blockIDs are available!");
+    }
+
+    public static int getFreeItemID(){
+        for(int id = 4097; id < Item.itemsList.length; id++){
+            if(Item.itemsList[id] == null){
+                return id;
+            }
+        }
+        throw new RuntimeException("No itemIDs are available!");
     }
 }
