@@ -22,11 +22,6 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public class TileEntityPowerBox extends TileEntityPowerStorage implements IInventory {
 
-    @Override
-    protected void createSynchronizedFields() {
-        super.createSynchronizedFields();
-    }
-
     public TileEntityPowerBox() {
         super();
         this.setInventory(new InventoryObject(4, "Power Box", 64));

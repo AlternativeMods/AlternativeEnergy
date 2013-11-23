@@ -11,11 +11,6 @@ import net.minecraft.inventory.ICrafting;
 
 import java.util.List;
 
-/**
- * No description given
- *
- * @author jk-5
- */
 public class ContainerPowerBox extends AltEngContainer {
 
     private int lastTickPower;
@@ -32,8 +27,8 @@ public class ContainerPowerBox extends AltEngContainer {
             this.addSlot(new SlotElectricItemCharge(te.getInventory(), 2, 33, 23));
             this.addSlot(new SlotElectricItemCharge(te.getInventory(), 3, 33, 45));
         }
-
-        this.addElement(new ElementIndicator(te.getEnergyIndicator(), 10, 19, 176, 12, 6, 48));
+                                                                   // x   y    u  v   w    h
+        this.addElement(new ElementIndicator(te.getEnergyIndicator(), 7, 16, 176, 0, 71, 215));
 
         this.addPlayerInventory(inventoryPlayer);
     }

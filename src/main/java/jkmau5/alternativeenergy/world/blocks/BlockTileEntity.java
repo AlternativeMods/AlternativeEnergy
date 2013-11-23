@@ -54,10 +54,10 @@ public abstract class BlockTileEntity extends BlockContainer {
         if(world.isRemote) return;
         TileEntity tile = world.getBlockTileEntity(x, y, z);
         if(tile != null && tile instanceof AltEngTileEntity){
-            ((AltEngTileEntity) tile).constructFromItemStack(itemStack, entity);
             if(entity != null && entity instanceof EntityPlayer){
                 ((AltEngTileEntity) tile).setOwner(((EntityPlayer) entity).username);
             }
+            ((AltEngTileEntity) tile).constructFromItemStack(itemStack, entity);
         }
     }
 

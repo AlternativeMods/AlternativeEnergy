@@ -33,6 +33,7 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
         super.writeToNBT(tag);
 
         tag.setString("owner", this.owner);
+        if(this.inventory != null) this.inventory.writeToNBT(tag, "inventory");
     }
 
     @Override
@@ -40,6 +41,7 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
         super.readFromNBT(tag);
 
         this.owner = tag.getString("owner");
+        if(this.inventory != null) this.inventory.readFromNBT(tag, "inventory");
     }
 
     /**

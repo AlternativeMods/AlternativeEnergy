@@ -2,8 +2,6 @@ package jkmau5.alternativeenergy.world;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import jkmau5.alternativeenergy.AltEngCompat;
-import jkmau5.alternativeenergy.world.item.AltEngItems;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -35,9 +33,9 @@ public class AltEngRecipes {
 
         //GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerBox), new Object[]{"GWG", "HED", "CCC", 'G', goldKinesis, 'W', woodKinesis, 'H', hvTransformer, 'E', energyCrystal, 'D', diamondChipset, 'C', goldCable});
 
-        GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 0), " A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal);
+        //GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 0), " A ", "ABA", " A ", 'A', goldKinesis, 'B', energyCrystal);
 
-        GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 1), "DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone);
+        //GameRegistry.addShapedRecipe(new ItemStack(AltEngItems.itemUpgrade, 1, 1), "DAD", "BCB", "DAD", 'A', Item.redstone, 'B', glassFiber, 'C', woodKinesis, 'D', Block.blockRedstone);
 
         //GameRegistry.addShapedRecipe(new ItemStack(AltEngBlocks.blockPowerCable, 16), new Object[] {" C ", "CPC", " C ", 'C', glassFiber, 'P', AltEngBlocks.blockPowerBox});
     }

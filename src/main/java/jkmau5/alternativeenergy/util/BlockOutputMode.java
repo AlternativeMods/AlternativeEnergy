@@ -73,7 +73,7 @@ public class BlockOutputMode extends SynchronizedBase {
         this.modes = new EnumOutputMode[list.tagCount()];
         for(int i = 0; i < list.tagCount(); i ++){
             NBTTagInt intTag = (NBTTagInt) list.tagAt(i);
-            this.modes[Integer.parseInt(intTag.getName())] = EnumOutputMode.values()[intTag.data];
+            this.modes[i] = EnumOutputMode.values()[intTag.data];
         }
     }
 }

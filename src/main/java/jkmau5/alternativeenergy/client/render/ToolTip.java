@@ -2,6 +2,8 @@ package jkmau5.alternativeenergy.client.render;
 
 import com.google.common.collect.ForwardingList;
 import com.google.common.collect.Lists;
+import jkmau5.alternativeenergy.AltEngLog;
+import net.minecraft.util.StatCollector;
 
 import java.util.List;
 
@@ -54,4 +56,24 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
     }
 
     public void refresh(){}
+
+    public static ToolTip buildToolTip(String tipTag, String[] vars) {
+        try{
+            ToolTip toolTip = new ToolTip(750);
+            String text = StatCollector.translateToLocalFormatted(tipTag, vars);
+            for (String var : vars) {
+                String[] pair = var.split("=");
+                text = text.replace(pair[0], pair[1]);
+            }
+            String[] tips = text.split("\n");
+            for (String tip : tips) {
+                tip = tip.trim();
+                toolTip.add(new ToolTipLine(tip));
+            }
+            return toolTip;
+        }catch(RuntimeException ex){
+            AltEngLog.severe(ex, "Failed to parse tooltip %s", tipTag);
+            throw ex;
+        }
+    }
 }

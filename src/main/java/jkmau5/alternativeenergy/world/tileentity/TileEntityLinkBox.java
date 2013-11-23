@@ -1,5 +1,6 @@
 package jkmau5.alternativeenergy.world.tileentity;
 
+import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.EnumGui;
 import jkmau5.alternativeenergy.gui.GuiHandler;
@@ -14,18 +15,13 @@ import jkmau5.alternativeenergy.util.interfaces.ILockable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraftforge.common.ForgeDirection;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-/**
- * Author: Lordmau5
- * Date: 02.11.13
- * Time: 23:22
- * You are allowed to change this code,
- * however, not to publish it without my permission.
- */
 public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockable, IGuiCloseSaveDataHandler {
 
     public SynchronizedInteger linkedID;
@@ -51,7 +47,9 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     @Override
     public void readGuiCloseData(DataInput input, EntityPlayer player) throws IOException {
         byte lock = input.readByte();
+        System.out.println("incoming " + lock);
         if(player == null || !this.isLocked() || Utils.isOwnerOrOp(this, player.username)){
+            System.out.println("set state to " + lock);
             this.lockController.setCurrentState(lock);
         }
     }
@@ -101,6 +99,24 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
             this.linkedID.setValue(linkId);
             LinkBoxNetwork.getInstance().addLinkBoxToNetwork(this, this.getLinkIdentifier());
         }
+    }
+
+    @Override
+    public boolean blockActivated(EntityPlayer player, int sideHit) {
+        if(this.isLocked() && !this.isOwner(player.username)) return super.blockActivated(player, sideHit);
+        if(player.getHeldItem() != null && AltEngCompat.isWrench(player.getHeldItem())) {
+            ForgeDirection side = ForgeDirection.getOrientation(sideHit);
+            if(this.worldObj.isRemote) return true;
+            if(player.isSneaking()) {
+                return false;
+            }else{
+                this.setMode(side, this.getNextMode(this.getMode(side)));
+                ChatMessageComponent component = ChatMessageComponent.createFromTranslationWithSubstitutions("altEng.chatmessage.storageSideModeChanged", this.getMode(side).toString().toLowerCase());
+                player.sendChatToPlayer(component);
+                return true;
+            }
+        }
+        return super.blockActivated(player, sideHit);
     }
 
     @Override
@@ -172,6 +188,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        System.out.println("Writing linkbox");
         this.lockController.writeToNBT(tag, "lock");
         super.writeToNBT(tag);
     }

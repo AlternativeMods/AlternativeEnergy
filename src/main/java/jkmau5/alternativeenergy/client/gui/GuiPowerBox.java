@@ -7,20 +7,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-/**
- * Author: Lordmau5
- * Date: 23.08.13
- * Time: 14:21
- * You are allowed to change this code,
- * however, not to publish it without my permission.
- */
 public class GuiPowerBox extends AltEngGuiContainer {
 
     private static final ResourceLocation background = new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/powerBox.png");
     private final TileEntityPowerBox tileEntity;
 
     public GuiPowerBox(InventoryPlayer inventoryPlayer, TileEntityPowerBox tileEntity) {
-        super(new ContainerPowerBox(inventoryPlayer, tileEntity), new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/powerBox.png"));
+        super(new ContainerPowerBox(inventoryPlayer, tileEntity), background);
         this.tileEntity = tileEntity;
     }
 

@@ -68,6 +68,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     protected void createSynchronizedFields() {
         this.storedPower = new SynchronizedInteger();
         this.outputMode = new BlockOutputMode();
+
+        this.addSyncedObject("storedPower", this.storedPower);
+        this.addSyncedObject("outputMode", this.outputMode);
     }
 
     @Override
@@ -510,8 +513,11 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
         @Override
         public int getScaledLevel(int scale) {
-            float f = Math.min(TileEntityPowerStorage.this.guiPower, 500);
-            return (int)(f * scale / 500);
+            //0 - 215
+            int max = TileEntityPowerStorage.this.getMaxStoredPower();
+            float f = Math.min(TileEntityPowerStorage.this.guiPower, max);
+            //System.out.println(scale + " " + max + " " + f + " " + (f * scale / max));
+            return (int)(f * scale / max);
         }
     }
 }

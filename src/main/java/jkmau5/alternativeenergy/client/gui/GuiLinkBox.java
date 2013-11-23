@@ -2,6 +2,7 @@ package jkmau5.alternativeenergy.client.gui;
 
 import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.client.gui.button.GuiMultiButton;
+import jkmau5.alternativeenergy.client.render.ToolTip;
 import jkmau5.alternativeenergy.gui.container.ContainerLinkBox;
 import jkmau5.alternativeenergy.gui.container.ContainerLockable;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
@@ -10,17 +11,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-/**
- * Author: Lordmau5
- * Date: 03.11.13
- * Time: 11:29
- * You are allowed to change this code,
- * however, not to publish it without my permission.
- */
 public class GuiLinkBox extends TileEntityGuiContainer {
 
-    private static final ResourceLocation background = new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/powerBox.png");
+    private static final ResourceLocation background = new ResourceLocation(Constants.TEXTURE_DOMAIN, "textures/gui/linkBox.png");
     private final TileEntityLinkBox tileEntity;
+    private String prevTickOwner = "Unknown";
+
+    private ToolTip lockedToolTip;
+    private ToolTip unlockedToolTip;
 
     private GuiMultiButton lockButton;
 
@@ -56,6 +54,11 @@ public class GuiLinkBox extends TileEntityGuiContainer {
 
     private void updateButtons(){
         this.lockButton.enabled = ((ContainerLockable) this.getContainer()).isCanLock();
+        String owner = ((ContainerLinkBox) this.getContainer()).getOwner();
+        if(!owner.equals(this.prevTickOwner)){
+            this.prevTickOwner = owner;
+
+        }
         //TODO: update lockbutton tooltips from here
     }
 
@@ -68,6 +71,8 @@ public class GuiLinkBox extends TileEntityGuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+        super.drawGuiContainerBackgroundLayer(par1, par2, par3);
+
         int posX = (width - xSize) / 2;
         int posY = (height - ySize) / 2;
 

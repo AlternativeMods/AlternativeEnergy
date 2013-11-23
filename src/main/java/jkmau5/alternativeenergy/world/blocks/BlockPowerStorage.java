@@ -40,6 +40,12 @@ public class BlockPowerStorage extends BlockTileEntity {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public Icon getIcon(int side, int meta) {
+        return this.icon_disabled[meta];
+    }
+
+    @Override
     public TileEntity createTileEntity(World world, int metadata) {
         if(metadata == 0) return new TileEntityPowerBox();
         else if(metadata == 1) return new TileEntityLinkBox();

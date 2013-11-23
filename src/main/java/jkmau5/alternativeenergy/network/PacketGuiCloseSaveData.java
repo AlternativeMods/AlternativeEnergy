@@ -2,7 +2,6 @@ package jkmau5.alternativeenergy.network;
 
 import jkmau5.alternativeenergy.util.interfaces.IGuiCloseSaveDataHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -18,13 +17,10 @@ import java.io.IOException;
  */
 public class PacketGuiCloseSaveData extends AbstractPacket {
 
-    private EntityPlayer sender;
     private IGuiCloseSaveDataHandler handler;
     private byte[] data;
 
-    public PacketGuiCloseSaveData(EntityPlayer sender){
-        this.sender = sender;
-    }
+    public PacketGuiCloseSaveData(){}
     public PacketGuiCloseSaveData(IGuiCloseSaveDataHandler handler){
         this.handler = handler;
     }
@@ -61,12 +57,12 @@ public class PacketGuiCloseSaveData extends AbstractPacket {
             int z = data.readInt();
             TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
             if(tileEntity instanceof IGuiCloseSaveDataHandler){
-                ((IGuiCloseSaveDataHandler) tileEntity).readGuiCloseData(data, this.sender);
+                ((IGuiCloseSaveDataHandler) tileEntity).readGuiCloseData(data, this.getSender());
             }
         }else{
             Entity entity = world.getEntityByID(data.readInt());
             if(entity instanceof IGuiCloseSaveDataHandler){
-                ((IGuiCloseSaveDataHandler) entity).readGuiCloseData(data, this.sender);
+                ((IGuiCloseSaveDataHandler) entity).readGuiCloseData(data, this.getSender());
             }
         }
     }

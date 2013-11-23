@@ -230,7 +230,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                 continue;
 
             if(tmpTile instanceof TileEntityPowerStorage) {
-                TileEntityPowerBox pBox = (TileEntityPowerBox) tmpTile;
+                TileEntityPowerStorage pBox = (TileEntityPowerStorage) tmpTile;
 
                 if(pBox.getMode(dr.getOpposite()) != EnumOutputMode.INPUT) continue;
 

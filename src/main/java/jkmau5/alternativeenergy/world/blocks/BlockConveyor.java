@@ -80,12 +80,14 @@ public class BlockConveyor extends BlockTileEntity {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+        super.onBlockPlacedBy(world, x, y, z, entity, itemStack);
         int facing = MathHelper.floor_double((double)(entity.rotationYaw * 4F / 360F) + .5D) & 3;
         world.setBlockMetadataWithNotify(x, y, z, facing, 2);
     }
 
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+        super.onEntityCollidedWithBlock(world, x, y, z, entity);
         double xVel, yVel, zVel;
         int meta = world.getBlockMetadata(x, y, z);
         ForgeDirection direction = ForgeDirection.UNKNOWN;
