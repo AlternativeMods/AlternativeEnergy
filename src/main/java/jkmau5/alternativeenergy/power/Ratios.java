@@ -1,7 +1,5 @@
 package jkmau5.alternativeenergy.power;
 
-import jkmau5.alternativeenergy.Config;
-
 /**
  * Author: Lordmau5
  * Date: 21.08.13
@@ -10,8 +8,8 @@ import jkmau5.alternativeenergy.Config;
  * however, not to publish it without my permission.
  */
 public enum Ratios {
-    EU(Config.eu),
-    MJ(Config.mj);
+    EU(5),
+    MJ(2);
 
     public final int conversion;
 

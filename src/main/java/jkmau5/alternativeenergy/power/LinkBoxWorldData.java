@@ -1,6 +1,5 @@
 package jkmau5.alternativeenergy.power;
 
-import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.util.interfaces.ISaveNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
@@ -20,11 +19,11 @@ public class LinkBoxWorldData extends WorldSavedData implements ISaveNBT {
 
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
-        AlternativeEnergy.linkBoxNetwork.readFromNBT(nbttagcompound);
+        LinkBoxNetwork.getInstance().readFromNBT(nbttagcompound);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbttagcompound) {
-        AlternativeEnergy.linkBoxNetwork.writeToNBT(nbttagcompound);
+        LinkBoxNetwork.getInstance().writeToNBT(nbttagcompound);
     }
 }

@@ -1,6 +1,5 @@
 package jkmau5.alternativeenergy.world.tileentity;
 
-import jkmau5.alternativeenergy.AlternativeEnergy;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.EnumGui;
 import jkmau5.alternativeenergy.gui.GuiHandler;
@@ -8,6 +7,7 @@ import jkmau5.alternativeenergy.gui.button.LockButtonState;
 import jkmau5.alternativeenergy.gui.button.MultiButtonController;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedBoolean;
 import jkmau5.alternativeenergy.network.synchronisation.objects.SynchronizedInteger;
+import jkmau5.alternativeenergy.power.LinkBoxNetwork;
 import jkmau5.alternativeenergy.util.Utils;
 import jkmau5.alternativeenergy.util.interfaces.IGuiCloseSaveDataHandler;
 import jkmau5.alternativeenergy.util.interfaces.ILockable;
@@ -97,9 +97,9 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
     public void setLinkId(int linkId) {
         if(!this.worldObj.isRemote){
-            AlternativeEnergy.linkBoxNetwork.removeFromLink(this, this.getLinkIdentifier());
+            LinkBoxNetwork.getInstance().removeFromLink(this, this.getLinkIdentifier());
             this.linkedID.setValue(linkId);
-            AlternativeEnergy.linkBoxNetwork.addLinkBoxToNetwork(this, this.getLinkIdentifier());
+            LinkBoxNetwork.getInstance().addLinkBoxToNetwork(this, this.getLinkIdentifier());
         }
     }
 
@@ -119,7 +119,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
     public int getPowerStored() {
         if(this.linkedID.getValue() != 0){
-            return AlternativeEnergy.linkBoxNetwork.getNetworkPower(getLinkIdentifier());
+            return LinkBoxNetwork.getInstance().getNetworkPower(getLinkIdentifier());
         }else{
             return super.getPowerStored();
         }
@@ -137,7 +137,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     @Override
     public void setPowerStored(int power) {
         if(this.linkedID.getValue() != 0){
-            AlternativeEnergy.linkBoxNetwork.setNetworkPower(getLinkIdentifier(), power);
+            LinkBoxNetwork.getInstance().setNetworkPower(getLinkIdentifier(), power);
         }else{
             super.setPowerStored(power);
         }
@@ -146,7 +146,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     @Override
     public int getNeededPower() {
         if(this.linkedID.getValue() != 0){
-            return AlternativeEnergy.linkBoxNetwork.neededPower(getLinkIdentifier());
+            return LinkBoxNetwork.getInstance().neededPower(getLinkIdentifier());
         }else{
             return super.getNeededPower();
         }
@@ -159,8 +159,8 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
         if(needsToInit) {
             needsToInit = false;
-            AlternativeEnergy.linkBoxNetwork.addLinkBoxToNetwork(this, getLinkIdentifier());
-            AlternativeEnergy.linkBoxNetwork.initiateNetworkPower(getLinkIdentifier(), needsToInit_Power);
+            LinkBoxNetwork.getInstance().addLinkBoxToNetwork(this, getLinkIdentifier());
+            LinkBoxNetwork.getInstance().initiateNetworkPower(getLinkIdentifier(), needsToInit_Power);
         }
     }
 

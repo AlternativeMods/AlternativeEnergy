@@ -29,6 +29,7 @@ public class AlternativeEnergy {
     @Getter
     private static AlternativeEnergy instance;
 
+    @Getter
     private AltEngCreativeTab creativeTab;
 
     @SuppressWarnings("unused")

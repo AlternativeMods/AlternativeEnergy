@@ -1,10 +1,7 @@
 package jkmau5.alternativeenergy.network;
 
-import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -45,7 +42,7 @@ public class PacketCapacityUpgrade extends AbstractPacket {
         this.y = data.readInt();
         this.z = data.readInt();
 
-        TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
+        /*TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
         if(tile == null || !(tile instanceof TileEntityPowerBox)) return;
         TileEntityPowerBox powerBox = (TileEntityPowerBox) tile;
         if(this.numUpgrades == 0){
@@ -53,6 +50,6 @@ public class PacketCapacityUpgrade extends AbstractPacket {
         }else{
             powerBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, this.numUpgrades, 0));
         }
-        powerBox.forceMaxPowersUpdate();
+        powerBox.forceMaxPowersUpdate();*/
     }
 }

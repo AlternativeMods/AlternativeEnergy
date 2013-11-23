@@ -1,17 +1,10 @@
 package jkmau5.alternativeenergy.world.tileentity;
 
-import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Optional;
-import jkmau5.alternativeenergy.AlternativeEnergy;
-import jkmau5.alternativeenergy.Config;
+import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.gui.EnumGui;
 import jkmau5.alternativeenergy.gui.GuiHandler;
-import jkmau5.alternativeenergy.gui.slot.InvSlot;
-import jkmau5.alternativeenergy.gui.slot.InvSlotCharge;
-import jkmau5.alternativeenergy.gui.slot.InvSlotDisCharge;
 import jkmau5.alternativeenergy.inventory.InventoryObject;
-import jkmau5.alternativeenergy.power.Ratios;
-import jkmau5.alternativeenergy.world.item.AltEngItems;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraftforge.common.ForgeDirection;
-
-import java.util.List;
 
 /**
  * Author: Lordmau5
@@ -36,23 +27,9 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
         super.createSynchronizedFields();
     }
 
-    public final List<InvSlot> invSlots = Lists.newArrayList();
-
-    public InvSlot capacitySlot;
-    public InvSlot outputSpeedSlot;
-    public InvSlotCharge chargeSlot;
-    public InvSlotDisCharge dischargeSlot;
-
     public TileEntityPowerBox() {
         super();
         this.setInventory(new InventoryObject(4, "Power Box", 64));
-
-        capacitySlot = new InvSlot(this, "capacity", 0, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 0));
-        outputSpeedSlot = new InvSlot(this, "outputSpeed", 1, InvSlot.Access.NONE, 1, new ItemStack(AltEngItems.itemUpgrade, 1, 1));
-        if(AlternativeEnergy.ICSupplied) {
-            chargeSlot = new InvSlotCharge(this, 2);
-            dischargeSlot = new InvSlotDisCharge(this, 3);
-        }
     }
 
     @Override
@@ -87,7 +64,7 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
 
     @Override
     public boolean blockActivated(EntityPlayer player, int sideHit) {
-        if(player.getHeldItem() != null && AlternativeEnergy.isWrench(player.getHeldItem().itemID)) {
+        if(player.getHeldItem() != null && AltEngCompat.isWrench(player.getHeldItem())) {
             ForgeDirection side = ForgeDirection.getOrientation(sideHit);
             if(this.worldObj.isRemote) return true;
             if(player.isSneaking()) {
@@ -115,14 +92,14 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
         super.updateEntity();
         if(worldObj == null || worldObj.isRemote) return;
 
-        if(AlternativeEnergy.ICSupplied) {
+        if(AltEngCompat.hasIC2) {
             fill_chargeSlot();
             empty_dischargeSlot();
         }
     }
 
     public void forceMaxPowersUpdate() {
-        if(capacitySlot != null && capacitySlot.get() != null) {
+        /*if(capacitySlot != null && capacitySlot.get() != null) {
             this.setMaxStoredPower(Config.powerBox_capacity);
 
             for(int i=1; i<=capacitySlot.get().stackSize; i++) {
@@ -130,42 +107,42 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
             }
         }else{
             this.setMaxStoredPower(Config.powerBox_capacity);
-        }
+        }*/
     }
 
     public void forceOutputSpeedUpdate() {
-        if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
+        /*if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
             int tmpOutput = 32 * (4 ^ outputSpeedSlot.get().stackSize);
             if(tmpOutput > 512) tmpOutput = 512;
 
             this.setMaxOutput(tmpOutput);
         }else{
             this.setMaxOutput(32);
-        }
+        }*/
     }
 
     //-----------------------------------------------------------------
 
     @Optional.Method(modid = "IC2")
     public void fill_chargeSlot() {
-        if(!AlternativeEnergy.ICSupplied || chargeSlot == null)
+        /*if(!AltEngCompat.hasIC2 || chargeSlot == null)
             return;
 
         if(this.storedPower.getValue() >= Ratios.EU.conversion) {
             int sent = chargeSlot.charge(this.storedPower.getValue() * Ratios.EU.conversion);
             this.storedPower.subtract(sent / Ratios.EU.conversion);
-        }
+        }*/
     }
 
     @Optional.Method(modid = "IC2")
     public void empty_dischargeSlot() {
-        if(!AlternativeEnergy.ICSupplied || dischargeSlot == null)
+        /*if(!AltEngCompat.hasIC2 || dischargeSlot == null)
             return;
 
         if (demandedEnergyUnits() > 0.0D) {
             int gain = dischargeSlot.discharge((int) demandedEnergyUnits(), false);
 
             this.euToConvert += gain;
-        }
+        }*/
     }
 }

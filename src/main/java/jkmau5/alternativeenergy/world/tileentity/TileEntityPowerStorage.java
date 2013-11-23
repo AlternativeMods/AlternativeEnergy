@@ -13,8 +13,7 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
-import jkmau5.alternativeenergy.AltEngProxy;
-import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.element.AbstractIndicatorController;
 import jkmau5.alternativeenergy.gui.element.IIndicatorController;
@@ -124,7 +123,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     private void onUnload() {
-        if(AltEngProxy.hasIC2()){
+        if(AltEngCompat.hasIC2){
             if(this.addedToEnet) {
                 MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
                 this.addedToEnet = false;
@@ -137,7 +136,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         super.updateEntity();
         if(worldObj == null || worldObj.isRemote) return;
 
-        if(AltEngProxy.hasIC2()){
+        if(AltEngCompat.hasIC2){
             if(!this.addedToEnet){
                 MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
                 this.addedToEnet = true;
@@ -150,7 +149,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
             this.euToConvert = 0;
         }
 
-        if(AltEngProxy.hasBC()) {
+        if(AltEngCompat.hasBC){
             this.convertBC();
             this.tryOutputtingEnergy();
         }
@@ -408,7 +407,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
-        if(!AltEngProxy.hasBC()) return;
+        if(!AltEngCompat.hasBC) return;
 
         if(this.bcPowerHandler == null){
             this.getPowerHandler();
@@ -452,7 +451,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
             if(!conSides[i]) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable) && !AlternativeEnergy.isInvalidPowerTile(tmptile)) {
+                if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable) && !AltEngCompat.isInvalidPowerTile(tmptile)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
@@ -484,7 +483,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-        if(this.outputMode.getMode(side) != EnumOutputMode.DISABLED && tmpTile != null && !AlternativeEnergy.isInvalidPowerTile(tmpTile))
+        if(this.outputMode.getMode(side) != EnumOutputMode.DISABLED && tmpTile != null && !AltEngCompat.isInvalidPowerTile(tmpTile))
             return getPowerHandler().getPowerReceiver();
         return null;
     }

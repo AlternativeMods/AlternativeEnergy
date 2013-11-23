@@ -1,10 +1,17 @@
 package jkmau5.alternativeenergy;
 
+import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.tools.IToolWrench;
+import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
+import ic2.api.energy.tile.IEnergyConductor;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 import ic2.api.item.Items;
+import ic2.api.tile.IEnergyStorage;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 import javax.swing.*;
 
@@ -39,5 +46,51 @@ public class AltEngCompat {
         if(stack.getItem() instanceof IToolWrench) return true;
         if(stack.getItem() == Items.getItem("wrench").getItem() || stack.getItem() == Items.getItem("electricWrench").getItem()) return true;
         return false;
+    }
+
+    private static String[] invalidTileClassNames = {"TileEntityTeleporter", "TileCapacitorBank", "TileConduitBundle", "PipeTile"};
+    private static String[] validTileClassNames = {"TileEntityCompactSolar"};
+    private static String[] validTileSuperNames = {"TileEntityCompactSolar"};
+
+    public static boolean isInvalidPowerTile(TileEntity tile) {
+        Class<? extends TileEntity> cl = tile.getClass();
+        for(String cClass : invalidTileClassNames){
+            if(cl.getSimpleName().equalsIgnoreCase(cClass)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkForModTile(TileEntity tile) {
+        if(AltEngCompat.hasBC){
+            if(tile instanceof IPipeTile) return false;
+            if(tile instanceof IPowerReceptor) return true;
+        }
+        if(AltEngCompat.hasIC2) {
+            if(tile instanceof IEnergyConductor) return false;
+            if(tile instanceof IEnergySink || tile instanceof IEnergyStorage || tile instanceof IEnergySource) return true;
+        }
+        return false;
+    }
+
+    public static boolean isValidPowerTile(TileEntity tile) {
+        if(isInvalidPowerTile(tile)) return false;
+
+        Class<? extends TileEntity> cl = tile.getClass();
+        for(String cClass : validTileClassNames) {
+            if(cl.getSimpleName().equalsIgnoreCase(cClass)){
+                return true;
+            }
+        }
+        Class<?> superClass = cl.getSuperclass();
+        if(superClass != null){
+            for(String sClass : validTileSuperNames) {
+                if(superClass.getSimpleName().equalsIgnoreCase(sClass)){
+                    return true;
+                }
+            }
+        }
+        return checkForModTile(tile);
     }
 }

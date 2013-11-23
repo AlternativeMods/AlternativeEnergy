@@ -11,7 +11,6 @@ import jkmau5.alternativeenergy.network.synchronisation.SynchronsiationMap;
 import jkmau5.alternativeenergy.util.interfaces.ISaveNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
-import scala.collection.Seq;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -68,7 +67,7 @@ public abstract class SynchronizedTileEntity extends AltEngTileEntity implements
             try {
                 addSyncedObject(field.getName(), (ISynchronized) field.get(this));
             } catch (Exception e) {
-                AltEngLog.severe(e, String.format("Exception while registering synced field '%s'", field), new Seq<Object>());
+                AltEngLog.severe(e, "Exception while registering synced field '%s'", field);
             }
         }
     }
@@ -105,7 +104,7 @@ public abstract class SynchronizedTileEntity extends AltEngTileEntity implements
         try {
             return syncMap.createPacket(true, false);
         } catch (IOException e) {
-            AltEngLog.severe(e, "Error during description packet creation", new Seq<Object>());
+            AltEngLog.severe(e, "Error during description packet creation");
             return null;
         }
     }

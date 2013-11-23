@@ -1,6 +1,6 @@
 package jkmau5.alternativeenergy.gui.container;
 
-import jkmau5.alternativeenergy.AltEngProxy;
+import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.gui.container.slot.SlotCapacityUpgrade;
 import jkmau5.alternativeenergy.gui.container.slot.SlotElectricItemCharge;
 import jkmau5.alternativeenergy.gui.container.slot.SlotOutputSpeedUpgrade;
@@ -28,7 +28,7 @@ public class ContainerPowerBox extends AltEngContainer {
         this.addSlot(new SlotCapacityUpgrade(te.getInventory(), 0, 131, 17));
         this.addSlot(new SlotOutputSpeedUpgrade(te.getInventory(), 1, 152, 17));
 
-        if(AltEngProxy.hasIC2()){
+        if(AltEngCompat.hasIC2){
             this.addSlot(new SlotElectricItemCharge(te.getInventory(), 2, 33, 23));
             this.addSlot(new SlotElectricItemCharge(te.getInventory(), 3, 33, 45));
         }

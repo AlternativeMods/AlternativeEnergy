@@ -2,7 +2,7 @@ package jkmau5.alternativeenergy.world.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.client.render.Render;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerCable;
@@ -118,10 +118,10 @@ public class BlockPowerCable extends BlockTileEntity {
         }
 
         TileEntity xTile = world.getBlockTileEntity(tileX, tileY, tileZ);
-        if(xTile == null || AlternativeEnergy.isInvalidPowerTile(xTile))
+        if(xTile == null || AltEngCompat.isInvalidPowerTile(xTile))
             me.getEnergyNetwork().removeInput(me, xTile);
         else
-            if(AlternativeEnergy.isInvalidPowerTile(xTile))
+            if(AltEngCompat.isInvalidPowerTile(xTile))
                 me.getEnergyNetwork().addInput(me, xTile);
     }
 
@@ -145,42 +145,42 @@ public class BlockPowerCable extends BlockTileEntity {
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
         if(xTile != null)
         {
-            if(AlternativeEnergy.isValidPowerTile(xTile))
+            if(AltEngCompat.isValidPowerTile(xTile))
                 minX = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x + 1, y, z);
         if(xTile != null)
         {
-            if(AlternativeEnergy.isValidPowerTile(xTile))
+            if(AltEngCompat.isValidPowerTile(xTile))
                 maxX = 1.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z - 1);
         if(xTile != null)
         {
-            if(AlternativeEnergy.isValidPowerTile(xTile))
+            if(AltEngCompat.isValidPowerTile(xTile))
                 minZ = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z + 1);
         if(xTile != null)
         {
-            if(AlternativeEnergy.isValidPowerTile(xTile))
+            if(AltEngCompat.isValidPowerTile(xTile))
                 maxZ = 1.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y - 1, z);
         if(xTile != null)
         {
-            if(AlternativeEnergy.isValidPowerTile(xTile))
+            if(AltEngCompat.isValidPowerTile(xTile))
                 minY = 0.0F;
         }
 
         xTile = bAccess.getBlockTileEntity(x, y + 1, z);
         if(xTile != null)
         {
-            if(AlternativeEnergy.isValidPowerTile(xTile))
+            if(AltEngCompat.isValidPowerTile(xTile))
                 maxY = 1.0F;
         }
 

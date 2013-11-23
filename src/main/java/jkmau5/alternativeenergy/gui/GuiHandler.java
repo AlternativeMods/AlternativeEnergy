@@ -2,7 +2,7 @@ package jkmau5.alternativeenergy.gui;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
-import jkmau5.alternativeenergy.AlternativeEnergy$;
+import jkmau5.alternativeenergy.AlternativeEnergy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -18,7 +18,7 @@ public class GuiHandler implements IGuiHandler {
         System.out.println(gui.name() + " Client: " + world.isRemote);
         if(!world.isRemote) {
             if(gui.hasContainer()){
-                player.openGui(AlternativeEnergy$.MODULE$, gui.getId(), world, x, y, z);
+                player.openGui(AlternativeEnergy.getInstance(), gui.getId(), world, x, y, z);
             }
         }else if (!gui.hasContainer()) {
             TileEntity tile = world.getBlockTileEntity(x, y, z);

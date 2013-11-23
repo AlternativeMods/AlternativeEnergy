@@ -27,7 +27,7 @@ public class ItemUpgrade extends Item {
     public ItemUpgrade(int par1) {
         super(par1);
         setUnlocalizedName("altEng.upgrade");
-        setCreativeTab(AlternativeEnergy.tabPowerBox);
+        setCreativeTab(AlternativeEnergy.getInstance().getCreativeTab());
         setMaxStackSize(16);
         setHasSubtypes(true);
     }

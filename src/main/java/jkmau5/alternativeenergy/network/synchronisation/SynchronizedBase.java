@@ -32,11 +32,11 @@ public abstract class SynchronizedBase implements ISynchronized {
 
     @Override
     public void resetChangeTimer(World world) {
-        lastChangeTime = AlternativeEnergy.proxy.getTicks(world);
+        lastChangeTime = AlternativeEnergy.getProxy().getTicks(world);
     }
 
     @Override
     public int getTicksSinceChange(World world) {
-        return (int)(AlternativeEnergy.proxy.getTicks(world) - lastChangeTime);
+        return (int)(AlternativeEnergy.getProxy().getTicks(world) - lastChangeTime);
     }
 }

@@ -68,6 +68,6 @@ public abstract class BlockTileEntity extends BlockContainer {
 
     @Override
     public CreativeTabs getCreativeTabToDisplayOn() {
-        return AlternativeEnergy.tabPowerBox;
+        return AlternativeEnergy.getInstance().getCreativeTab();
     }
 }

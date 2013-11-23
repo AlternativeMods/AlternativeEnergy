@@ -8,7 +8,7 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.tile.IEnergyStorage;
-import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
 import jkmau5.alternativeenergy.util.CableConnectionMatrix;
@@ -39,6 +39,8 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     int euForNetwork;
 
     private CableConnectionMatrix connectionMatrix;
+
+    private PowerHandler bcPowerHandler;
 
     public TileEntityPowerCable() {
         initializeNetwork();
@@ -71,7 +73,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                 if(tile instanceof TileEntityPowerCable) {
                     network = network.mergeNetworks(((TileEntityPowerCable)tile).network, network);
                     connect = true;
-                }else if(AlternativeEnergy.isValidPowerTile(tile)) {
+                }else if(AltEngCompat.isValidPowerTile(tile)) {
                     getEnergyNetwork().addInput(this, tile);
                     connect = true;
                 }
@@ -114,12 +116,12 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
         tryOutputtingPBu();
 
-        if(AlternativeEnergy.BCSupplied) {
+        if(AltEngCompat.hasBC) {
             convertBC();
             tryOutputtingEnergy();
         }
 
-        if(AlternativeEnergy.ICSupplied)
+        if(AltEngCompat.hasIC2)
             tryOutputtingEU();
     }
 
@@ -160,22 +162,16 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     //------------------------------------------------
 
     public void loadTile() {
-        if(!AlternativeEnergy.ICSupplied)
-            return;
-
-        if(addedToENet == false) {
-            addedToENet = true;
+        if(AltEngCompat.hasIC2 && !this.addedToENet){
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            this.addedToENet = true;
         }
     }
 
     public void unloadTile() {
-        if(!AlternativeEnergy.ICSupplied)
-            return;
-
-        if(addedToENet == true) {
-            addedToENet = false;
+        if(AltEngCompat.hasIC2 && this.addedToENet){
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            this.addedToENet = false;
         }
     }
 
@@ -257,8 +253,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     //-- IEnergySink
 
     public void tryOutputtingEU() {
-        if(!AlternativeEnergy.ICSupplied)
-            return;
+        if(!AltEngCompat.hasIC2) return;
 
         for(int i=0; i<6; i++) {
             ForgeDirection dr = ForgeDirection.getOrientation(i);
@@ -315,7 +310,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
         if(emitter instanceof TileEntityPowerCable)
             return false;
-        if(!AlternativeEnergy.isValidPowerTile(emitter))
+        if(!AltEngCompat.isValidPowerTile(emitter))
             return false;
         if(!getEnergyNetwork().isAcceptor(this, emitter))
             return true;
@@ -328,32 +323,23 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
-        if(!AlternativeEnergy.BCSupplied)
-            return;
-
-        if(AlternativeEnergy.bcComp.getPowerHandler(this) == null)
-            getPowerProvider();
-        if(AlternativeEnergy.bcComp.getPowerHandler(this).getEnergyStored() <= 0)
-            return;
-
-        network.addPower((int) Math.floor(AlternativeEnergy.bcComp.getPowerHandler(this).useEnergy(1, AlternativeEnergy.bcComp.getPowerHandler(this).getMaxEnergyStored(), true) / Ratios.MJ.conversion));
+        if(!AltEngCompat.hasBC) return;
+        if(this.bcPowerHandler == null){
+            this.getPowerProvider();
+        }
+        if(this.bcPowerHandler.getEnergyStored() <= 0) return;
+        network.addPower((int) Math.floor(this.bcPowerHandler.useEnergy(1, this.bcPowerHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public boolean checkForMachine(TileEntity tmpTile) {
-        if(!AlternativeEnergy.BCSupplied)
-            return false;
-
-        if(tmpTile instanceof IMachine && !((IMachine)tmpTile).isActive())
-            return true;
-
-        return false;
+        if(!AltEngCompat.hasBC) return false;
+        return tmpTile instanceof IMachine && !((IMachine)tmpTile).isActive();
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
-        if(!AlternativeEnergy.BCSupplied)
-            return;
+        if(!AltEngCompat.hasBC) return;
 
         if(network.networkPower <= Ratios.MJ.conversion)
             return;
@@ -363,7 +349,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
         for(int i=0; i<6; i++) {
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
             if(tmpTile != null) {
-                if(!AlternativeEnergy.isInvalidPowerTile(tmpTile) && !(tmpTile instanceof TileEntityPowerCable)) {
+                if(!AltEngCompat.isInvalidPowerTile(tmpTile) && !(tmpTile instanceof TileEntityPowerCable)) {
                     if(tmpTile instanceof IPowerReceptor) {
                         if(checkForMachine(tmpTile))
                             continue;
@@ -382,7 +368,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
             if(conSides[i] != false) {
                 TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
 
-                if(tmptile instanceof IPowerReceptor && AlternativeEnergy.isValidPowerTile(tmptile) && !(tmptile instanceof TileEntityPowerCable)) {
+                if(tmptile instanceof IPowerReceptor && AltEngCompat.isValidPowerTile(tmptile) && !(tmptile instanceof TileEntityPowerCable)) {
                     if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
                         float neededPower = rec.powerRequest();
@@ -404,21 +390,18 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler getPowerProvider() {
-        if(AlternativeEnergy.bcComp.getPowerHandler(this) == null)
-        {
-            AlternativeEnergy.bcComp.addPowerHandler(this, PowerHandler.Type.MACHINE);
-            if (AlternativeEnergy.bcComp.getPowerHandler(this) != null) {
-                AlternativeEnergy.bcComp.configurePowerHandler(AlternativeEnergy.bcComp.getPowerHandler(this), 25, 500, 1337, 1000);
-                AlternativeEnergy.bcComp.configurePerdition(AlternativeEnergy.bcComp.getPowerHandler(this), 0, 0);
-            }
+        if(this.bcPowerHandler == null){
+            this.bcPowerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
+            this.bcPowerHandler.configure(25, 500, 1337, 1000);
+            this.bcPowerHandler.configurePowerPerdition(0, 0);
         }
-        return AlternativeEnergy.bcComp.getPowerHandler(this);
+        return this.bcPowerHandler;
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-        if(tmpTile != null && AlternativeEnergy.isValidPowerTile(tmpTile))
+        if(tmpTile != null && AltEngCompat.isValidPowerTile(tmpTile))
             return getPowerProvider().getPowerReceiver();
         return null;
     }

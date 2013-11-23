@@ -4,6 +4,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.util.interfaces.ISaveNBT;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
+import lombok.Getter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.MapStorage;
@@ -21,6 +22,9 @@ import java.util.Map;
  * however, not to publish it without my permission.
  */
 public class LinkBoxNetwork implements ISaveNBT {
+
+    @Getter
+    private static LinkBoxNetwork instance = new LinkBoxNetwork();
 
     public Map<String, ArrayList<TileEntityLinkBox>> linkBoxes;
     public Map<String, Boolean> initiatedNBTPower;
@@ -61,7 +65,7 @@ public class LinkBoxNetwork implements ISaveNBT {
     }
 
     public void initiateNetworkPower(String linkId, int power) {
-        if(initiatedNBTPower.get(linkId) == null || initiatedNBTPower.get(linkId) == false) {
+        if(initiatedNBTPower.get(linkId) == null || !initiatedNBTPower.get(linkId)) {
             initiatedNBTPower.put(linkId, true);
             setNetworkPower(linkId, power);
         }

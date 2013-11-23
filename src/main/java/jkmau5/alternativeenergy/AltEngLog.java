@@ -34,6 +34,10 @@ public class AltEngLog {
         log(Level.SEVERE, format, data);
     }
 
+    public static void warning(Throwable ex, String format, Object... data) {
+        log(Level.WARNING, ex, format, data);
+    }
+
     public static void warning(String format, Object... data) {
         log(Level.WARNING, format, data);
     }
