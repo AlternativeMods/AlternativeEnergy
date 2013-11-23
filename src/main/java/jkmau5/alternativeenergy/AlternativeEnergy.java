@@ -21,12 +21,13 @@ public class AlternativeEnergy {
     @Getter
     @SuppressWarnings("unused")
     @SidedProxy(modId = Constants.MODID, serverSide = "jkmau5.alternativeenergy.server.ProxyCommon", clientSide = "jkmau5.alternativeenergy.client.ProxyClient")
-    private static ProxyCommon proxy;
+    public static ProxyCommon proxy;
 
     @Getter
     private ConfigFile config;
 
     @Getter
+    @Mod.Instance(Constants.MODID)
     private static AlternativeEnergy instance;
 
     @Getter
