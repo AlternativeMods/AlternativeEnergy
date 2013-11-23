@@ -26,12 +26,12 @@ import net.minecraftforge.common.MinecraftForge;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
+@Optional.InterfaceList(value = {
+        @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
         @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
-
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")})
-
-public class TileEntityPowerCableOld extends AltEngTileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
+        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")
+})
+public class TileEntityPowerCable extends AltEngTileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
