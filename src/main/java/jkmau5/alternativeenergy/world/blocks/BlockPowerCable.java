@@ -30,9 +30,8 @@ import java.util.List;
  */
 public class BlockPowerCable extends BlockTileEntity {
 
-    public BlockPowerCable(int par1, Material par2Material) {
-        super(par1, par2Material);
-        setUnlocalizedName("altEng.powerCable");
+    public BlockPowerCable(Material par2Material) {
+        super("powerCable", par2Material);
         setHardness(5.0F);
         setStepSound(soundMetalFootstep);
     }

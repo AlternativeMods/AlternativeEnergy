@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.util.interfaces.IOwnable;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerManager;
@@ -17,6 +18,8 @@ import java.util.Set;
  * @author jk-5
  */
 public class Utils {
+
+    private static final int BLOCKID_START = 2000;
 
     public static Set<EntityPlayer> getPlayersWatchingChunk(WorldServer world, int chunkX, int chunkZ) {
         PlayerManager manager = world.getPlayerManager();
@@ -44,5 +47,19 @@ public class Utils {
             throw new RuntimeException("Don\'t call me on the client!");
         }
         return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(username);
+    }
+
+    public static int getFreeBlockID(){
+        for(int id = BLOCKID_START; id < 4096; id++){
+            if(Block.blocksList[id] == null){
+                return id;
+            }
+        }
+        for(int id = 256; id < BLOCKID_START; id++){
+            if(Block.blocksList[id] == null){
+                return id;
+            }
+        }
+        throw new RuntimeException("No blockIDs are available!");
     }
 }

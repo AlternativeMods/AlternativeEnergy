@@ -7,13 +7,8 @@ import java.util.Locale;
 
 public class Config {
 
-    public static int powerBox_blockId = 2000;
     public static int powerBox_capacity = 100000;
     public static int powerBox_capacity_multiplier = 5000;
-
-    public static int powerCable_blockId = 2001;
-
-    public static int linkBox_blockId = 2002;
 
     public static int upgrade_ItemId = 5760;
 

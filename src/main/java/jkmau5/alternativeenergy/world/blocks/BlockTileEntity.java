@@ -1,7 +1,11 @@
 package jkmau5.alternativeenergy.world.blocks;
 
 import jkmau5.alternativeenergy.AlternativeEnergy;
+import jkmau5.alternativeenergy.Constants;
+import jkmau5.alternativeenergy.util.Utils;
+import jkmau5.alternativeenergy.util.config.ConfigTag;
 import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntity;
+import lombok.Getter;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,8 +22,14 @@ import net.minecraft.world.World;
  */
 public abstract class BlockTileEntity extends BlockContainer {
 
-    public BlockTileEntity(int id, Material material){
-        super(id, material);
+    @Getter
+    private final ConfigTag blockConfig;
+
+    public BlockTileEntity(String unlocalizedName, Material material){
+        super(AlternativeEnergy.getInstance().getConfig().getTag("blocks").useBraces().getTag(unlocalizedName).useBraces().getTag("blockid").getIntValue(Utils.getFreeBlockID()), material);
+        this.blockConfig = AlternativeEnergy.getInstance().getConfig().getTag("blocks").useBraces().getTag(unlocalizedName).useBraces();
+        this.setUnlocalizedName("altEng." + unlocalizedName);
+        this.setTextureName(Constants.TEXTURE_DOMAIN + ":" + unlocalizedName);
     }
 
     /**

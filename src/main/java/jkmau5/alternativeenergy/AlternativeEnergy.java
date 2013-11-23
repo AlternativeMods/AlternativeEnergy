@@ -47,12 +47,9 @@ public class AlternativeEnergy {
 
         //Config stuff
         ConfigTag powerBoxTag = this.config.getTag("powerBox").useBraces().setComment("PowerBox settings");
-        Config.powerBox_blockId = powerBoxTag.getTag("blockID").getIntValue(Config.powerBox_blockId);
         Config.powerBox_capacity = powerBoxTag.getTag("capacity").setComment("The max capacity for the powerbox").getIntValue(Config.powerBox_capacity);
         Config.powerBoxExplosionResistant = powerBoxTag.getTag("explosionResistant").setComment("Should the powerbox be explosion resistant?").getBooleanValue(Config.powerBoxExplosionResistant);
         Config.powerBox_capacity_multiplier = powerBoxTag.getTag("upgradeCapacityMultiplier").setComment("The capacity that will be added to the powerbox for every capacity upgrade inserted").getIntValue(Config.powerBox_capacity_multiplier);
-        Config.powerCable_blockId = this.config.getTag("powerCable").setComment("PowerCable settings").useBraces().getTag("blockID").getIntValue(Config.powerCable_blockId);
-        Config.linkBox_blockId = this.config.getTag("powerCable").setComment("PowerCable settings").useBraces().getTag("blockID").getIntValue(Config.powerCable_blockId);
         Config.upgrade_ItemId = this.config.getTag("upgrades").getTag("blockID").getIntValue(Config.upgrade_ItemId);
     }
 

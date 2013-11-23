@@ -27,9 +27,8 @@ public class BlockPowerStorage extends BlockTileEntity {
     @SideOnly(Side.CLIENT) public Icon[] icon_output = new Icon[iconNames.length];
     @SideOnly(Side.CLIENT) public Icon[] icon_disabled = new Icon[iconNames.length];
 
-    public BlockPowerStorage(int id){
-        super(id, Material.iron);
-        this.setUnlocalizedName("altEng.powerStorage");
+    public BlockPowerStorage(){
+        super("powerStorage", Material.iron);
         this.setHardness(5.0F);
         if(Config.powerBoxExplosionResistant){
             this.setResistance(6000000.0F);

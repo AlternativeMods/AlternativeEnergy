@@ -30,8 +30,8 @@ public class BlockConveyor extends BlockTileEntity {
 
     private static final double SPEED = 0.09D;
 
-    public BlockConveyor(int id) {
-        super(id, Material.iron);
+    public BlockConveyor() {
+        super("conveyor", Material.iron);
         this.setBlockBounds(0, 0, 0, 1, 0.4f, 1);
     }
 
