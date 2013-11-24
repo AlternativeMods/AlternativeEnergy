@@ -16,6 +16,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     private final long delay;
     private long mouseOverStart;
+    private final List<ToolTipLine> delegate = Lists.newArrayList();
 
     public ToolTip(long delay){
         this.delay = delay;
@@ -27,7 +28,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     @Override
     protected List<ToolTipLine> delegate() {
-        return Lists.newArrayList();
+        return this.delegate;
     }
 
     public boolean add(String line){
