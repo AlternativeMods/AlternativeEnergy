@@ -222,8 +222,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     //------------------------------------------------
 
     public void tryOutputtingPBu() {
-        for(int i=0; i<6; i++) {
-            ForgeDirection dr = ForgeDirection.getOrientation(i);
+        for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
             if(tmpTile == null)

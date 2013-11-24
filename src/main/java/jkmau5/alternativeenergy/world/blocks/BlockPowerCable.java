@@ -118,7 +118,7 @@ public class BlockPowerCable extends BlockTileEntity {
 
         TileEntity xTile = world.getBlockTileEntity(tileX, tileY, tileZ);
         if(xTile == null || AltEngCompat.isInvalidPowerTile(xTile))
-            me.getEnergyNetwork().removeInput(me, xTile);
+            me.getEnergyNetwork().removeInput(xTile);
         else
             if(AltEngCompat.isInvalidPowerTile(xTile))
                 me.getEnergyNetwork().addInput(me, xTile);
