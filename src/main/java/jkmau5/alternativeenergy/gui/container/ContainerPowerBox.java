@@ -27,8 +27,8 @@ public class ContainerPowerBox extends AltEngContainer {
             this.addSlot(new SlotElectricItemCharge(te.getInventory(), 2, 33, 23));
             this.addSlot(new SlotElectricItemCharge(te.getInventory(), 3, 33, 45));
         }
-                                                                   // x   y    u  v   w    h
-        this.addElement(new ElementIndicator(te.getEnergyIndicator(), 7, 16, 176, 0, 71, 215));
+
+        this.addElement(new ElementIndicator(te.getEnergyIndicator(), 7, 16, 176, 0, 17, 54));
 
         this.addPlayerInventory(inventoryPlayer);
     }

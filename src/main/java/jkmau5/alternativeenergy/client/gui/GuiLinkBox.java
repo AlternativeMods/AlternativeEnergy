@@ -37,7 +37,7 @@ public class GuiLinkBox extends TileEntityGuiContainer {
         int h = (this.height - this.ySize) / 2;
         this.buttonList.clear();
 
-        this.lockButton = new GuiMultiButton(1, w + 150, h + 8, 16, this.tileEntity.getLockController());
+        this.lockButton = new GuiMultiButton(1, w + 152, h + 17, 16, this.tileEntity.getLockController());
         this.buttonList.add(this.lockButton);
     }
 
@@ -71,25 +71,5 @@ public class GuiLinkBox extends TileEntityGuiContainer {
         super.drawGuiContainerForegroundLayer(posX, posY);
         fontRenderer.drawString("Link Box", 6, 5, 0x000000);
         fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6, ySize - 96 + 4, 0x000000);
-    }
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-
-        int posX = (width - xSize) / 2;
-        int posY = (height - ySize) / 2;
-
-        if (tileEntity.getPowerStored() > 0) {
-            int showUntil = 0;
-
-            for (int i = 1; i < 54; i++) {
-                if (tileEntity.getPowerStored() >= i * (tileEntity.getMaxStoredPower() / 54)) {
-                    showUntil = i;
-                }
-            }
-
-            drawTexturedModalRect(posX + 7, posY + 70 - showUntil, 176, 54 - showUntil, 18, showUntil + 31);
-        }
     }
 }

@@ -25,7 +25,8 @@ public class ElementIndicator extends Element {
         int scale = this.controller.getScaledLevel(this.h);
         System.out.println(scale);
         //                        X-----------X, Y----------------------------Y, U----U, V---------------------V,  width, height
-        gui.drawTexturedModalRect(guiX + this.x, guiY + this.y, this.u, scale, this.w, scale);
+        gui.drawTexturedModalRect(guiX + this.x, guiY + this.y + this.h - scale, this.u, this.v + this.h - scale, this.w, scale);
+        //gui.drawTexturedModalRect(guiX + this.x, guiY + this.y, this.u, scale, this.w, scale);
     }
 
     @Override

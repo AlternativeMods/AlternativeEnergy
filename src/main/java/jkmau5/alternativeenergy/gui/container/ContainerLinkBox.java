@@ -21,7 +21,7 @@ public class ContainerLinkBox extends ContainerLockable {
         super(inventoryPlayer, te);
         this.tileEntity = te;
 
-        this.addElement(new ElementIndicator(te.getEnergyIndicator(), 10, 19, 176, 12, 6, 48));
+        this.addElement(new ElementIndicator(te.getEnergyIndicator(), 7, 16, 176, 0, 17, 54));
 
         this.addPlayerInventory(inventoryPlayer);
     }
