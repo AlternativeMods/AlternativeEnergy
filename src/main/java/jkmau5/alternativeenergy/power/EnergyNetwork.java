@@ -20,7 +20,7 @@ public class EnergyNetwork {
     public Map<TileEntity, TileEntityPowerCable> inputs = new HashMap<TileEntity, TileEntityPowerCable>();
 
     public int networkPower;
-    public int maxNetworkPower = 5000;
+    public int maxNetworkPower = 500;
 
     public EnergyNetwork(TileEntityPowerCable headCable) {
         cables.add(headCable);
@@ -42,10 +42,12 @@ public class EnergyNetwork {
         inputs.put(input, cable);
     }
 
-    public void removeInput(TileEntityPowerCable cable, TileEntity input) {
+    public void removeInput(TileEntity input) {
         if(!inputs.containsKey(input))
             return;
-        inputs.put(input, cable);
+        Map<TileEntity, TileEntityPowerCable> tempInputs = inputs;
+        tempInputs.remove(input);
+        inputs = tempInputs;
     }
 
     public boolean isAcceptor(TileEntityPowerCable cable, TileEntity input) {

@@ -450,26 +450,26 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         if(Math.floor(equalPower) < Ratios.MJ.conversion) return;
 
         int drainPower = 0;
-        for(int i=0; i<6; i++) {
-            if(!conSides[i]) {
-                TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
+        for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
+            if(conSides[dr.ordinal()]) {
+                TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
                 if(tmptile instanceof IPowerReceptor && !(tmptile instanceof TileEntityPowerCable) && !AltEngCompat.isInvalidPowerTile(tmptile)) {
-                    if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
-                        PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
+                    if(((IPowerReceptor) tmptile).getPowerReceiver(dr.getOpposite()) != null) {
+                        PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(dr.getOpposite());
                         float neededPower = rec.powerRequest();
                         if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= 5)
                             continue;
                         if(neededPower > equalPower)
                             neededPower = equalPower;
 
-                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, (float) Math.ceil(neededPower / Ratios.MJ.conversion), ForgeDirection.getOrientation(i).getOpposite());
+                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, (float) Math.ceil(neededPower / Ratios.MJ.conversion), dr.getOpposite());
                         drainPower += (equalPower - restEnergy);
                     }
                 }
             }
         }
-        this.storedPower.setValue(this.storedPower.getValue() - (int)(drainPower / Ratios.MJ.conversion));
+        this.storedPower.setValue(this.storedPower.getValue() - drainPower / Ratios.MJ.conversion);
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")

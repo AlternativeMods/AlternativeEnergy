@@ -24,17 +24,6 @@ public class GuiPowerBox extends AltEngGuiContainer {
         fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6, ySize - 96 + 4, 0x000000);
     }
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-        super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-        int x = (this.width - this.xSize) / 2;
-        int y = (this.height - this.ySize) / 2;
-        if(this.tileEntity.getPowerStored() > 0){
-            int indicatorHeight = (this.tileEntity.getMaxStoredPower() / this.tileEntity.getPowerStored()) * 54;
-            this.drawTexturedModalRect(x + 7, y + 70 - indicatorHeight, 176, 54 - indicatorHeight, 18, indicatorHeight + 31);
-        }
-    }
-
     private void debugMouse(int mouseX, int mouseY) {
         drawCreativeTabHoveringText("X: " + mouseX + " | Y: " + mouseY, mouseX + guiLeft, mouseY + guiTop);
     }
