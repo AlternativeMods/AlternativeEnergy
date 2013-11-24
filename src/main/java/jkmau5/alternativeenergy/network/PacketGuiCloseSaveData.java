@@ -11,13 +11,21 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * No description given
+ * This event is sent from the client to the server when an gui closes.
+ * It has all the data that is updated, to send it to the server
  *
  * @author jk-5
  */
 public class PacketGuiCloseSaveData extends AbstractPacket {
 
+    /**
+     * The {@link IGuiCloseSaveDataHandler} that this packet is for
+     */
     private IGuiCloseSaveDataHandler handler;
+
+    /**
+     * The data that is being sent to the server
+     */
     private byte[] data;
 
     public PacketGuiCloseSaveData(){}

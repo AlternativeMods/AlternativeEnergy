@@ -22,6 +22,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+/**
+ * The TileEntity for the linkbox. It is an {@link IGuiCloseSaveDataHandler}, so it is able to sync
+ * gui data between client and server
+ */
 public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockable, IGuiCloseSaveDataHandler {
 
     public SynchronizedInteger linkedID;
@@ -47,9 +51,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     @Override
     public void readGuiCloseData(DataInput input, EntityPlayer player) throws IOException {
         byte lock = input.readByte();
-        System.out.println("incoming " + lock);
         if(player == null || !this.isLocked() || Utils.isOwnerOrOp(this, player.username)){
-            System.out.println("set state to " + lock);
             this.lockController.setCurrentState(lock);
         }
     }
@@ -188,7 +190,6 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        System.out.println("Writing linkbox");
         this.lockController.writeToNBT(tag, "lock");
         super.writeToNBT(tag);
     }
