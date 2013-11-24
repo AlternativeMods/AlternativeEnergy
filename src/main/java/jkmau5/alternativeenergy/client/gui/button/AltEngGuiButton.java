@@ -6,6 +6,8 @@ import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.client.render.ToolTip;
 import jkmau5.alternativeenergy.gui.button.IButtonTextureSet;
 import jkmau5.alternativeenergy.gui.button.StandardButtonTextureSets;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -23,6 +25,9 @@ public abstract class AltEngGuiButton extends GuiButton {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.TEXTURE_DOMAIN + ":textures/gui/guiBasic.png");
 
     protected final IButtonTextureSet texture;
+
+    @Getter
+    @Setter
     private ToolTip toolTip;
 
     public AltEngGuiButton(int id, int x, int y, String label){
@@ -77,13 +82,5 @@ public abstract class AltEngGuiButton extends GuiButton {
         this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, xOffset + w - this.width / 2, yOffset + hoverState * h, this.width / 2, h);
         this.mouseDragged(minecraft, mouseX, mouseY);
         this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (h - 8) / 2, getTextColor(mouseOver));
-    }
-
-    public ToolTip getToolTip() {
-        return this.toolTip;
-    }
-
-    public void setToolTip(ToolTip tips) {
-        this.toolTip = tips;
     }
 }

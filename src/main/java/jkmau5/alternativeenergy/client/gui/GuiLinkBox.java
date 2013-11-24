@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy.client.gui;
 import jkmau5.alternativeenergy.Constants;
 import jkmau5.alternativeenergy.client.gui.button.GuiMultiButton;
 import jkmau5.alternativeenergy.client.render.ToolTip;
+import jkmau5.alternativeenergy.gui.button.LockButtonState;
 import jkmau5.alternativeenergy.gui.container.ContainerLinkBox;
 import jkmau5.alternativeenergy.gui.container.ContainerLockable;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityLinkBox;
@@ -19,6 +20,7 @@ public class GuiLinkBox extends TileEntityGuiContainer {
 
     private ToolTip lockedToolTip;
     private ToolTip unlockedToolTip;
+    private ToolTip notOwnedToolTip;
 
     private GuiMultiButton lockButton;
 
@@ -41,6 +43,7 @@ public class GuiLinkBox extends TileEntityGuiContainer {
 
     @Override
     protected void actionPerformed(GuiButton par1GuiButton) {
+        super.actionPerformed(par1GuiButton);
         if(this.tileEntity == null) return;
         this.updateButtons();
     }
@@ -49,7 +52,6 @@ public class GuiLinkBox extends TileEntityGuiContainer {
     public void updateScreen() {
         super.updateScreen();
         this.updateButtons();
-
     }
 
     private void updateButtons(){
@@ -57,9 +59,11 @@ public class GuiLinkBox extends TileEntityGuiContainer {
         String owner = ((ContainerLinkBox) this.getContainer()).getOwner();
         if(!owner.equals(this.prevTickOwner)){
             this.prevTickOwner = owner;
-
+            this.lockedToolTip = ToolTip.buildToolTip("gui.altEng.tooltip.lock.locked");
+            this.unlockedToolTip = ToolTip.buildToolTip("gui.altEng.tooltip.lock.unlocked");
+            this.notOwnedToolTip = ToolTip.buildToolTip("gui.altEng.tooltip.lock.notOwned");
         }
-        //TODO: update lockbutton tooltips from here
+        this.lockButton.setToolTip(this.lockButton.enabled ? this.unlockedToolTip : this.tileEntity.getLockController().getButtonState() == LockButtonState.LOCKED ? this.lockedToolTip : this.notOwnedToolTip);
     }
 
     @Override

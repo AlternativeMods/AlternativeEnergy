@@ -57,7 +57,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     public void refresh(){}
 
-    public static ToolTip buildToolTip(String tipTag, String[] vars) {
+    public static ToolTip buildToolTip(String tipTag, String... vars) {
         try{
             ToolTip toolTip = new ToolTip(750);
             String text = StatCollector.translateToLocalFormatted(tipTag, vars);
