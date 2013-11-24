@@ -4,9 +4,12 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.client.render.BlockPowerCableRender;
+import jkmau5.alternativeenergy.client.render.ItemRendererPowerCable;
 import jkmau5.alternativeenergy.client.render.Render;
 import jkmau5.alternativeenergy.server.ProxyCommon;
+import jkmau5.alternativeenergy.world.blocks.AltEngBlocks;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 /**
  * No description given
@@ -19,10 +22,14 @@ public class ProxyClient extends ProxyCommon {
     public void registerEventHandlers() {
         super.registerEventHandlers();
 
+        TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
+    }
+
+    @Override
+    public void registerRenderers() {
         Render.RENDER_BLOCKPOWERCABLE = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new BlockPowerCableRender());
-
-        TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
+        MinecraftForgeClient.registerItemRenderer(AltEngBlocks.blockPowerCable.blockID, new ItemRendererPowerCable());
     }
 
     @Override

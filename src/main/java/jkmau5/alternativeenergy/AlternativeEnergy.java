@@ -57,6 +57,7 @@ public class AlternativeEnergy {
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event){
+        proxy.registerRenderers();
         AltEngCompat.checkCompat();
     }
 }

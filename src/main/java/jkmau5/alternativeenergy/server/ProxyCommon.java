@@ -21,6 +21,10 @@ public class ProxyCommon {
 
     }
 
+    public void registerRenderers(){
+
+    }
+
     public long getTicks(World world){
         return world.getTotalWorldTime();
     }
