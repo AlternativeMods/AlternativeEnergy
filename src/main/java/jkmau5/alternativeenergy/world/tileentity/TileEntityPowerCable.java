@@ -253,6 +253,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
     public void tryOutputtingEU() {
         if(!AltEngCompat.hasIC2) return;
+        if(network.getNetworkPower() < 1) return;
 
         for(int i=0; i<6; i++) {
             ForgeDirection dr = ForgeDirection.getOrientation(i);
@@ -267,7 +268,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
                     if(sink.acceptsEnergyFrom(this, dr.getOpposite())) {
                         if(network.getNetworkPower() >= 1) {
-                            int toDrain = (int) Ratios.EU.conversion * 4;
+                            int toDrain = Ratios.EU.conversion * 4;
                             if(sink.getMaxSafeInput() > toDrain)
                                 toDrain = (int) Math.floor(sink.getMaxSafeInput() / 5);
                             if(network.getNetworkPower() < toDrain)
@@ -345,15 +346,17 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
         boolean[] conSides = new boolean[6];
         int connected = 0;
-        for(int i=0; i<6; i++) {
-            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
+        for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
+            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord +dr.offsetY, zCoord + dr.offsetZ);
             if(tmpTile != null) {
                 if(!AltEngCompat.isInvalidPowerTile(tmpTile) && !(tmpTile instanceof TileEntityPowerCable)) {
                     if(tmpTile instanceof IPowerReceptor) {
+                        if(AltEngCompat.isICTile(tmpTile))
+                            continue;
                         if(checkForMachine(tmpTile))
                             continue;
                         connected += 1;
-                        conSides[i] = true;
+                        conSides[dr.ordinal()] = true;
                     }
                 }
             }
@@ -363,20 +366,20 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
         int equalPower = (int) Math.floor(network.networkPower / connected);
 
         int drainPower = 0;
-        for(int i=0; i<6; i++) {
-            if(conSides[i] != false) {
-                TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + ForgeDirection.getOrientation(i).offsetX, yCoord + ForgeDirection.getOrientation(i).offsetY, zCoord + ForgeDirection.getOrientation(i).offsetZ);
+        for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
+            if(conSides[dr.ordinal()]) {
+                TileEntity tmptile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
                 if(tmptile instanceof IPowerReceptor && AltEngCompat.isValidPowerTile(tmptile) && !(tmptile instanceof TileEntityPowerCable)) {
-                    if(((IPowerReceptor) tmptile).getPowerReceiver(ForgeDirection.getOrientation(i)) != null) {
-                        PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(ForgeDirection.getOrientation(i));
+                    if(((IPowerReceptor) tmptile).getPowerReceiver(dr.getOpposite()) != null) {
+                        PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(dr.getOpposite());
                         float neededPower = rec.powerRequest();
                         if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= Ratios.MJ.conversion)
                             continue;
                         if(neededPower > equalPower)
                             neededPower = equalPower;
 
-                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, neededPower, ForgeDirection.getOrientation(i).getOpposite());
+                        float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, neededPower, dr.getOpposite());
                         drainPower += equalPower - restEnergy;
                     }
                 }

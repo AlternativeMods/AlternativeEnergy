@@ -93,4 +93,14 @@ public class AltEngCompat {
         }
         return checkForModTile(tile);
     }
+
+    public static boolean isICTile(TileEntity tile) {
+        if(!hasIC2)
+            return false;
+
+        if(tile instanceof IEnergySink || tile instanceof IEnergyStorage || tile instanceof IEnergySource)
+            return true;
+
+        return false;
+    }
 }
