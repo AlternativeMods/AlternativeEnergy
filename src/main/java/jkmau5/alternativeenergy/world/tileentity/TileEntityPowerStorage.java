@@ -504,7 +504,6 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     private class EnergyIndicatorController extends AbstractIndicatorController{
-        private EnergyIndicatorController(){}
 
         @Override
         protected void refreshToolTip() {
@@ -513,10 +512,8 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
         @Override
         public int getScaledLevel(int scale) {
-            //0 - 215
             int max = TileEntityPowerStorage.this.getMaxStoredPower();
             float f = Math.min(TileEntityPowerStorage.this.guiPower, max);
-            //System.out.println(scale + " " + max + " " + f + " " + (f * scale / max));
             return (int)(f * scale / max);
         }
     }

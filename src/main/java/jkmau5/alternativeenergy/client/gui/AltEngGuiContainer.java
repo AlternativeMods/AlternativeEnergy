@@ -68,7 +68,7 @@ public abstract class AltEngGuiContainer extends GuiContainer {
                 }
             }
             for(GuiButton button : (List<GuiButton>) this.buttonList){
-                if(button instanceof AltEngGuiButton && button.drawButton){
+                if(button.drawButton && button instanceof AltEngGuiButton){
                     AltEngGuiButton altEngButton = (AltEngGuiButton) button;
                     ToolTip toolTip = altEngButton.getToolTip();
                     if(toolTip != null){

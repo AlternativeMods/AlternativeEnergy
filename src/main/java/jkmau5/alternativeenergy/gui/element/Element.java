@@ -26,7 +26,7 @@ public abstract class Element {
     public final int v;
     public final int w;
     public final int h;
-    public boolean isHidden;
+    public boolean isHidden = false;
     @Setter protected AltEngContainer container;
 
     @SideOnly(Side.CLIENT)
