@@ -13,12 +13,13 @@ import java.util.EnumSet;
  */
 public class TickHandlerClient implements ITickHandler {
 
-    @Getter
-    private static long ticks = 0;
+    @Getter private static long ticks = 0;
+    @Getter private static float partialTicks = 0f;
 
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData) {
-        ticks ++;
+        if(type.contains(TickType.CLIENT)) ticks ++;
+        else if(type.contains(TickType.RENDER)) partialTicks = (Float) tickData[0];
     }
 
     @Override
@@ -28,7 +29,7 @@ public class TickHandlerClient implements ITickHandler {
 
     @Override
     public EnumSet<TickType> ticks() {
-        return EnumSet.of(TickType.CLIENT);
+        return EnumSet.of(TickType.CLIENT, TickType.RENDER);
     }
 
     @Override

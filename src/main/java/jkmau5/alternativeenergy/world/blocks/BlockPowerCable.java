@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.Constants;
-import jkmau5.alternativeenergy.client.render.Render;
+import jkmau5.alternativeenergy.client.render.RenderIDs;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerCable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -217,6 +217,6 @@ public class BlockPowerCable extends BlockTileEntity {
     @Override
     public int getRenderType()
     {
-        return Render.RENDER_BLOCKPOWERCABLE;
+        return RenderIDs.POWERCABLE.getRenderID();
     }
 }

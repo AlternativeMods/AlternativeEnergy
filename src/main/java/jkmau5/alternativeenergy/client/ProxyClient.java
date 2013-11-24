@@ -5,7 +5,6 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import jkmau5.alternativeenergy.client.render.BlockPowerCableRender;
 import jkmau5.alternativeenergy.client.render.ItemRendererPowerCable;
-import jkmau5.alternativeenergy.client.render.Render;
 import jkmau5.alternativeenergy.server.ProxyCommon;
 import jkmau5.alternativeenergy.world.blocks.AltEngBlocks;
 import net.minecraft.world.World;
@@ -27,8 +26,8 @@ public class ProxyClient extends ProxyCommon {
 
     @Override
     public void registerRenderers() {
-        Render.RENDER_BLOCKPOWERCABLE = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new BlockPowerCableRender());
+
         MinecraftForgeClient.registerItemRenderer(AltEngBlocks.blockPowerCable.blockID, new ItemRendererPowerCable());
     }
 

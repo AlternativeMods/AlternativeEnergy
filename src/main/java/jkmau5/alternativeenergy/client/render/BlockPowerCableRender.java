@@ -60,6 +60,6 @@ public class BlockPowerCableRender implements ISimpleBlockRenderingHandler {
 
     @Override
     public int getRenderId(){
-        return Render.RENDER_BLOCKPOWERCABLE;
+        return RenderIDs.POWERCABLE.getRenderID();
     }
 }

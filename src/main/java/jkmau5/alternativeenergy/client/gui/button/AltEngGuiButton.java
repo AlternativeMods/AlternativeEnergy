@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 /**
- * No description given
+ * Our button base class. Has things like tooltips and multiple textures
  *
  * @author jk-5
  */
