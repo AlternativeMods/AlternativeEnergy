@@ -2,7 +2,6 @@ package jkmau5.alternativeenergy.world.tileentity;
 
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
-import buildcraft.core.IMachine;
 import cpw.mods.fml.common.Optional;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
@@ -332,12 +331,6 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
-    public boolean checkForMachine(TileEntity tmpTile) {
-        if(!AltEngCompat.hasBC) return false;
-        return tmpTile instanceof IMachine && !((IMachine)tmpTile).isActive();
-    }
-
-    @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
         if(!AltEngCompat.hasBC) return;
 
@@ -352,8 +345,6 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                 if(!AltEngCompat.isInvalidPowerTile(tmpTile) && !(tmpTile instanceof TileEntityPowerCable)) {
                     if(tmpTile instanceof IPowerReceptor) {
                         if(AltEngCompat.isICTile(tmpTile))
-                            continue;
-                        if(checkForMachine(tmpTile))
                             continue;
                         connected += 1;
                         conSides[dr.ordinal()] = true;
