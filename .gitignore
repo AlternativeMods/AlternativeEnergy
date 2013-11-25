@@ -7,7 +7,6 @@ minecraft
 *.iws
 out
 runtime
-src/api
 
 #Remove these in the future
 common_103
