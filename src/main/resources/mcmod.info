@@ -9,7 +9,7 @@
         "jk-5"
     ],
     "description": "Adding cables that can be used for IC2 and BC power, and nice power storage for it",
-    "logoFile" : "",
+    "logoFile" : "assets/alternativeenergy/textures/AltEngLogo.png",
     "updateUrl" : "",
     "parent" : "",
     "screenshots": [],
