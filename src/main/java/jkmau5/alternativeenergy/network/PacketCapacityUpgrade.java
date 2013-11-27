@@ -50,6 +50,6 @@ public class PacketCapacityUpgrade extends AbstractPacket {
         }else{
             powerBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, this.numUpgrades, 0));
         }
-        powerBox.forceMaxPowersUpdate();*/
+        powerBox.updateMaxStorage();*/
     }
 }

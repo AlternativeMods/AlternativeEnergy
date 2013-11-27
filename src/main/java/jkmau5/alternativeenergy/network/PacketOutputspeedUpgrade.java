@@ -46,6 +46,6 @@ public class PacketOutputspeedUpgrade extends AbstractPacket {
         }else{
             powerBox.outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, this.numUpgrades, 1));
         }
-        powerBox.forceOutputSpeedUpdate();*/
+        powerBox.updateOutputSpeed();*/
     }
 }

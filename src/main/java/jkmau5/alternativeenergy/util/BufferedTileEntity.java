@@ -1,6 +1,5 @@
 package jkmau5.alternativeenergy.util;
 
-import buildcraft.api.core.SafeTimeTracker;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -15,7 +14,7 @@ public class BufferedTileEntity {
 
     private int blockID = 0;
     private TileEntity tile;
-    private final SafeTimeTracker tracker = new SafeTimeTracker();
+    private final TimeTracker tracker = new TimeTracker();
     private final World world;
     final int x, y, z;
     private final boolean loadUnloaded;
@@ -53,7 +52,7 @@ public class BufferedTileEntity {
         if (tile != null && !tile.isInvalid())
             return blockID;
 
-        if (tracker.markTimeIfDelay(world, 20)) {
+        if (tracker.markTimeIfPassed(world, 20)) {
             refresh();
 
             if (tile != null && !tile.isInvalid())
@@ -67,7 +66,7 @@ public class BufferedTileEntity {
         if (tile != null && !tile.isInvalid())
             return tile;
 
-        if (tracker.markTimeIfDelay(world, 20)) {
+        if (tracker.markTimeIfPassed(world, 20)) {
             refresh();
 
             if (tile != null && !tile.isInvalid())

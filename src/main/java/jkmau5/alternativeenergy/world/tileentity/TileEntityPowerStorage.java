@@ -137,35 +137,33 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Override
     public void updateEntity(){
         super.updateEntity();
-        if(worldObj == null || worldObj.isRemote) return;
-
-        if(AltEngCompat.hasIC2){
-            if(!this.addedToEnet){
-                MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-                this.addedToEnet = true;
+        if(!this.worldObj.isRemote){
+            if(AltEngCompat.hasIC2){
+                if(!this.addedToEnet){
+                    MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+                    this.addedToEnet = true;
+                }
             }
+
+            if(this.euToConvert % Ratios.EU.conversion == 0) {
+                this.storedPower.clampMin(1);
+                this.storedPower.add((int) Math.ceil(euToConvert / Ratios.EU.conversion));
+                this.euToConvert = 0;
+            }
+
+            if(AltEngCompat.hasBC){
+                this.convertBC();
+                this.tryOutputtingEnergy();
+            }
+
+            this.outputToPowerCables();
+
+            this.storedPower.clampMin(0);
+            this.storedPower.clampMax(this.maxStoredPower);
+
+            //if(oldEnergy != getPowerStored()) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            oldEnergy = getPowerStored();
         }
-
-        if(this.euToConvert % Ratios.EU.conversion == 0) {
-            this.storedPower.clampMin(1);
-            this.storedPower.add((int) Math.ceil(euToConvert / Ratios.EU.conversion));
-            this.euToConvert = 0;
-        }
-
-        if(AltEngCompat.hasBC){
-            this.convertBC();
-            this.tryOutputtingEnergy();
-        }
-
-        this.outputToPowerCables();
-
-        if(this.storedPower.getValue() <= 1) this.storedPower.setValue(0);
-
-        this.storedPower.clampMin(0);
-        this.storedPower.clampMax(this.maxStoredPower);
-
-        if(oldEnergy != getPowerStored()) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        oldEnergy = getPowerStored();
     }
 
     private void outputToPowerCables() {

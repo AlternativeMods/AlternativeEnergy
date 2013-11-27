@@ -78,8 +78,8 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
 
-        forceMaxPowersUpdate();
-        forceOutputSpeedUpdate();
+        updateMaxStorage();
+        updateOutputSpeed();
     }
 
     @Override
@@ -87,13 +87,13 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
         super.updateEntity();
         if(worldObj == null || worldObj.isRemote) return;
 
-        if(AltEngCompat.hasIC2) {
+        if(AltEngCompat.hasIC2){
             fill_chargeSlot();
             empty_dischargeSlot();
         }
     }
 
-    public void forceMaxPowersUpdate() {
+    public void updateMaxStorage() {
         /*if(capacitySlot != null && capacitySlot.get() != null) {
             this.setMaxStoredPower(Config.powerBox_capacity);
 
@@ -105,7 +105,7 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
         }*/
     }
 
-    public void forceOutputSpeedUpdate() {
+    public void updateOutputSpeed() {
         /*if(outputSpeedSlot != null && outputSpeedSlot.get() != null) {
             int tmpOutput = 32 * (4 ^ outputSpeedSlot.get().stackSize);
             if(tmpOutput > 512) tmpOutput = 512;

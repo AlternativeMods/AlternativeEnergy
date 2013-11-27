@@ -22,11 +22,10 @@ public class ContainerLinkBox extends ContainerLockable {
         this.tileEntity = te;
 
         this.addElement(new ElementIndicator(te.getEnergyIndicator(), 7, 16, 176, 0, 17, 54));
-
-        this.addPlayerInventory(inventoryPlayer);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 

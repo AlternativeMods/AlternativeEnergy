@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 public class GuiHandler implements IGuiHandler {
 
     public static void openGui(EnumGui gui, EntityPlayer player, World world, int x, int y, int z){
-        System.out.println(gui.name() + " Client: " + world.isRemote);
         if(!world.isRemote) {
             if(gui.hasContainer()){
                 player.openGui(AlternativeEnergy.getInstance(), gui.getId(), world, x, y, z);
