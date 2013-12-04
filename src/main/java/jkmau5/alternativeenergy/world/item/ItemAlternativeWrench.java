@@ -1,5 +1,6 @@
 package jkmau5.alternativeenergy.world.item;
 
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.item.IElectricItemManager;
@@ -32,6 +33,7 @@ import java.util.Random;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
+@Optional.Interface(iface = "ic2.api.item.IElectricItemManager", modid = "IC2")
 public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectricItem {
 
     public static int maxStoredPower = 15000;
@@ -91,8 +93,10 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-        if(tileEntity instanceof IWrenchable) {
-            return handleIC2Wrenching(world, player, itemStack, (IWrenchable) tileEntity, x, y, z, side, block);
+        if(AltEngCompat.hasIC2) {
+            if(tileEntity instanceof IWrenchable) {
+                return handleIC2Wrenching(world, player, itemStack, (IWrenchable) tileEntity, x, y, z, side, block);
+            }
         }
         if(tileEntity instanceof TileEntityPowerStorage) {
             if(!world.isRemote)
@@ -126,6 +130,7 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         world.spawnEntityInWorld(entityItem);
     }
 
+    @Optional.Method(modid = "IC2")
     protected boolean handleIC2Wrenching(World world, EntityPlayer player, ItemStack itemStack, IWrenchable iWrenchable, int x, int y, int z, int side, Block block) {
         if(player.isSneaking()) {
             side += side % 2 * -2 + 1;
@@ -176,36 +181,43 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
     //---------------------------------------------------------------------------------------------------------
 
+    @Optional.Method(modid = "IC2")
     @Override
     public IElectricItemManager getManager(ItemStack itemStack) {
         return AltEngCompat.alternativeElectricItemManager;
     }
 
+    @Optional.Method(modid = "IC2")
     @Override
     public boolean canProvideEnergy(ItemStack itemStack) {
         return false;
     }
 
+    @Optional.Method(modid = "IC2")
     @Override
     public int getChargedItemId(ItemStack itemStack) {
         return 0;
     }
 
+    @Optional.Method(modid = "IC2")
     @Override
     public int getEmptyItemId(ItemStack itemStack) {
         return 0;
     }
 
+    @Optional.Method(modid = "IC2")
     @Override
     public int getMaxCharge(ItemStack itemStack) {
         return (int) Math.ceil(maxStoredPower / Ratios.EU.conversion);
     }
 
+    @Optional.Method(modid = "IC2")
     @Override
     public int getTier(ItemStack itemStack) {
         return 0;
     }
 
+    @Optional.Method(modid = "IC2")
     @Override
     public int getTransferLimit(ItemStack itemStack) {
         return 0;
