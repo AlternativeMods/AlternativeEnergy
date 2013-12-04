@@ -10,6 +10,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.item.Items;
 import ic2.api.tile.IEnergyStorage;
+import jkmau5.alternativeenergy.compatibility.IndustrialCraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -26,6 +27,8 @@ public class AltEngCompat {
     public static boolean hasIC2 = Loader.isModLoaded("IC2");
     public static boolean hasCC = Loader.isModLoaded("ComputerCraft");
 
+    public static IndustrialCraft.AlternativeElectricItemManager alternativeElectricItemManager;
+
     public static void checkCompat(){
         hasBC = Loader.isModLoaded("BuildCraft|Transport");
         hasIC2 = Loader.isModLoaded("IC2");
@@ -40,6 +43,9 @@ public class AltEngCompat {
                 dialog.setVisible(true);
             }
         }
+
+        if(hasIC2)
+            alternativeElectricItemManager = new IndustrialCraft.AlternativeElectricItemManager();
     }
 
     public static boolean isWrench(ItemStack stack){

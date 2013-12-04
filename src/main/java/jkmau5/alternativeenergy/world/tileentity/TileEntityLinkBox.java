@@ -1,6 +1,5 @@
 package jkmau5.alternativeenergy.world.tileentity;
 
-import jkmau5.alternativeenergy.AltEngCompat;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.EnumGui;
 import jkmau5.alternativeenergy.gui.GuiHandler;
@@ -15,8 +14,6 @@ import jkmau5.alternativeenergy.util.interfaces.ILockable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraftforge.common.ForgeDirection;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -101,24 +98,6 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
             this.linkedID.setValue(linkId);
             LinkBoxNetwork.getInstance().addLinkBoxToNetwork(this, this.getLinkIdentifier());
         }
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, int sideHit) {
-        if(this.isLocked() && !this.isOwner(player.username)) return super.blockActivated(player, sideHit);
-        if(player.getHeldItem() != null && AltEngCompat.isWrench(player.getHeldItem())) {
-            ForgeDirection side = ForgeDirection.getOrientation(sideHit);
-            if(this.worldObj.isRemote) return true;
-            if(player.isSneaking()) {
-                return false;
-            }else{
-                this.setMode(side, this.getNextMode(this.getMode(side)));
-                ChatMessageComponent component = ChatMessageComponent.createFromTranslationWithSubstitutions("altEng.chatmessage.storageSideModeChanged", this.getMode(side).toString().toLowerCase());
-                player.sendChatToPlayer(component);
-                return true;
-            }
-        }
-        return super.blockActivated(player, sideHit);
     }
 
     @Override

@@ -26,7 +26,9 @@ import jkmau5.alternativeenergy.util.EnumOutputMode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -113,6 +115,31 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         int ordinal = mode.ordinal() + 1;
         if(ordinal > EnumOutputMode.values().length - 1) ordinal = 0;
         return EnumOutputMode.values()[ordinal];
+    }
+
+    public boolean setNextMode(EntityPlayer player, ForgeDirection side) {
+        this.setMode(side, this.getNextMode(this.getMode(side)));
+        ChatMessageComponent component = ChatMessageComponent.createFromTranslationWithSubstitutions("altEng.chatmessage.storageSideModeChanged", this.getMode(side).toString().toLowerCase());
+        player.sendChatToPlayer(component);
+        return true;
+    }
+
+    @Override
+    public boolean blockActivated(EntityPlayer player, int sideHit) {
+        if(this instanceof TileEntityLinkBox)
+            if(((TileEntityLinkBox)this).isLocked() && !this.isOwner(player.username))
+                return super.blockActivated(player, sideHit);
+        if(player.getHeldItem() != null && AltEngCompat.isWrench(player.getHeldItem())) {
+            ForgeDirection side = ForgeDirection.getOrientation(sideHit);
+            if(this.worldObj.isRemote) return true;
+            if(player.isSneaking()) {
+                return false;
+            }else{
+                setNextMode(player, side);
+                return true;
+            }
+        }
+        return super.blockActivated(player, sideHit);
     }
 
     @Override

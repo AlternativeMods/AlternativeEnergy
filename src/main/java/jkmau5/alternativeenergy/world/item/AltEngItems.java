@@ -5,10 +5,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class AltEngItems {
 
     public static ItemUpgrade itemUpgrade;
+    public static ItemAlternativeWrench itemAlternativeWrench;
 
     public static void init(){
         itemUpgrade = new ItemUpgrade();
+        GameRegistry.registerItem(itemUpgrade, "upgrade");
 
-        GameRegistry.registerItem(itemUpgrade, "powerUpgrade");
+        itemAlternativeWrench = new ItemAlternativeWrench();
+        GameRegistry.registerItem(itemAlternativeWrench, "alternativeWrench");
     }
 }

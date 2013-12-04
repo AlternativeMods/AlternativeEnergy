@@ -10,8 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Author: Lordmau5
@@ -55,23 +53,6 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
     public boolean openGui(EntityPlayer player) {
         GuiHandler.openGui(EnumGui.POWERBOX, player, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
         return true;
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, int sideHit) {
-        if(player.getHeldItem() != null && AltEngCompat.isWrench(player.getHeldItem())) {
-            ForgeDirection side = ForgeDirection.getOrientation(sideHit);
-            if(this.worldObj.isRemote) return true;
-            if(player.isSneaking()) {
-                return false;
-            }else{
-                this.setMode(side, this.getNextMode(this.getMode(side)));
-                ChatMessageComponent component = ChatMessageComponent.createFromTranslationWithSubstitutions("altEng.chatmessage.storageSideModeChanged", this.getMode(side).toString().toLowerCase());
-                player.sendChatToPlayer(component);
-                return true;
-            }
-        }
-        return super.blockActivated(player, sideHit);
     }
 
     @Override
