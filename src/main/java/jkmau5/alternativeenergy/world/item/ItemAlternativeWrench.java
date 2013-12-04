@@ -33,7 +33,7 @@ import java.util.Random;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Optional.Interface(iface = "ic2.api.item.IElectricItemManager", modid = "IC2")
+@Optional.Interface(iface = "ic2.api.item.ISpecialElectricItem", modid = "IC2")
 public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectricItem {
 
     public static int maxStoredPower = 15000;

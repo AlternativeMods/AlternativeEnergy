@@ -1,9 +1,12 @@
-itemGroup.tabPowerBox=AlternativeEnergy
+itemGroup.altEng=AlternativeEnergy
 
 tile.altEng.powerCable.name=Power Cable
 tile.altEng.powerBox.name=Power Box
 tile.altEng.linkBox.name=Link Box
 
+
+item.altEng.upgrade.capacity.name=Capacity Upgrade
+item.altEng.upgrade.outputSpeed.name=Output Speed Upgrade
 item.altEng.alternativeWrench.name=Alternative Wrench
 
 altEng.chatmessage.storageSideModeChanged=Changed side mode to %s

@@ -26,7 +26,10 @@ import jkmau5.alternativeenergy.util.EnumOutputMode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
@@ -34,6 +37,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * No description given
@@ -111,6 +115,30 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         }
     }
 
+    public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity) {
+        readFromNBT(itemStack.getTagCompound());
+    }
+
+    public static void dropItemStackAsEntity(World world, int x, int y, int z, ItemStack itemStack)
+    {
+        if (itemStack == null) return;
+
+        Random random = new Random();
+
+        double f = 0.7D;
+        double dx = random.nextFloat() * f + (1.0D - f) * 0.5D;
+        double dy = random.nextFloat() * f + (1.0D - f) * 0.5D;
+        double dz = random.nextFloat() * f + (1.0D - f) * 0.5D;
+
+        EntityItem entityItem = new EntityItem(world, x + dx, y + dy, z + dz, itemStack.copy());
+        entityItem.delayBeforeCanPickup = 10;
+        world.spawnEntityInWorld(entityItem);
+    }
+
+    public boolean removeBlockByPlayer(EntityPlayer player) {
+        return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+    }
+
     public EnumOutputMode getNextMode(EnumOutputMode mode){
         int ordinal = mode.ordinal() + 1;
         if(ordinal > EnumOutputMode.values().length - 1) ordinal = 0;
@@ -173,7 +201,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
             }
 
             if(this.euToConvert % Ratios.EU.conversion == 0) {
-                this.storedPower.clampMin(1);
+                this.storedPower.clampMin(0);
                 this.storedPower.add((int) Math.ceil(euToConvert / Ratios.EU.conversion));
                 this.euToConvert = 0;
             }
