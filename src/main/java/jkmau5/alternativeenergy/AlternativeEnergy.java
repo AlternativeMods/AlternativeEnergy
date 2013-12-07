@@ -2,9 +2,11 @@ package jkmau5.alternativeenergy;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import jkmau5.alternativeenergy.compat.CompatPluginLoader;
 import jkmau5.alternativeenergy.server.ProxyCommon;
 import jkmau5.alternativeenergy.util.config.ConfigFile;
 import jkmau5.alternativeenergy.util.config.ConfigTag;
@@ -52,11 +54,21 @@ public class AlternativeEnergy {
         Config.powerBoxExplosionResistant = powerBoxTag.getTag("explosionResistant").setComment("Should the powerbox be explosion resistant?").getBooleanValue(Config.powerBoxExplosionResistant);
         Config.powerBox_capacity_multiplier = powerBoxTag.getTag("upgradeCapacityMultiplier").setComment("The capacity that will be added to the powerbox for every capacity upgrade inserted").getIntValue(Config.powerBox_capacity_multiplier);
         Config.upgrade_ItemId = this.config.getTag("upgrades").getTag("blockID").getIntValue(Config.upgrade_ItemId);
+
+        CompatPluginLoader.getInstance().registerBuiltInPlugins();
+        CompatPluginLoader.getInstance().preInit();
+    }
+
+    @SuppressWarnings("unused")
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event){
+        CompatPluginLoader.getInstance().init();
     }
 
     @SuppressWarnings("unused")
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        CompatPluginLoader.getInstance().postInit();
         proxy.registerRenderers();
         AltEngCompat.checkCompat();
     }
