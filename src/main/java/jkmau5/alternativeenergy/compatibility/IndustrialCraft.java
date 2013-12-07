@@ -38,6 +38,7 @@ public class IndustrialCraft {
 
         @Override
         public int discharge(ItemStack itemStack, int amount, int tier, boolean ignoreTransferLimit, boolean simulate) {
+            System.out.println("Discharge, seriously?");
             return 0;
         }
 
@@ -48,15 +49,16 @@ public class IndustrialCraft {
 
         @Override
         public boolean canUse(ItemStack itemStack, int amount) {
-            return ItemAlternativeWrench.canWrench(itemStack);
+           return false;
+           //return AltEngSupport.canWrench(itemStack);
         }
 
         @Override
         public boolean use(ItemStack itemStack, int amount, EntityLivingBase entity) {
-            if(!canUse(itemStack, amount))
+            System.out.println(amount);
+            if(amount == 0)
                 return false;
-
-            ItemAlternativeWrench.drainWrenchPower(itemStack, true);
+            AltEngSupport.drainWrenchPower(itemStack, true);
             return true;
         }
 

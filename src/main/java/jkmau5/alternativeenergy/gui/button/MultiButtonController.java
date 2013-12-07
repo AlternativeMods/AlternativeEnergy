@@ -76,6 +76,9 @@ public class MultiButtonController<T extends IMultiButtonState> {
     }
 
     public void readFromNBT(NBTTagCompound nbt, String tag) {
+        if(nbt == null)
+            return;
+
         if (nbt.getTag(tag) instanceof NBTTagString) {
             String name = nbt.getString(tag);
             for (int i = 0; i < validStates.length; i++) {

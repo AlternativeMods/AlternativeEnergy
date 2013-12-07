@@ -122,6 +122,8 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity) {
+        if(itemStack.getTagCompound() == null)
+            return;
         readFromNBT(itemStack.getTagCompound());
     }
 

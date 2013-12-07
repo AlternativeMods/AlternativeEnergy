@@ -1,5 +1,6 @@
 package jkmau5.alternativeenergy.compat.waila;
 
+import cpw.mods.fml.common.event.FMLInterModComms;
 import jkmau5.alternativeenergy.compat.ICompatPlugin;
 
 /**
@@ -20,6 +21,7 @@ public class PluginWaila implements ICompatPlugin {
 
     @Override
     public void init() {
+        FMLInterModComms.sendMessage("Waila", "register", "jkmau5.alternativeenergy.compat.waila.WailaProvider.callbackRegister");
     }
 
     @Override

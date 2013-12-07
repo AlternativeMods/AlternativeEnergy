@@ -11,6 +11,23 @@ import net.minecraft.nbt.NBTTagCompound;
  * however, not to publish it without my permission.
  */
 public class AltEngSupport {
+    public static boolean canWrench(ItemStack itemStack) {
+        return AltEngSupport.initiateOrGetNBTInteger(itemStack, "storedPower") >= 250;
+    }
+
+    public static boolean drainWrenchPower(ItemStack itemStack, boolean isGT) {
+        System.out.println("Let me drain?");
+        if(!canWrench(itemStack))
+            return false;
+
+        int storedPower = AltEngSupport.initiateOrGetNBTInteger(itemStack, "storedPower");
+        int drain = 250;
+        //if(isGT)
+        //    drain = 125;
+        AltEngSupport.setNBTInteger(itemStack, "storedPower", storedPower - drain);
+        return true;
+    }
+
     public static void initiateNBTTag(ItemStack is) {
         if(is.getTagCompound() == null) {
             is.setTagCompound(new NBTTagCompound());

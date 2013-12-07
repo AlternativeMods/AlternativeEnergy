@@ -102,7 +102,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
     @Override
     public boolean removeBlockByPlayer(EntityPlayer player) {
-        if(!this.isPrivate() && this.getEnergyOwner().equals(player.username) || MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username) || this.isPrivate() && this.getEnergyOwner().equals(player.username)) {
+        if(this.getOwner().equals(player.username) || MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username) || this.isPrivate() && this.getEnergyOwner().equals(player.username)) {
             return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
         }
         if(!this.worldObj.isRemote) {

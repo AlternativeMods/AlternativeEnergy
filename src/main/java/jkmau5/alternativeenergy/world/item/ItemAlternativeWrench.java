@@ -79,23 +79,11 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
     }
 
-    public static boolean canWrench(ItemStack itemStack) {
-        return AltEngSupport.initiateOrGetNBTInteger(itemStack, "storedPower") >= 250;
-    }
-
-    public static void drainWrenchPower(ItemStack itemStack, boolean isGT) {
-        int storedPower = AltEngSupport.initiateOrGetNBTInteger(itemStack, "storedPower");
-        int drain = 250;
-        if(isGT)
-            drain = 125;
-        AltEngSupport.setNBTInteger(itemStack, "storedPower", storedPower - drain);
-    }
-
     //------------------------------------------------------------------------------
 
     public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
-        if(!canWrench(itemStack))
+        if(!AltEngSupport.canWrench(itemStack))
             return false;
 
         int blockId = world.getBlockId(x, y, z);
@@ -113,17 +101,17 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         if(tileEntity instanceof TileEntityPowerStorage) {
             if(!world.isRemote)
                 if(((TileEntityPowerStorage)tileEntity).setNextMode(player, ForgeDirection.getOrientation(side)))
-                    drainWrenchPower(itemStack, false);
+                    AltEngSupport.drainWrenchPower(itemStack, false);
             return !world.isRemote;
         }
 
         if(AltEngCompat.hasBiblioCraft && !world.isRemote)
             if(tryAnythingWithBiblioCraft(player, world, x, y, z, side, tileEntity))
-                drainWrenchPower(itemStack, false);
+                AltEngSupport.drainWrenchPower(itemStack, false);
 
         if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
             if(!world.isRemote)
-                drainWrenchPower(itemStack, false);
+                AltEngSupport.drainWrenchPower(itemStack, false);
             return !world.isRemote;
         }
 
@@ -863,7 +851,7 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         if (iWrenchable.wrenchCanSetFacing(player, side)) {
             if(!world.isRemote) {
                 iWrenchable.setFacing((short) side);
-                drainWrenchPower(itemStack, false);
+                AltEngSupport.drainWrenchPower(itemStack, false);
             }
 
             return !world.isRemote;
@@ -889,7 +877,7 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
                 }
 
                 world.setBlock(x, y, z, 0, 0, 3);
-                drainWrenchPower(itemStack, false);
+                AltEngSupport.drainWrenchPower(itemStack, false);
             }
 
             return !world.isRemote;
@@ -950,12 +938,12 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
     @Optional.Method(modid = "CarpentersBlocks")
     @Override
     public void onHammerUse(World world, EntityPlayer player) {
-        drainWrenchPower(player.getCurrentEquippedItem(), false);
+        AltEngSupport.drainWrenchPower(player.getCurrentEquippedItem(), false);
     }
 
     @Optional.Method(modid = "CarpentersBlocks")
     @Override
     public boolean canUseHammer(World world, EntityPlayer player) {
-        return canWrench(player.getCurrentEquippedItem());
+        return AltEngSupport.canWrench(player.getCurrentEquippedItem());
     }
 }
