@@ -13,6 +13,10 @@ buildscript {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "reening"
+        url = "http://maven.reening.nl"
+    }
 }
 
 apply plugin: 'forge'
@@ -28,6 +32,7 @@ minecraft{
 
 dependencies {
     compile 'org.projectlombok:lombok:1.12.2'
+    compile 'jds.bibliocraft:BiblioCraft:1.5.3'
 }
 
 task wrapper(type: Wrapper) {
