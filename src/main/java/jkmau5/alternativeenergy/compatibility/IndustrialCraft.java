@@ -24,10 +24,16 @@ public class IndustrialCraft {
             if(itemStack.getItem() != AltEngItems.itemAlternativeWrench) {
                 return 0;
             }
+            if(amount >= 512)
+                amount = 512;
 
             int storedPower = AltEngSupport.initiateOrGetNBTInteger(itemStack, "storedPower");
+            if(storedPower >= ItemAlternativeWrench.maxStoredPower)
+                return 0;
+
             storedPower += (int) Math.floor(amount / Ratios.EU.conversion);
             if(storedPower > ItemAlternativeWrench.maxStoredPower) {
+                amount -= Math.ceil((storedPower - ItemAlternativeWrench.maxStoredPower) * Ratios.EU.conversion);
                 storedPower = ItemAlternativeWrench.maxStoredPower;
             }
 

@@ -1,6 +1,8 @@
 package jkmau5.alternativeenergy.world.item;
 
+import buildcraft.api.tools.IToolWrench;
 import carpentersblocks.api.ICarpentersHammer;
+import cofh.api.energy.IEnergyContainerItem;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,9 +43,11 @@ import java.util.Random;
  */
 @Optional.InterfaceList({
         @Optional.Interface(iface = "ic2.api.item.ISpecialElectricItem", modid = "IC2"),
-        @Optional.Interface(iface = "carpentersblocks.api.ICarpentersHammer", modid = "CarpentersBlocks")
+        @Optional.Interface(iface = "carpentersblocks.api.ICarpentersHammer", modid = "CarpentersBlocks"),
+        @Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "BuildCraft|Energy"),
+        @Optional.Interface(iface = "cofh.api.energy.IEnergyContainerItem", modid = "CoFHCore")
 })
-public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectricItem, ICarpentersHammer {
+public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, ISpecialElectricItem, ICarpentersHammer, IEnergyContainerItem {
 
     public static int maxStoredPower = 30000;
 
@@ -935,15 +939,78 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         return 0;
     }
 
+    @Optional.Method(modid = "BuildCraft|Energy")
+    @Override
+    public boolean canWrench(EntityPlayer player, int i, int i2, int i3) {
+        return AltEngSupport.canWrench(player.getCurrentEquippedItem());
+    }
+
+    @Optional.Method(modid = "BuildCraft|Energy")
+    @Override
+    public void wrenchUsed(EntityPlayer player, int i, int i2, int i3) {
+        AltEngSupport.drainWrenchPower(player.getCurrentEquippedItem(), false);
+        player.swingItem();
+    }
+
     @Optional.Method(modid = "CarpentersBlocks")
     @Override
     public void onHammerUse(World world, EntityPlayer player) {
         AltEngSupport.drainWrenchPower(player.getCurrentEquippedItem(), false);
+        player.swingItem();
     }
 
     @Optional.Method(modid = "CarpentersBlocks")
     @Override
     public boolean canUseHammer(World world, EntityPlayer player) {
         return AltEngSupport.canWrench(player.getCurrentEquippedItem());
+    }
+
+    //------------------------------------------------------------------------------
+
+    int rfConversion;
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate) {
+        AltEngSupport.initiateNBTTag(container);
+        int storedPower = AltEngSupport.initiateOrGetNBTInteger(container, "storedPower");
+        if(storedPower >= maxStoredPower)
+            return maxReceive;
+
+        int returning = maxReceive;
+        rfConversion += maxReceive;
+        if(rfConversion >= Ratios.RF.conversion) {
+            while(rfConversion >= Ratios.RF.conversion) {
+                storedPower += 1;
+                if(storedPower > maxStoredPower) {
+                    returning -= Math.ceil((storedPower - maxStoredPower) * Ratios.RF.conversion);
+                    storedPower = maxStoredPower;
+                }
+                rfConversion -= Ratios.RF.conversion;
+            }
+        }
+
+        AltEngSupport.setNBTInteger(container, "storedPower", storedPower);
+        return returning;
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int extractEnergy(ItemStack container, int maxExtract, boolean simulate) {
+        return 0;
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getEnergyStored(ItemStack container) {
+        if(container.getTagCompound() == null)
+            return 0;
+        return AltEngSupport.initiateOrGetNBTInteger(container, "storedPower");
+    }
+
+    @Optional.Method(modid = "CoFHCore")
+    @Override
+    public int getMaxEnergyStored(ItemStack container) {
+        return maxStoredPower;
     }
 }

@@ -9,7 +9,8 @@ package jkmau5.alternativeenergy.power;
  */
 public enum Ratios {
     EU(5),
-    MJ(2);
+    MJ(2),
+    RF(20);
 
     public final int conversion;
 

@@ -51,13 +51,17 @@ import java.util.Random;
     @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
     @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
     @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
-    @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")
+    @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy"),
+    @Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFH|Core")
 })
-public abstract class TileEntityPowerStorage extends SynchronizedTileEntity implements IPeripheral, IEnergySink, IEnergyStorage, IEnergySource, IPowerReceptor {
+public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
+        implements IPeripheral,
+        IEnergySink, IEnergyStorage, IEnergySource,
+        IPowerReceptor,
+        cofh.api.energy.IEnergyHandler {
 
     protected boolean addedToEnet = false;
     protected int euToConvert = 0;
-    private int oldEnergy = 0;
     @SideOnly(Side.CLIENT)
     public int guiPower = 0; //The amount of energy to display in the gui
 
@@ -240,9 +244,6 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
             this.storedPower.clampMin(0);
             this.storedPower.clampMax(this.maxStoredPower);
-
-            //if(oldEnergy != getPowerStored()) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            oldEnergy = getPowerStored();
         }
     }
 
@@ -622,5 +623,29 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
             float f = Math.min(TileEntityPowerStorage.this.guiPower, max);
             return (int)(f * scale / max);
         }
+    }
+
+    public int receiveEnergy(ForgeDirection paramForgeDirection, int paramInt, boolean paramBoolean) {
+        if(outputMode.getMode(paramForgeDirection) != EnumOutputMode.INPUT)
+            return 0;
+        return 5;
+    }
+
+    public int extractEnergy(ForgeDirection paramForgeDirection, int paramInt, boolean paramBoolean) {
+        if(outputMode.getMode(paramForgeDirection) != EnumOutputMode.OUTPUT)
+            return 0;
+        return 0;
+    }
+
+    public int getEnergyStored(ForgeDirection paramForgeDirection) {
+        return storedPower.getValue();
+    }
+
+    public int getMaxEnergyStored(ForgeDirection paramForgeDirection) {
+        return maxStoredPower;
+    }
+
+    public boolean canInterface(ForgeDirection paramForgeDirection) {
+        return true;
     }
 }

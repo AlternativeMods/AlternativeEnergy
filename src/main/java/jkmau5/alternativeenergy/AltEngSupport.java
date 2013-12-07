@@ -16,7 +16,6 @@ public class AltEngSupport {
     }
 
     public static boolean drainWrenchPower(ItemStack itemStack, boolean isGT) {
-        System.out.println("Let me drain?");
         if(!canWrench(itemStack))
             return false;
 
@@ -40,6 +39,9 @@ public class AltEngSupport {
     }
 
     public static int initiateOrGetNBTInteger(ItemStack is, String field) {
+        if(is.getTagCompound() == null)
+            return 0;
+
         NBTTagCompound tag = is.getTagCompound();
         if(!tag.hasKey(field)) {
             tag.setInteger(field, 0);
