@@ -33,6 +33,7 @@ minecraft{
 dependencies {
     compile 'org.projectlombok:lombok:1.12.2'
     compile 'jds.bibliocraft:BiblioCraft:1.5.3'
+    compile 'gregtechmod:GregTechAPI:4.05j'
 }
 
 task wrapper(type: Wrapper) {
