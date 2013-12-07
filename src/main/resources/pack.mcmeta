@@ -4,9 +4,9 @@
         "pack_format": 1
     },
 	"language": {
-     "en_US": {
-        "name": "English",
-        "region": "United States"
-     }
-  }
+        "en_US": {
+            "name": "English",
+            "region": "United States"
+        }
+    }
 }
