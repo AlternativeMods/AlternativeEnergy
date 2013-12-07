@@ -76,7 +76,7 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
         list.add("Stored Power: " + storedPower + " PBu / " + maxStoredPower + " PBu");
 
         if(GuiScreen.isShiftKeyDown()){
-
+            // TODO: Add more information maybe? :D
         }
         else {
             list.add("Hold shift to get more information");
@@ -358,20 +358,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityBookcase))
             {
                 TileEntityBookcase te = (TileEntityBookcase)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -380,20 +377,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityDinnerPlate))
             {
                 TileEntityDinnerPlate te = (TileEntityDinnerPlate)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -402,20 +396,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityGenericShelf))
             {
                 TileEntityGenericShelf te = (TileEntityGenericShelf)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -424,20 +415,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityLamp))
             {
                 TileEntityLamp te = (TileEntityLamp)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -446,20 +434,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityLamp))
             {
                 TileEntityLamp te = (TileEntityLamp)tile;
-                if (te != null)
+                int currAngle = te.getStyle();
+                if (currAngle >= 2)
                 {
-                    int currAngle = te.getStyle();
-                    if (currAngle >= 2)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setStyle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setStyle(currAngle);
+                return true;
             }
             return false;
         }
@@ -468,20 +453,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityLantern))
             {
                 TileEntityLantern te = (TileEntityLantern)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -490,20 +472,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityLantern))
             {
                 TileEntityLantern te = (TileEntityLantern)tile;
-                if (te != null)
+                int currAngle = te.getStyle();
+                if (currAngle >= 2)
                 {
-                    int currAngle = te.getStyle();
-                    if (currAngle >= 2)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setStyle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setStyle(currAngle);
+                return true;
             }
             return false;
         }
@@ -512,20 +491,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityMapFrame))
             {
                 TileEntityMapFrame te = (TileEntityMapFrame)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -534,20 +510,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityPotionShelf))
             {
                 TileEntityPotionShelf te = (TileEntityPotionShelf)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -557,33 +530,30 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityWeaponCase))
             {
                 TileEntityWeaponCase te = (TileEntityWeaponCase)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle > 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle > 3)
+                    if (currAngle >= 7)
                     {
-                        if (currAngle >= 7)
-                        {
-                            currAngle = 4;
-                        }
-                        else
-                        {
-                            currAngle++;
-                        }
-
-                    }
-                    else if (currAngle >= 3)
-                    {
-                        currAngle = 0;
+                        currAngle = 4;
                     }
                     else
                     {
                         currAngle++;
                     }
 
-                    te.setAngle(currAngle);
-                    return true;
                 }
+                else if (currAngle >= 3)
+                {
+                    currAngle = 0;
+                }
+                else
+                {
+                    currAngle++;
+                }
+
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -592,20 +562,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityWeaponCase))
             {
                 TileEntityWeaponCase te = (TileEntityWeaponCase)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle > 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle > 3)
-                    {
-                        currAngle -= 4;
-                    }
-                    else
-                    {
-                        currAngle += 4;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle -= 4;
                 }
+                else
+                {
+                    currAngle += 4;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -614,20 +581,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityWeaponRack))
             {
                 TileEntityWeaponRack te = (TileEntityWeaponRack)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -636,20 +600,17 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
             if ((tile instanceof TileEntityWritingDesk))
             {
                 TileEntityWritingDesk te = (TileEntityWritingDesk)tile;
-                if (te != null)
+                int currAngle = te.getAngle();
+                if (currAngle >= 3)
                 {
-                    int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
-                        currAngle = 0;
-                    }
-                    else
-                    {
-                        currAngle++;
-                    }
-                    te.setAngle(currAngle);
-                    return true;
+                    currAngle = 0;
                 }
+                else
+                {
+                    currAngle++;
+                }
+                te.setAngle(currAngle);
+                return true;
             }
             return false;
         }
@@ -930,13 +891,13 @@ public class ItemAlternativeWrench extends AltEngItem implements IToolWrench, IS
     @Optional.Method(modid = "IC2")
     @Override
     public int getTier(ItemStack itemStack) {
-        return 0;
+        return 3;
     }
 
     @Optional.Method(modid = "IC2")
     @Override
     public int getTransferLimit(ItemStack itemStack) {
-        return 0;
+        return 512;
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
