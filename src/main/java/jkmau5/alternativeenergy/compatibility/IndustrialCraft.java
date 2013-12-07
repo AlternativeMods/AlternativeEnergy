@@ -48,12 +48,16 @@ public class IndustrialCraft {
 
         @Override
         public boolean canUse(ItemStack itemStack, int amount) {
-            return false;
+            return ItemAlternativeWrench.canWrench(itemStack);
         }
 
         @Override
         public boolean use(ItemStack itemStack, int amount, EntityLivingBase entity) {
-            return false;
+            if(!canUse(itemStack, amount))
+                return false;
+
+            ItemAlternativeWrench.drainWrenchPower(itemStack, true);
+            return true;
         }
 
         @Override
