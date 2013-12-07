@@ -16,6 +16,11 @@ public class AltEngSupport {
             is.setTagCompound(new NBTTagCompound());
     }
 
+    public static boolean hasNBTKey(ItemStack is, String field) {
+        NBTTagCompound tag = is.getTagCompound();
+        return tag.hasKey(field);
+    }
+
     public static int initiateOrGetNBTInteger(ItemStack is, String field) {
         NBTTagCompound tag = is.getTagCompound();
         if(!tag.hasKey(field))

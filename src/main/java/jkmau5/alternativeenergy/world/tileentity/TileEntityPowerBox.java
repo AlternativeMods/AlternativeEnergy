@@ -27,7 +27,9 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
 
     @Override
     public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity) {
-        if(itemStack.getTagCompound() == null || !itemStack.getTagCompound().hasKey("storedPower")) return;
+        if(itemStack.getTagCompound() == null || !itemStack.getTagCompound().hasKey("capacityUpgrade"))
+            return;
+
         if(itemStack.getTagCompound().hasKey("capacityUpgrade")) {
             /*pBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, itemStack.getTagCompound().getInteger("capacityUpgrade"), 0));
 
@@ -35,14 +37,6 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
                 pBox.maxPowers += i * Config.powerBox_capacity_multiplier;
             }*/
         }
-        if(itemStack.getTagCompound().hasKey("outputSpeedUpgrade")) {
-            /*pBox.outputSpeedSlot.put(new ItemStack(AltEngItems.itemUpgrade, itemStack.getTagCompound().getInteger("outputSpeedUpgrade"), 1));
-
-            int tmpOutput = 32 * (4 ^ pBox.outputSpeedSlot.get().stackSize);
-            if(tmpOutput > 512) tmpOutput = 512;
-            pBox.maxOutput = tmpOutput;*/
-        }
-        this.setPowerStored(itemStack.getTagCompound().getInteger("storedPower"));
     }
 
     public String getType(){

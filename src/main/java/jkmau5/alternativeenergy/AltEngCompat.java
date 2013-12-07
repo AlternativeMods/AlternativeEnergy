@@ -26,6 +26,8 @@ public class AltEngCompat {
     public static boolean hasBC = Loader.isModLoaded("BuildCraft|Transport");
     public static boolean hasIC2 = Loader.isModLoaded("IC2");
     public static boolean hasCC = Loader.isModLoaded("ComputerCraft");
+    public static boolean hasBiblioCraft = Loader.isModLoaded("BiblioCraft");
+    public static boolean hasCarpentersBlocks = Loader.isModLoaded("CarpentersBlocks");
 
     public static IndustrialCraft.AlternativeElectricItemManager alternativeElectricItemManager;
 

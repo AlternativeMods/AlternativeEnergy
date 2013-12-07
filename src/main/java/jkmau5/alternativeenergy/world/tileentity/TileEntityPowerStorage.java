@@ -14,6 +14,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.tile.IEnergyStorage;
 import jkmau5.alternativeenergy.AltEngCompat;
+import jkmau5.alternativeenergy.AltEngSupport;
 import jkmau5.alternativeenergy.Config;
 import jkmau5.alternativeenergy.gui.element.AbstractIndicatorController;
 import jkmau5.alternativeenergy.gui.element.IIndicatorController;
@@ -23,6 +24,7 @@ import jkmau5.alternativeenergy.power.EnergyNetwork;
 import jkmau5.alternativeenergy.power.Ratios;
 import jkmau5.alternativeenergy.util.BlockOutputMode;
 import jkmau5.alternativeenergy.util.EnumOutputMode;
+import jkmau5.alternativeenergy.world.blocks.AltEngBlocks;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -136,6 +138,12 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     public boolean removeBlockByPlayer(EntityPlayer player) {
+        if(worldObj.isRemote)
+            return this.worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+        ItemStack itemStack = new ItemStack(AltEngBlocks.blockPowerStorage, 1, getBlockMetadata());
+        AltEngSupport.initiateNBTTag(itemStack);
+        writeToNBT(itemStack.getTagCompound());
+        dropItemStackAsEntity(worldObj, xCoord, yCoord, zCoord, itemStack);
         return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
     }
 

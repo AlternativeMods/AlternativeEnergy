@@ -30,7 +30,7 @@ public class ItemUpgrade extends AltEngItem {
         setHasSubtypes(true);
     }
 
-    private String[] upgradeNames = {"capacity", "outputSpeed"};
+    private String[] upgradeNames = {"capacity", "computerCraft"};
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack){

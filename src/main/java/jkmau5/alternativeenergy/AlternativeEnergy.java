@@ -14,7 +14,7 @@ import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntities;
 import lombok.Getter;
 
-@Mod(modid = "AlternativeEnergy", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft")
+@Mod(modid = "AlternativeEnergy", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft;after:BiblioCraft;after:CarpentersBlocks")
 @NetworkMod
 public class AlternativeEnergy {
 

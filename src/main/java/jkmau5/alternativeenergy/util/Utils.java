@@ -51,25 +51,19 @@ public class Utils {
     }
 
     public static int getFreeBlockID(){
-        for(int id = BLOCKID_START; id < 4096; id++){
-            if(Block.blocksList[id] == null){
+        for(int id = BLOCKID_START; id < 4096; id++)
+            if(Block.blocksList[id] == null)
                 return id;
-            }
-        }
-        for(int id = 256; id < BLOCKID_START; id++){
-            if(Block.blocksList[id] == null){
+        for(int id = 256; id < BLOCKID_START; id++)
+            if(Block.blocksList[id] == null)
                 return id;
-            }
-        }
         throw new RuntimeException("No blockIDs are available!");
     }
 
     public static int getFreeItemID(){
-        for(int id = 4097; id < Item.itemsList.length; id++){
-            if(Item.itemsList[id] == null){
+        for(int id = 4097; id < Item.itemsList.length; id++)
+            if(Item.itemsList[id + 256] == null)
                 return id;
-            }
-        }
         throw new RuntimeException("No itemIDs are available!");
     }
 }

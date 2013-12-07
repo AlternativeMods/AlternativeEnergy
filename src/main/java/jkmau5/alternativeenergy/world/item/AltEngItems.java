@@ -6,6 +6,7 @@ public class AltEngItems {
 
     public static ItemUpgrade itemUpgrade;
     public static ItemAlternativeWrench itemAlternativeWrench;
+    public static ItemWrenchUpgrade itemWrenchUpgrade;
 
     public static void init(){
         itemUpgrade = new ItemUpgrade();
@@ -13,5 +14,8 @@ public class AltEngItems {
 
         itemAlternativeWrench = new ItemAlternativeWrench();
         GameRegistry.registerItem(itemAlternativeWrench, "alternativeWrench");
+
+        itemWrenchUpgrade = new ItemWrenchUpgrade();
+        GameRegistry.registerItem(itemWrenchUpgrade, "wrenchUpgrade");
     }
 }
