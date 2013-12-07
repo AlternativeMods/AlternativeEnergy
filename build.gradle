@@ -35,6 +35,8 @@ dependencies {
     compile 'jds.bibliocraft:BiblioCraft:1.5.3'
     compile 'gregtechmod:GregTechAPI:4.05j'
     compile 'buildcraft:BuildCraftAPI:1.0'
+    compile 'ic2:IC2Api:1.0'
+    compile 'computercraft:ComputerCraftAPI:1.0'
 }
 
 task wrapper(type: Wrapper) {
