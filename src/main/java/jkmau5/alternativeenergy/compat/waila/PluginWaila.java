@@ -12,7 +12,7 @@ public class PluginWaila implements ICompatPlugin {
 
     @Override
     public String getModID() {
-        return "waila";
+        return "Waila";
     }
 
     @Override
