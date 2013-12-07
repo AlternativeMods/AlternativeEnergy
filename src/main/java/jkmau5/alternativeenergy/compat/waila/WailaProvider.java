@@ -7,7 +7,6 @@ import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +30,6 @@ public class WailaProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        currenttip = new ArrayList<String>();
         if(accessor.getTileEntity() instanceof TileEntityPowerStorage) {
             TileEntityPowerStorage storage = (TileEntityPowerStorage) accessor.getTileEntity();
             currenttip.add("Storage: " + storage.getPowerStored() + "/" + storage.getMaxStoredPower() + " PBu");
