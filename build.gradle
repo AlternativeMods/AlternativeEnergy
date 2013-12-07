@@ -34,6 +34,7 @@ dependencies {
     compile 'org.projectlombok:lombok:1.12.2'
     compile 'jds.bibliocraft:BiblioCraft:1.5.3'
     compile 'gregtechmod:GregTechAPI:4.05j'
+    compile 'buildcraft:BuildCraftAPI:1.0'
 }
 
 task wrapper(type: Wrapper) {
