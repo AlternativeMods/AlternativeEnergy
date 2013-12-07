@@ -42,74 +42,75 @@ public class BlockPowerCable extends BlockTileEntity {
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int meta)
-    {
+    public TileEntity createTileEntity(World world, int meta) {
         return new TileEntityPowerCable();
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
-    {
+    public void registerIcons(IconRegister par1IconRegister) {
         this.blockIcon = par1IconRegister.registerIcon(Constants.TEXTURE_DOMAIN + ":" + this.getUnlocalizedName().substring(12));
     }
 
     @Override
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side) {
         return this.getIcon(side, par1IBlockAccess.getBlockMetadata(x, y, z));
     }
 
     @Override
-    public Icon getIcon(int side, int meta)
-    {
+    public Icon getIcon(int side, int meta) {
         return this.blockIcon;
     }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase ent, ItemStack is) {
         super.onBlockPlacedBy(world, x, y, z, ent, is);
-        if(!world.isRemote)
+        if(!world.isRemote) {
             return;
+        }
 
         TileEntityPowerCable pCable = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
 
-        if(pCable != null)
+        if(pCable != null) {
             pCable.onNeighborChange();
+        }
     }
 
     @Override
-    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
-    {
-        if(world.isRemote)
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+        if(world.isRemote) {
             return world.setBlockToAir(x, y, z);
+        }
 
         TileEntityPowerCable tile = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
-        if(tile != null)
+        if(tile != null) {
             tile.getEnergyNetwork().recalculateNetworks();
+        }
 
         return world.setBlockToAir(x, y, z);
     }
 
     public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int par5) {
-        if(!world.isRemote)
+        if(!world.isRemote) {
             return;
+        }
 
-        for(int i=0; i<6; i++) {
+        for(int i = 0; i < 6; i++) {
             ForgeDirection dr = ForgeDirection.getOrientation(i);
             TileEntity tmpTile = world.getBlockTileEntity(x + dr.offsetX, y + dr.offsetY, z + dr.offsetZ);
-            if(tmpTile == null || !(tmpTile instanceof TileEntityPowerCable))
+            if(tmpTile == null || !(tmpTile instanceof TileEntityPowerCable)) {
                 continue;
+            }
 
             ((TileEntityPowerCable)tmpTile).getConnectionMatrix().setConnected(dr.getOpposite(), false);
         }
     }
 
     @Override
-    public void onNeighborTileChange(World world, int x, int y, int z, int tileX, int tileY, int tileZ)
-    {
+    public void onNeighborTileChange(World world, int x, int y, int z, int tileX, int tileY, int tileZ) {
         TileEntityPowerCable me = (TileEntityPowerCable) world.getBlockTileEntity(x, y, z);
-        if(me == null)
+        if(me == null) {
             return;
+        }
 
         if(world.isRemote) {
             me.onNeighborChange();
@@ -117,21 +118,19 @@ public class BlockPowerCable extends BlockTileEntity {
         }
 
         TileEntity xTile = world.getBlockTileEntity(tileX, tileY, tileZ);
-        if(xTile == null || AltEngCompat.isInvalidPowerTile(xTile))
+        if(xTile == null || AltEngCompat.isInvalidPowerTile(xTile)) {
             me.getEnergyNetwork().removeInput(xTile);
-        else
-            if(AltEngCompat.isInvalidPowerTile(xTile))
-                me.getEnergyNetwork().addInput(me, xTile);
+        } else if(AltEngCompat.isInvalidPowerTile(xTile)) {
+            me.getEnergyNetwork().addInput(me, xTile);
+        }
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k)
-    {
+    public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
         setCableBoundingBox(world, i, j, k);
     }
 
-    public void setCableBoundingBox(IBlockAccess bAccess, int x, int y, int z)
-    {
+    public void setCableBoundingBox(IBlockAccess bAccess, int x, int y, int z) {
         TileEntity xTile;
         float minX = 0.335F;
         float minY = 0.335F;
@@ -142,64 +141,61 @@ public class BlockPowerCable extends BlockTileEntity {
         float maxZ = 0.665F;
 
         xTile = bAccess.getBlockTileEntity(x - 1, y, z);
-        if(xTile != null)
-        {
-            if(AltEngCompat.isValidPowerTile(xTile))
+        if(xTile != null) {
+            if(AltEngCompat.isValidPowerTile(xTile)) {
                 minX = 0.0F;
+            }
         }
 
         xTile = bAccess.getBlockTileEntity(x + 1, y, z);
-        if(xTile != null)
-        {
-            if(AltEngCompat.isValidPowerTile(xTile))
+        if(xTile != null) {
+            if(AltEngCompat.isValidPowerTile(xTile)) {
                 maxX = 1.0F;
+            }
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z - 1);
-        if(xTile != null)
-        {
-            if(AltEngCompat.isValidPowerTile(xTile))
+        if(xTile != null) {
+            if(AltEngCompat.isValidPowerTile(xTile)) {
                 minZ = 0.0F;
+            }
         }
 
         xTile = bAccess.getBlockTileEntity(x, y, z + 1);
-        if(xTile != null)
-        {
-            if(AltEngCompat.isValidPowerTile(xTile))
+        if(xTile != null) {
+            if(AltEngCompat.isValidPowerTile(xTile)) {
                 maxZ = 1.0F;
+            }
         }
 
         xTile = bAccess.getBlockTileEntity(x, y - 1, z);
-        if(xTile != null)
-        {
-            if(AltEngCompat.isValidPowerTile(xTile))
+        if(xTile != null) {
+            if(AltEngCompat.isValidPowerTile(xTile)) {
                 minY = 0.0F;
+            }
         }
 
         xTile = bAccess.getBlockTileEntity(x, y + 1, z);
-        if(xTile != null)
-        {
-            if(AltEngCompat.isValidPowerTile(xTile))
+        if(xTile != null) {
+            if(AltEngCompat.isValidPowerTile(xTile)) {
                 maxY = 1.0F;
+            }
         }
 
         this.setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity)
-    {
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB axisAlignedBB, List list, Entity entity) {
         setCableBoundingBox(world, x, y, z);
         AxisAlignedBB aabb = super.getCollisionBoundingBoxFromPool(world, x, y, z);
-        if ((aabb != null) && (axisAlignedBB.intersectsWith(aabb)))
-        {
+        if ((aabb != null) && (axisAlignedBB.intersectsWith(aabb))) {
             list.add(aabb);
         }
     }
 
     @Override
-    public boolean isOpaqueCube()
-    {
+    public boolean isOpaqueCube() {
         return false;
     }
 
@@ -209,14 +205,12 @@ public class BlockPowerCable extends BlockTileEntity {
     }
 
     @Override
-    public boolean renderAsNormalBlock()
-    {
+    public boolean renderAsNormalBlock() {
         return false;
     }
 
     @Override
-    public int getRenderType()
-    {
+    public int getRenderType() {
         return RenderIDs.POWERCABLE.getRenderID();
     }
 }

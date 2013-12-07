@@ -37,7 +37,7 @@ public abstract class SynchronsiationMap<T extends ISynchronisationHandler> {
 
     private int index = 0;
 
-    protected SynchronsiationMap(T handler){
+    protected SynchronsiationMap(T handler) {
         this.handler = handler;
     }
 
@@ -112,14 +112,18 @@ public abstract class SynchronsiationMap<T extends ISynchronisationHandler> {
                 Set<Integer> newUsersInRange = Sets.newHashSet();
                 for (EntityPlayer player : players) {
                     newUsersInRange.add(player.entityId);
-                    if (knownUsers.contains(player.entityId)){
-                        if(hasChanges){
-                            if (changePacket == null) changePacket = createPacket(false, false);
+                    if (knownUsers.contains(player.entityId)) {
+                        if(hasChanges) {
+                            if (changePacket == null) {
+                                changePacket = createPacket(false, false);
+                            }
                             PacketDispatcher.sendPacketToPlayer(changePacket, (Player) player);
                             sent = true;
                         }
-                    }else{
-                        if (fullPacket == null) fullPacket = createPacket(true, false);
+                    } else {
+                        if (fullPacket == null) {
+                            fullPacket = createPacket(true, false);
+                        }
                         PacketDispatcher.sendPacketToPlayer(fullPacket, (Player) player);
                         sent = true;
                     }
@@ -128,11 +132,11 @@ public abstract class SynchronsiationMap<T extends ISynchronisationHandler> {
             } catch (IOException e) {
                 AltEngLog.warning(e, "IOException during synchronisation");
             }
-        }else{
-            try{
+        } else {
+            try {
                 PacketDispatcher.sendPacketToServer(createPacket(false, true));
                 sent = true;
-            }catch(IOException e){
+            } catch(IOException e) {
                 e.printStackTrace();
             }
             knownUsers.clear();
@@ -143,7 +147,9 @@ public abstract class SynchronsiationMap<T extends ISynchronisationHandler> {
 
     private boolean hasChanges() {
         for (ISynchronized obj : objects) {
-            if (obj != null && obj.isDirty()) return true;
+            if (obj != null && obj.isDirty()) {
+                return true;
+            }
         }
 
         return false;

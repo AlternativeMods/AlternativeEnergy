@@ -12,8 +12,7 @@ import net.minecraft.nbt.NBTTagList;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-public class InvSlot
-{
+public class InvSlot {
     public final TileEntityPowerBox base;
     public final String name;
     public final int oldStartIndex;
@@ -23,13 +22,11 @@ public class InvSlot
 
     private final ItemStack[] acceptIS;
 
-    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, ItemStack allowedIS)
-    {
+    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, ItemStack allowedIS) {
         this(base, name, oldStartIndex, access, count, InvSide.ANY, new ItemStack[] {allowedIS});
     }
 
-    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, ItemStack[] allowedIS)
-    {
+    public InvSlot(TileEntityPowerBox base, String name, int oldStartIndex, Access access, int count, ItemStack[] allowedIS) {
         this(base, name, oldStartIndex, access, count, InvSide.ANY, allowedIS);
     }
 
@@ -55,18 +52,17 @@ public class InvSlot
 
             int index = contentTag.getByte("Index") & 0xFF;
             ItemStack itemStack = ItemStack.loadItemStackFromNBT(contentTag);
-            if (itemStack != null)
-            {
+            if (itemStack != null) {
                 put(index, itemStack);
             }
         }
     }
 
-    public void writeToNbt(NBTTagCompound nbtTagCompound) { NBTTagList contentsTag = new NBTTagList();
+    public void writeToNbt(NBTTagCompound nbtTagCompound) {
+        NBTTagList contentsTag = new NBTTagList();
 
         for (int i = 0; i < contents.length; i++) {
-            if (contents[i] != null)
-            {
+            if (contents[i] != null) {
                 NBTTagCompound contentTag = new NBTTagCompound();
 
                 contentTag.setByte("Index", (byte)i);
@@ -76,10 +72,10 @@ public class InvSlot
             }
         }
 
-        nbtTagCompound.setTag("Contents", contentsTag); }
+        nbtTagCompound.setTag("Contents", contentsTag);
+    }
 
-    public int size()
-    {
+    public int size() {
         return contents.length;
     }
 
@@ -100,19 +96,22 @@ public class InvSlot
     }
 
     public void clear() {
-        for (int i = 0; i < contents.length; i++)
+        for (int i = 0; i < contents.length; i++) {
             contents[i] = null;
+        }
     }
 
-    public boolean accepts(ItemStack itemStack)
-    {
-        if(acceptIS == null)
+    public boolean accepts(ItemStack itemStack) {
+        if(acceptIS == null) {
             return true;
-        for(int i=0; i<acceptIS.length; i++) {
-            if(acceptIS[i] == null)
+        }
+        for(int i = 0; i < acceptIS.length; i++) {
+            if(acceptIS[i] == null) {
                 return true;
-            if(itemStack.itemID == acceptIS[i].itemID && itemStack.getItemDamage() == acceptIS[i].getItemDamage())
+            }
+            if(itemStack.itemID == acceptIS[i].itemID && itemStack.getItemDamage() == acceptIS[i].getItemDamage()) {
                 return true;
+            }
         }
 
         return false;
@@ -128,7 +127,9 @@ public class InvSlot
 
     public boolean isEmpty() {
         for (ItemStack itemStack : contents) {
-            if (itemStack != null) return false;
+            if (itemStack != null) {
+                return false;
+            }
         }
 
         return true;
@@ -138,15 +139,15 @@ public class InvSlot
         for (int dstIndex = 0; dstIndex < contents.length - 1; dstIndex++) {
             ItemStack dst = contents[dstIndex];
 
-            if ((dst == null) || (dst.stackSize < dst.getMaxStackSize()))
-            {
+            if ((dst == null) || (dst.stackSize < dst.getMaxStackSize())) {
                 for (int srcIndex = dstIndex + 1; srcIndex < contents.length; srcIndex++) {
                     ItemStack src = contents[srcIndex];
-                    if (src != null)
-                    {
+                    if (src != null) {
                         if (dst == null) {
                             contents[srcIndex] = null;
-                            ItemStack tmp85_83 = src; dst = tmp85_83; contents[dstIndex] = tmp85_83;
+                            ItemStack tmp85_83 = src;
+                            dst = tmp85_83;
+                            contents[dstIndex] = tmp85_83;
                         } else if (dst.itemID == src.itemID && dst.getItemDamage() == src.getItemDamage()) {
                             int space = dst.getMaxStackSize() - dst.stackSize;
 
@@ -165,19 +166,21 @@ public class InvSlot
         }
     }
 
-    public String toString() { String ret = name + "[" + contents.length + "]: ";
+    public String toString() {
+        String ret = name + "[" + contents.length + "]: ";
 
         for (int i = 0; i < contents.length; i++) {
             ret = ret + contents[i];
 
-            if (i < contents.length - 1) ret = ret + ", ";
+            if (i < contents.length - 1) {
+                ret = ret + ", ";
+            }
         }
 
         return ret;
     }
 
-    public static enum InvSide
-    {
+    public static enum InvSide {
         ANY,
         TOP,
         BOTTOM,
@@ -188,8 +191,7 @@ public class InvSlot
         }
     }
 
-    public static enum Access
-    {
+    public static enum Access {
         NONE,
         I,
         O,

@@ -56,7 +56,7 @@ public class TileEntityConveyor extends AltEngTileEntity implements IInventory, 
 
     @Override
     public int[] getAccessibleSlotsFromSide(int var1) {
-        return new int[]{0};
+        return new int[] {0};
     }
 
     @Override

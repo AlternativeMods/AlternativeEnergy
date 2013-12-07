@@ -12,8 +12,9 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class AltEngSupport {
     public static void initiateNBTTag(ItemStack is) {
-        if(is.getTagCompound() == null)
+        if(is.getTagCompound() == null) {
             is.setTagCompound(new NBTTagCompound());
+        }
     }
 
     public static boolean hasNBTKey(ItemStack is, String field) {
@@ -23,8 +24,9 @@ public class AltEngSupport {
 
     public static int initiateOrGetNBTInteger(ItemStack is, String field) {
         NBTTagCompound tag = is.getTagCompound();
-        if(!tag.hasKey(field))
+        if(!tag.hasKey(field)) {
             tag.setInteger(field, 0);
+        }
         return tag.getInteger(field);
     }
 

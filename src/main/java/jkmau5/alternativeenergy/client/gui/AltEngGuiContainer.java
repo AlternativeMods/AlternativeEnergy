@@ -30,7 +30,7 @@ public abstract class AltEngGuiContainer extends GuiContainer {
     private final AltEngContainer container;
     private final ResourceLocation backgroundTexture;
 
-    public AltEngGuiContainer(AltEngContainer container, ResourceLocation background){
+    public AltEngGuiContainer(AltEngContainer container, ResourceLocation background) {
         super(container);
         this.container = container;
         this.backgroundTexture = background;
@@ -51,45 +51,45 @@ public abstract class AltEngGuiContainer extends GuiContainer {
         RenderHelper.disableStandardItemLighting();
 
         InventoryPlayer inventoryPlayer = this.mc.thePlayer.inventory;
-        if(inventoryPlayer.getItemStack() == null){ //If no ItemStack is hovered
+        if(inventoryPlayer.getItemStack() == null) { //If no ItemStack is hovered
             int mX = mouseX - left;
             int mY = mouseY - top;
-            for(Element element : this.container.getElements()){
-                if(!element.isHidden){
+            for(Element element : this.container.getElements()) {
+                if(!element.isHidden) {
                     ToolTip toolTip = element.getToolTip();
-                    if(toolTip != null){
+                    if(toolTip != null) {
                         boolean mouseOver = element.isMouseOver(mX, mY);
                         toolTip.onTick(mouseOver);
-                        if(mouseOver && toolTip.isReady()){
+                        if(mouseOver && toolTip.isReady()) {
                             toolTip.refresh();
                             this.drawToolTip(toolTip, mouseX, mouseY);
                         }
                     }
                 }
             }
-            for(GuiButton button : (List<GuiButton>) this.buttonList){
-                if(button.drawButton && button instanceof AltEngGuiButton){
+            for(GuiButton button : (List<GuiButton>) this.buttonList) {
+                if(button.drawButton && button instanceof AltEngGuiButton) {
                     AltEngGuiButton altEngButton = (AltEngGuiButton) button;
                     ToolTip toolTip = altEngButton.getToolTip();
-                    if(toolTip != null){
+                    if(toolTip != null) {
                         boolean mouseOver = altEngButton.isMouseOverButton(mouseX, mouseY);
                         toolTip.onTick(mouseOver);
-                        if(mouseOver && toolTip.isReady()){
+                        if(mouseOver && toolTip.isReady()) {
                             toolTip.refresh();
                             this.drawToolTip(toolTip, mouseX, mouseY);
                         }
                     }
                 }
             }
-            for(Slot s : (List<Slot>) this.inventorySlots.inventorySlots){
-                if(s instanceof AltEngSlot){
+            for(Slot s : (List<Slot>) this.inventorySlots.inventorySlots) {
+                if(s instanceof AltEngSlot) {
                     AltEngSlot slot = (AltEngSlot) s;
-                    if(slot.getStack() == null){
+                    if(slot.getStack() == null) {
                         ToolTip toolTip = slot.getToolTip();
-                        if(toolTip != null){
+                        if(toolTip != null) {
                             boolean mouseOver = this.isMouseOverSlot(slot, mouseX, mouseY);
                             toolTip.onTick(mouseOver);
-                            if(mouseOver && toolTip.isReady()){
+                            if(mouseOver && toolTip.isReady()) {
                                 toolTip.refresh();
                                 this.drawToolTip(toolTip, mouseX, mouseY);
                             }
@@ -105,7 +105,7 @@ public abstract class AltEngGuiContainer extends GuiContainer {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY){
+    protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
         GL11.glColor4f(1, 1, 1, 1);
         RenderState.bindTexture(this.backgroundTexture);
 
@@ -117,39 +117,47 @@ public abstract class AltEngGuiContainer extends GuiContainer {
         int mX = mouseX - this.guiLeft;
         int mY = mouseY - this.guiTop;
 
-        for(Element element : this.container.getElements()){
-            if(!element.isHidden) element.draw(this, x, y, mX, mY);
+        for(Element element : this.container.getElements()) {
+            if(!element.isHidden) {
+                element.draw(this, x, y, mX, mY);
+            }
         }
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int button){
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
         int mX = mouseX - this.guiLeft;
         int mY = mouseY - this.guiTop;
 
-        for (Element element : this.container.getElements()){
-            if (!element.isHidden && element.isMouseOver(mX, mY)){
-                if (element.mouseClicked(mX, mY, button)) return;
+        for (Element element : this.container.getElements()) {
+            if (!element.isHidden && element.isMouseOver(mX, mY)) {
+                if (element.mouseClicked(mX, mY, button)) {
+                    return;
+                }
             }
         }
         super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    protected void mouseClickMove(int x, int y, int mouseButton, long time){
+    protected void mouseClickMove(int x, int y, int mouseButton, long time) {
         Slot slot = getSlotAtPosition(x, y);
-        if (mouseButton == 1 && (slot instanceof AltEngSlot && ((AltEngSlot) slot).isFakeSlot())) return;
+        if (mouseButton == 1 && (slot instanceof AltEngSlot && ((AltEngSlot) slot).isFakeSlot())) {
+            return;
+        }
         super.mouseClickMove(x, y, mouseButton, time);
     }
 
-    private Slot getSlotAtPosition(int x, int y){
-        for (Slot slot : (List<Slot>) this.inventorySlots.inventorySlots){
-            if (isMouseOverSlot(slot, x, y)) return slot;
+    private Slot getSlotAtPosition(int x, int y) {
+        for (Slot slot : (List<Slot>) this.inventorySlots.inventorySlots) {
+            if (isMouseOverSlot(slot, x, y)) {
+                return slot;
+            }
         }
         return null;
     }
 
-    private boolean isMouseOverSlot(Slot slot, int mouseX, int mouseY){
+    private boolean isMouseOverSlot(Slot slot, int mouseX, int mouseY) {
         int left = this.guiLeft;
         int top = this.guiTop;
         mouseX -= left;
@@ -157,14 +165,16 @@ public abstract class AltEngGuiContainer extends GuiContainer {
         return (mouseX >= slot.xDisplayPosition - 1) && (mouseX < slot.xDisplayPosition + 16 + 1) && (mouseY >= slot.yDisplayPosition - 1) && (mouseY < slot.yDisplayPosition + 16 + 1);
     }
 
-    private void drawToolTip(ToolTip toolTip, int mouseX, int mouseY){
-        if (toolTip.size() > 0){
+    private void drawToolTip(ToolTip toolTip, int mouseX, int mouseY) {
+        if (toolTip.size() > 0) {
             int left = this.guiLeft;
             int top = this.guiTop;
             int length = 0;
-            for(ToolTipLine line : toolTip){
+            for(ToolTipLine line : toolTip) {
                 int y = this.fontRenderer.getStringWidth(line.getText());
-                if (y > length) length = y;
+                if (y > length) {
+                    length = y;
+                }
             }
             int x = mouseX - left + 12;
             int y = mouseY - top - 12;
@@ -189,9 +199,9 @@ public abstract class AltEngGuiContainer extends GuiContainer {
 
             for (ToolTipLine tip : toolTip) {
                 String line = tip.getText();
-                if (tip.getColor() == -1){
+                if (tip.getColor() == -1) {
                     line = "§7" + line;
-                }else{
+                } else {
                     line = "§" + Integer.toHexString(tip.getColor()) + line;
                 }
                 this.fontRenderer.drawStringWithShadow(line, x, y, -1);

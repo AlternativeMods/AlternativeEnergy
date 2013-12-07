@@ -30,7 +30,9 @@ public class GuiMultiButton extends AltEngGuiButton {
 
     @Override
     public void drawButton(Minecraft minecraft, int x, int y) {
-        if (!this.drawButton) return;
+        if (!this.drawButton) {
+            return;
+        }
         FontRenderer fontrenderer = minecraft.fontRenderer;
         bindButtonTextures(minecraft);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -46,12 +48,12 @@ public class GuiMultiButton extends AltEngGuiButton {
         drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, xOffset + w - this.width / 2, yOffset + hoverState * h, this.width / 2, h);
         mouseDragged(minecraft, x, y);
         this.displayString = state.getLabel();
-        if (!this.displayString.isEmpty()){
-            if (!this.enabled){
+        if (!this.displayString.isEmpty()) {
+            if (!this.enabled) {
                 this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (h - 8) / 2, -6250336);
-            }else if (hover){
+            } else if (hover) {
                 this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (h - 8) / 2, 16777120);
-            }else{
+            } else {
                 this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (h - 8) / 2, 14737632);
             }
         }
@@ -60,10 +62,10 @@ public class GuiMultiButton extends AltEngGuiButton {
     @Override
     public boolean mousePressed(Minecraft minecraft, int mouseX, int mouseY) {
         boolean pressed = super.mousePressed(minecraft, mouseX, mouseY);
-        if(this.canChange && pressed && this.enabled){
-            if (Mouse.getEventButton() == 0){
+        if(this.canChange && pressed && this.enabled) {
+            if (Mouse.getEventButton() == 0) {
                 this.control.incrementState();
-            }else {
+            } else {
                 this.control.decrementState();
             }
         }
@@ -77,7 +79,9 @@ public class GuiMultiButton extends AltEngGuiButton {
     @Override
     public ToolTip getToolTip() {
         ToolTip tip = this.control.getButtonState().getToolTip();
-        if (tip != null) return tip;
+        if (tip != null) {
+            return tip;
+        }
         return super.getToolTip();
     }
 }

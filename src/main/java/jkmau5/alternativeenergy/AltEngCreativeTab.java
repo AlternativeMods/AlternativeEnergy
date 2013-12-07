@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
  */
 public class AltEngCreativeTab extends CreativeTabs {
 
-    public AltEngCreativeTab(){
+    public AltEngCreativeTab() {
         super("altEng");
     }
 

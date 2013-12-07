@@ -16,7 +16,7 @@ public class SynchronizedInteger extends SynchronizedBase {
 
     protected int value = 0;
 
-    public SynchronizedInteger(){}
+    public SynchronizedInteger() {}
     public SynchronizedInteger(int value) {
         this.value = value;
     }
@@ -41,11 +41,11 @@ public class SynchronizedInteger extends SynchronizedBase {
         return value;
     }
 
-    public void add(int val){
+    public void add(int val) {
         this.setValue(this.value + val);
     }
 
-    public void subtract(int val){
+    public void subtract(int val) {
         this.setValue(this.value - val);
     }
 
@@ -54,17 +54,25 @@ public class SynchronizedInteger extends SynchronizedBase {
      * @param min
      * @param max
      */
-    public void clamp(int min, int max){
-        if(this.value < min) this.setValue(min);
-        if(this.value > max) this.setValue(max);
+    public void clamp(int min, int max) {
+        if(this.value < min) {
+            this.setValue(min);
+        }
+        if(this.value > max) {
+            this.setValue(max);
+        }
     }
 
-    public void clampMin(int min){
-        if(this.value < min) this.setValue(min);
+    public void clampMin(int min) {
+        if(this.value < min) {
+            this.setValue(min);
+        }
     }
 
-    public void clampMax(int max){
-        if(this.value > max) this.setValue(max);
+    public void clampMax(int max) {
+        if(this.value > max) {
+            this.setValue(max);
+        }
     }
 
     @Override
@@ -74,13 +82,17 @@ public class SynchronizedInteger extends SynchronizedBase {
 
     @Override
     public void writeToNBT(NBTTagCompound tag, String name) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         tag.setInteger(name, value);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag, String name) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         if (tag.hasKey(name)) {
             value = tag.getInteger(name);
         }

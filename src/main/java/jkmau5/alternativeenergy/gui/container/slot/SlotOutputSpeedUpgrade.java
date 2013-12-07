@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotOutputSpeedUpgrade extends AltEngSlot {
 
-    public SlotOutputSpeedUpgrade(IInventory inventory, int slotIndex, int posX, int posY){
+    public SlotOutputSpeedUpgrade(IInventory inventory, int slotIndex, int posX, int posY) {
         super(inventory, slotIndex, posX, posY);
 
         ToolTip tip = new ToolTip(1000);

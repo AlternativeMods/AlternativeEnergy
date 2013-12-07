@@ -9,7 +9,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
  */
 public class AltEngTileEntities {
 
-    public static void init(){
+    public static void init() {
         GameRegistry.registerTileEntity(TileEntityPowerBox.class, "AltEng.PowerBox");
         GameRegistry.registerTileEntity(TileEntityPowerCable.class, "AltEng.PowerCable");
         GameRegistry.registerTileEntity(TileEntityLinkBox.class, "AltEng.LinkBox");

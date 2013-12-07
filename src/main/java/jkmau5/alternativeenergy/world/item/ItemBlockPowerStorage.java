@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ItemBlockPowerStorage extends ItemBlock {
 
-    public ItemBlockPowerStorage(int id){
+    public ItemBlockPowerStorage(int id) {
         super(id);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
@@ -45,8 +45,8 @@ public class ItemBlockPowerStorage extends ItemBlock {
     }
 
     public void addInformation(ItemStack is, EntityPlayer player, List list, boolean par4) {
-        if(GuiScreen.isShiftKeyDown()){
-            if(!is.hasTagCompound()){
+        if(GuiScreen.isShiftKeyDown()) {
+            if(!is.hasTagCompound()) {
                 is.setTagCompound(new NBTTagCompound());
                 is.getTagCompound().setInteger("storedPower", 0);
             }
@@ -64,7 +64,7 @@ public class ItemBlockPowerStorage extends ItemBlock {
                 if(is.getTagCompound().hasKey("capacityUpgrade")) {
                     gotUpgrade = true;
                     int capacityUpgrades = is.getTagCompound().getInteger("capacityUpgrade");
-                    for(int i=1; i<=capacityUpgrades; i++) {
+                    for(int i = 1; i <= capacityUpgrades; i++) {
                         pBoxCapacity += i * Config.powerBox_capacity_multiplier;
                     }
                     capacityAmount = capacityUpgrades;
@@ -78,14 +78,14 @@ public class ItemBlockPowerStorage extends ItemBlock {
             list.add("Stored Power: " + Config.convertNumber(storedPower) + "/" + Config.convertNumber(pBoxCapacity));
             if(gotUpgrade) {
                 list.add(" ");
-                if(capacityAmount > 0){
+                if(capacityAmount > 0) {
                     list.add("Capacity increased by " + capacityAmount);
                 }
-                if(outputSpeedUpgrades > 0){
+                if(outputSpeedUpgrades > 0) {
                     list.add("Output Speed increased by " + outputSpeedUpgrades);
                 }
             }
-        }else {
+        } else {
             list.add("Hold shift to get more information");
         }
     }

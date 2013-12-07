@@ -10,7 +10,7 @@ import jkmau5.alternativeenergy.client.render.ToolTipLine;
  */
 public abstract class AbstractIndicatorController implements IIndicatorController {
 
-    private final ToolTip defaultToolTip = new ToolTip(){
+    private final ToolTip defaultToolTip = new ToolTip() {
         @Override
         public void refresh() {
             AbstractIndicatorController.this.refreshToolTip();
@@ -28,7 +28,7 @@ public abstract class AbstractIndicatorController implements IIndicatorControlle
         return this.defaultToolTip;
     }
 
-    protected void refreshToolTip(){
+    protected void refreshToolTip() {
 
     }
 }

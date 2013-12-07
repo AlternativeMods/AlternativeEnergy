@@ -18,8 +18,11 @@ public class TickHandlerClient implements ITickHandler {
 
     @Override
     public void tickStart(EnumSet<TickType> type, Object... tickData) {
-        if(type.contains(TickType.CLIENT)) ticks ++;
-        else if(type.contains(TickType.RENDER)) partialTicks = (Float) tickData[0];
+        if(type.contains(TickType.CLIENT)) {
+            ticks ++;
+        } else if(type.contains(TickType.RENDER)) {
+            partialTicks = (Float) tickData[0];
+        }
     }
 
     @Override

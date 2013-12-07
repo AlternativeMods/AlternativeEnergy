@@ -16,7 +16,7 @@ public class SynchronizedBoolean extends SynchronizedBase {
 
     private boolean value;
 
-    public SynchronizedBoolean(){} //We need the empty constructor here for reflection
+    public SynchronizedBoolean() {} //We need the empty constructor here for reflection
     public SynchronizedBoolean(boolean value) {
         this.value = value;
     }
@@ -44,13 +44,17 @@ public class SynchronizedBoolean extends SynchronizedBase {
 
     @Override
     public void writeToNBT(NBTTagCompound tag, String prefix) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         tag.setBoolean(prefix, value);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag, String prefix) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         value = tag.getBoolean(prefix);
     }
 

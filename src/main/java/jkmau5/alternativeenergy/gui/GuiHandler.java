@@ -14,12 +14,12 @@ import net.minecraft.world.World;
  */
 public class GuiHandler implements IGuiHandler {
 
-    public static void openGui(EnumGui gui, EntityPlayer player, World world, int x, int y, int z){
+    public static void openGui(EnumGui gui, EntityPlayer player, World world, int x, int y, int z) {
         if(!world.isRemote) {
-            if(gui.hasContainer()){
+            if(gui.hasContainer()) {
                 player.openGui(AlternativeEnergy.getInstance(), gui.getId(), world, x, y, z);
             }
-        }else if (!gui.hasContainer()) {
+        } else if (!gui.hasContainer()) {
             TileEntity tile = world.getBlockTileEntity(x, y, z);
             FMLClientHandler.instance().displayGuiScreen(player, GuiFactory.createGui(gui, player.inventory, tile, world, x, y, z));
         }

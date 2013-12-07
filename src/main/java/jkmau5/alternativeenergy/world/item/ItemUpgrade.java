@@ -33,31 +33,26 @@ public class ItemUpgrade extends AltEngItem {
     private String[] upgradeNames = {"capacity", "computerCraft"};
 
     @Override
-    public String getUnlocalizedName(ItemStack itemStack){
+    public String getUnlocalizedName(ItemStack itemStack) {
         return "item.altEng.upgrade." + upgradeNames[itemStack.getItemDamage()];
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerIcons(IconRegister iR)
-    {
+    public void registerIcons(IconRegister iR) {
         icons = new Icon[2];
-        for(int i = 0; i < icons.length; i++)
-        {
+        for(int i = 0; i < icons.length; i++) {
             icons[i] = iR.registerIcon(Constants.TEXTURE_DOMAIN + ":" + this.getUnlocalizedName().substring(12) + "_" + upgradeNames[i]);
         }
     }
 
-    public Icon getIconFromDamage(int par1)
-    {
+    public Icon getIconFromDamage(int par1) {
         return icons[par1];
     }
 
     @SideOnly(Side.CLIENT)
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int x = 0; x < icons.length; x++)
-        {
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+        for (int x = 0; x < icons.length; x++) {
             par3List.add(new ItemStack(this, 1, x));
         }
     }

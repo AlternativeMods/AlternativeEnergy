@@ -19,18 +19,18 @@ public class BlockOutputMode extends SynchronizedBase {
 
     private EnumOutputMode[] modes = new EnumOutputMode[ForgeDirection.VALID_DIRECTIONS.length];
 
-    public BlockOutputMode(){
-        for(int i = 0; i < this.modes.length; i++){
+    public BlockOutputMode() {
+        for(int i = 0; i < this.modes.length; i++) {
             this.modes[i] = EnumOutputMode.DISABLED;
         }
     }
 
-    public EnumOutputMode getMode(ForgeDirection direction){
+    public EnumOutputMode getMode(ForgeDirection direction) {
         return this.modes[direction.ordinal()];
     }
 
-    public EnumOutputMode setMode(ForgeDirection direction, EnumOutputMode mode){
-        if(this.getMode(direction) != mode){
+    public EnumOutputMode setMode(ForgeDirection direction, EnumOutputMode mode) {
+        if(this.getMode(direction) != mode) {
             this.modes[direction.ordinal()] = mode;
             this.markDirty();
         }
@@ -41,7 +41,7 @@ public class BlockOutputMode extends SynchronizedBase {
     public void readFromStream(DataInput stream) throws IOException {
         int length = stream.readByte();
         this.modes = new EnumOutputMode[length];
-        for(int i = 0; i < length; i ++){
+        for(int i = 0; i < length; i ++) {
             this.modes[stream.readByte()] = EnumOutputMode.values()[stream.readByte()];
         }
     }
@@ -49,7 +49,7 @@ public class BlockOutputMode extends SynchronizedBase {
     @Override
     public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
         stream.writeByte(this.modes.length);
-        for(int i = 0; i < this.modes.length; i ++){
+        for(int i = 0; i < this.modes.length; i ++) {
             stream.writeByte(i);
             stream.writeByte(this.modes[i].ordinal());
         }
@@ -57,9 +57,11 @@ public class BlockOutputMode extends SynchronizedBase {
 
     @Override
     public void writeToNBT(NBTTagCompound nbt, String name) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         NBTTagList list = new NBTTagList();
-        for(int i = 0; i < this.modes.length; i ++){
+        for(int i = 0; i < this.modes.length; i ++) {
             NBTTagInt intTag = new NBTTagInt(i + "", this.modes[i].ordinal());
             list.appendTag(intTag);
         }
@@ -68,10 +70,12 @@ public class BlockOutputMode extends SynchronizedBase {
 
     @Override
     public void readFromNBT(NBTTagCompound nbt, String name) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         NBTTagList list = nbt.getTagList(name);
         this.modes = new EnumOutputMode[list.tagCount()];
-        for(int i = 0; i < list.tagCount(); i ++){
+        for(int i = 0; i < list.tagCount(); i ++) {
             NBTTagInt intTag = (NBTTagInt) list.tagAt(i);
             this.modes[i] = EnumOutputMode.values()[intTag.data];
         }

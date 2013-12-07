@@ -76,7 +76,7 @@ public class ConfigTag extends ConfigTagParent {
     }
 
     public void setHexValue(int i) {
-        setValue("0x" + Long.toString(((long) i) << 32 >>> 32, 16));
+        setValue("0x" + Long.toString(((long) i) << 32 > >> 32, 16));
     }
 
     public String getValue() {
@@ -144,24 +144,29 @@ public class ConfigTag extends ConfigTagParent {
 
     public void save(PrintWriter writer, int tabs, String bracequalifier, boolean first) {
         String vname;
-        if (qualifiedname.contains(".") && bracequalifier.length() > 0)
+        if (qualifiedname.contains(".") && bracequalifier.length() > 0) {
             vname = qualifiedname.substring(bracequalifier.length() + 1);
-        else
+        } else {
             vname = qualifiedname;
+        }
 
-        if (newline && !first)
+        if (newline && !first) {
             ConfigFile.writeLine(writer, "", tabs);
+        }
 
         writeComment(writer, tabs);
-        if (value != null)
+        if (value != null) {
             ConfigFile.writeLine(writer, vname + "=" + value, tabs);
+        }
 
-        if (!hasChildTags())
+        if (!hasChildTags()) {
             return;
+        }
 
         if (brace) {
-            if (value == null)
+            if (value == null) {
                 ConfigFile.writeLine(writer, vname, tabs);
+            }
             ConfigFile.writeLine(writer, "{", tabs);
             saveTagTree(writer, tabs + 1, qualifiedname);
             ConfigFile.writeLine(writer, "}", tabs);
@@ -190,8 +195,9 @@ public class ConfigTag extends ConfigTagParent {
 
     public ConfigTag useBraces() {
         brace = true;
-        if (parent.newlinemode == 1)
+        if (parent.newlinemode == 1) {
             newline = true;
+        }
 
         saveConfig();
         return this;

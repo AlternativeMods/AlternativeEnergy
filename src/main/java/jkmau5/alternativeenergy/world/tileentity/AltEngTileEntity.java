@@ -33,7 +33,9 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
         super.writeToNBT(tag);
 
         tag.setString("owner", this.owner);
-        if(this.inventory != null) this.inventory.writeToNBT(tag, "inventory");
+        if(this.inventory != null) {
+            this.inventory.writeToNBT(tag, "inventory");
+        }
     }
 
     @Override
@@ -41,7 +43,9 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
         super.readFromNBT(tag);
 
         this.owner = tag.getString("owner");
-        if(this.inventory != null) this.inventory.readFromNBT(tag, "inventory");
+        if(this.inventory != null) {
+            this.inventory.readFromNBT(tag, "inventory");
+        }
     }
 
     /**
@@ -50,26 +54,28 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
      * @param itemStack The stack that this TileEntity was created from
      * @param entity The entity that created this TileEntity
      */
-    public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity){}
+    public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity) {}
 
-    public boolean removeBlockByPlayer(EntityPlayer player){
+    public boolean removeBlockByPlayer(EntityPlayer player) {
         return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
     }
 
-    public boolean isOwner(String username){
+    public boolean isOwner(String username) {
         return this.owner.equals(username);
     }
 
-    public final void markBlockForUpdate(){
+    public final void markBlockForUpdate() {
         this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
     }
 
-    public final void notifyBlocksOfNeighborChange(){
+    public final void notifyBlocksOfNeighborChange() {
         this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord));
     }
 
-    public boolean blockActivated(EntityPlayer player, int side){
-        if(player.isSneaking()) return false;
+    public boolean blockActivated(EntityPlayer player, int side) {
+        if(player.isSneaking()) {
+            return false;
+        }
         ItemStack holding = player.getCurrentEquippedItem();
         /*if(holding != null){
             //Do something item specific here
@@ -77,7 +83,7 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
         return this.openGui(player);
     }
 
-    public boolean openGui(EntityPlayer player){
+    public boolean openGui(EntityPlayer player) {
         return false;
     }
 
@@ -106,7 +112,9 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
-        if(this.inventory != null) this.inventory.setInventorySlotContents(i, itemstack);
+        if(this.inventory != null) {
+            this.inventory.setInventorySlotContents(i, itemstack);
+        }
     }
 
     @Override
@@ -131,12 +139,16 @@ public abstract class AltEngTileEntity extends TileEntity implements IInventory,
 
     @Override
     public void openChest() {
-        if(this.inventory != null) this.inventory.openChest();
+        if(this.inventory != null) {
+            this.inventory.openChest();
+        }
     }
 
     @Override
     public void closeChest() {
-        if(this.inventory != null) this.inventory.closeChest();
+        if(this.inventory != null) {
+            this.inventory.closeChest();
+        }
     }
 
     @Override

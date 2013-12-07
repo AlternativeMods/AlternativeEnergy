@@ -25,7 +25,7 @@ public abstract class BlockTileEntity extends BlockContainer {
     @Getter
     private final ConfigTag blockConfig;
 
-    public BlockTileEntity(String unlocalizedName, Material material){
+    public BlockTileEntity(String unlocalizedName, Material material) {
         super(AlternativeEnergy.getInstance().getConfig().getTag("blocks").useBraces().getTag(unlocalizedName).useBraces().getTag("blockid").getIntValue(Utils.getFreeBlockID()), material);
         this.blockConfig = AlternativeEnergy.getInstance().getConfig().getTag("blocks").useBraces().getTag(unlocalizedName).useBraces();
         this.setUnlocalizedName("altEng." + unlocalizedName);
@@ -51,10 +51,12 @@ public abstract class BlockTileEntity extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-        if(world.isRemote) return;
+        if(world.isRemote) {
+            return;
+        }
         TileEntity tile = world.getBlockTileEntity(x, y, z);
-        if(tile != null && tile instanceof AltEngTileEntity){
-            if(entity != null && entity instanceof EntityPlayer){
+        if(tile != null && tile instanceof AltEngTileEntity) {
+            if(entity != null && entity instanceof EntityPlayer) {
                 ((AltEngTileEntity) tile).setOwner(((EntityPlayer) entity).username);
             }
             ((AltEngTileEntity) tile).constructFromItemStack(itemStack, entity);
@@ -64,7 +66,7 @@ public abstract class BlockTileEntity extends BlockContainer {
     @Override
     public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
-        if(tile != null && tile instanceof AltEngTileEntity){
+        if(tile != null && tile instanceof AltEngTileEntity) {
             return ((AltEngTileEntity) tile).removeBlockByPlayer(player);
         }
         return world.setBlockToAir(x, y, z);

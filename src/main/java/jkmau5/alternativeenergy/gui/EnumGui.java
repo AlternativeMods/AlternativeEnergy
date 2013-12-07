@@ -13,24 +13,24 @@ public enum EnumGui {
     private final boolean hasContainer;
     private static byte nextId = 0;
 
-    private EnumGui(boolean hasContainer){
+    private EnumGui(boolean hasContainer) {
         this.id = getNextId();
         this.hasContainer = hasContainer;
     }
 
-    public final byte getId(){
+    public final byte getId() {
         return this.id;
     }
 
-    private static byte getNextId(){
+    private static byte getNextId() {
         return nextId++;
     }
 
-    public boolean hasContainer(){
+    public boolean hasContainer() {
         return this.hasContainer;
     }
 
-    public static EnumGui fromId(int i){
+    public static EnumGui fromId(int i) {
         for (EnumGui e : values()) {
             if (e.getId() == i) {
                 return e;

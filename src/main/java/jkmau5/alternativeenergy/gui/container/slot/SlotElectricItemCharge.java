@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotElectricItemCharge extends AltEngSlot {
 
-    public SlotElectricItemCharge(IInventory inventory, int slotIndex, int posX, int posY){
+    public SlotElectricItemCharge(IInventory inventory, int slotIndex, int posX, int posY) {
         super(inventory, slotIndex, posX, posY);
     }
 

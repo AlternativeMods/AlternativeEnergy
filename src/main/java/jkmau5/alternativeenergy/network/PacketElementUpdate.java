@@ -19,8 +19,8 @@ public class PacketElementUpdate extends AbstractPacket {
     private int widgetID;
     private byte[] data;
 
-    public PacketElementUpdate(){} //We need the empty constructor here!
-    public PacketElementUpdate(int windowID, int widgetID, byte[] data){
+    public PacketElementUpdate() {} //We need the empty constructor here!
+    public PacketElementUpdate(int windowID, int widgetID, byte[] data) {
         this.windowID = windowID;
         this.widgetID = widgetID;
         this.data = data;
@@ -38,7 +38,7 @@ public class PacketElementUpdate extends AbstractPacket {
         this.windowID = data.readInt();
         this.widgetID = data.readInt();
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-        if(player.openContainer instanceof AltEngContainer && player.openContainer.windowId == this.windowID){
+        if(player.openContainer instanceof AltEngContainer && player.openContainer.windowId == this.windowID) {
             ((AltEngContainer) player.openContainer).handleElementDataClient(this.widgetID, data);
         }
     }

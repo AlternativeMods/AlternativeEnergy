@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class SynchronisationMapTileEntity<T extends AltEngTileEntity & ISynchronisationHandler> extends SynchronsiationMap<T> implements ISaveNBT {
 
-    public SynchronisationMapTileEntity(T handler){
+    public SynchronisationMapTileEntity(T handler) {
         super(handler);
     }
 
@@ -30,7 +30,7 @@ public class SynchronisationMapTileEntity<T extends AltEngTileEntity & ISynchron
 
     @Override
     protected Set<EntityPlayer> getPlayersWatching() {
-        if(handler.worldObj instanceof WorldServer){
+        if(handler.worldObj instanceof WorldServer) {
             return Utils.getPlayersWatchingBlock((WorldServer) handler.worldObj, handler.xCoord, handler.zCoord);
         }
         return ImmutableSet.of();

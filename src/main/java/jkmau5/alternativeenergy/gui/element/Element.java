@@ -30,17 +30,17 @@ public abstract class Element {
     @Setter protected AltEngContainer container;
 
     @SideOnly(Side.CLIENT)
-    public final boolean isMouseOver(int mouseX, int mouseY){
+    public final boolean isMouseOver(int mouseX, int mouseY) {
         return (mouseX >= this.x - 1) && (mouseX < this.x + this.w + 1) && (mouseY >= this.y - 1) && (mouseY < this.y + this.h + 1);
     }
 
     @SideOnly(Side.CLIENT)
-    public boolean mouseClicked(int mouseX, int mouseY, int button){
+    public boolean mouseClicked(int mouseX, int mouseY, int button) {
         return false;
     }
 
     @SideOnly(Side.CLIENT)
-    public void draw(AltEngGuiContainer gui, int guiX, int guiY, int mouseX, int mouseY){
+    public void draw(AltEngGuiContainer gui, int guiX, int guiY, int mouseX, int mouseY) {
         gui.drawTexturedModalRect(guiX + this.x, guiY + this.y, this.u, this.v, this.w, this.h);
     }
 
@@ -49,11 +49,11 @@ public abstract class Element {
         return null;
     }
 
-    public void initElement(ICrafting player){
+    public void initElement(ICrafting player) {
 
     }
 
-    public void updateElement(ICrafting player){
+    public void updateElement(ICrafting player) {
 
     }
 

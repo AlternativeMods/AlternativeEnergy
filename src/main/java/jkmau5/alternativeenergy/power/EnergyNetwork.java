@@ -31,30 +31,35 @@ public class EnergyNetwork {
     }
 
     public void addCable(TileEntityPowerCable cable) {
-        if(cables.contains(cable))
+        if(cables.contains(cable)) {
             return;
+        }
         cables.add(cable);
     }
 
     public void addInput(TileEntityPowerCable cable, TileEntity input) {
-        if(inputs.containsKey(input))
+        if(inputs.containsKey(input)) {
             return;
+        }
         inputs.put(input, cable);
     }
 
     public void removeInput(TileEntity input) {
-        if(!inputs.containsKey(input))
+        if(!inputs.containsKey(input)) {
             return;
+        }
         Map<TileEntity, TileEntityPowerCable> tempInputs = inputs;
         tempInputs.remove(input);
         inputs = tempInputs;
     }
 
     public boolean isAcceptor(TileEntityPowerCable cable, TileEntity input) {
-        if(!inputs.containsKey(input))
+        if(!inputs.containsKey(input)) {
             return false;
-        if(inputs.get(cable) == input)
+        }
+        if(inputs.get(cable) == input) {
             return true;
+        }
         return false;
     }
 
@@ -75,8 +80,9 @@ public class EnergyNetwork {
 
     public void setPower(int energy) {
         networkPower = energy;
-        if(networkPower > maxNetworkPower)
+        if(networkPower > maxNetworkPower) {
             networkPower = maxNetworkPower;
+        }
     }
 
     public int addPower(int energy) {
@@ -92,7 +98,8 @@ public class EnergyNetwork {
 
     public void drainPower(int energy) {
         networkPower -= energy;
-        if(networkPower < 0)
+        if(networkPower < 0) {
             networkPower = 0;
+        }
     }
 }

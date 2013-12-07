@@ -39,9 +39,9 @@ import java.util.Random;
  * You are allowed to change this code,
  * however, not to publish it without my permission.
  */
-@Optional.InterfaceList({
-        @Optional.Interface(iface = "ic2.api.item.ISpecialElectricItem", modid = "IC2"),
-        @Optional.Interface(iface = "carpentersblocks.api.ICarpentersHammer", modid = "CarpentersBlocks")
+@Optional.InterfaceList( {
+    @Optional.Interface(iface = "ic2.api.item.ISpecialElectricItem", modid = "IC2"),
+    @Optional.Interface(iface = "carpentersblocks.api.ICarpentersHammer", modid = "CarpentersBlocks")
 })
 public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectricItem, ICarpentersHammer {
 
@@ -55,13 +55,11 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerIcons(IconRegister iR)
-    {
+    public void registerIcons(IconRegister iR) {
         itemIcon = iR.registerIcon(Constants.TEXTURE_DOMAIN + ":" + this.getUnlocalizedName().substring(12));
     }
 
-    public Icon getIconFromDamage(int par1)
-    {
+    public Icon getIconFromDamage(int par1) {
         return itemIcon;
     }
 
@@ -71,10 +69,9 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
         list.add("Stored Power: " + storedPower + " PBu / " + maxStoredPower + " PBu");
 
-        if(GuiScreen.isShiftKeyDown()){
+        if(GuiScreen.isShiftKeyDown()) {
 
-        }
-        else {
+        } else {
             list.add("Hold shift to get more information");
         }
     }
@@ -90,15 +87,17 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
     //------------------------------------------------------------------------------
 
-    public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-    {
-        if(!canWrench(itemStack))
+    public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        if(!canWrench(itemStack)) {
             return false;
+        }
 
         int blockId = world.getBlockId(x, y, z);
         Block block = Block.blocksList[blockId];
 
-        if (block == null) return false;
+        if (block == null) {
+            return false;
+        }
 
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
@@ -109,18 +108,21 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
         if(tileEntity instanceof TileEntityPowerStorage) {
             if(!world.isRemote)
-                if(((TileEntityPowerStorage)tileEntity).setNextMode(player, ForgeDirection.getOrientation(side)))
+                if(((TileEntityPowerStorage)tileEntity).setNextMode(player, ForgeDirection.getOrientation(side))) {
                     drainWrenchPower(itemStack);
+                }
             return !world.isRemote;
         }
 
         if(AltEngCompat.hasBiblioCraft && !world.isRemote)
-            if(tryAnythingWithBiblioCraft(player, world, x, y, z, side, tileEntity))
+            if(tryAnythingWithBiblioCraft(player, world, x, y, z, side, tileEntity)) {
                 drainWrenchPower(itemStack);
+            }
 
         if (block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
-            if(!world.isRemote)
+            if(!world.isRemote) {
                 drainWrenchPower(itemStack);
+            }
             return !world.isRemote;
         }
 
@@ -131,98 +133,72 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
     public static boolean tryAnythingWithBiblioCraft(EntityPlayer player, World world, int x, int y, int z, int side, TileEntity tile) {
         boolean returnValue = false;
 
-        if (player.isSneaking())
-        {
-            if ((tile instanceof TileEntitySeat))
-            {
-                if (side == 1)
-                {
+        if (player.isSneaking()) {
+            if ((tile instanceof TileEntitySeat)) {
+                if (side == 1) {
                     returnValue = BiblioCraft_Compatibility.connectChairs(player, world, x, y, z);
-                }
-                else
-                {
+                } else {
                     returnValue = BiblioCraft_Compatibility.rotateSeat(tile);
                 }
             }
-            if ((tile instanceof TileEntityDiscRack))
-            {
+            if ((tile instanceof TileEntityDiscRack)) {
                 returnValue = BiblioCraft_Compatibility.discRackAngle(world, x, y, z);
             }
-            if ((tile instanceof TileEntityBookcase))
-            {
+            if ((tile instanceof TileEntityBookcase)) {
                 returnValue = BiblioCraft_Compatibility.rotateBookcase(tile);
             }
-            if ((tile instanceof TileEntityDinnerPlate))
-            {
+            if ((tile instanceof TileEntityDinnerPlate)) {
                 returnValue = BiblioCraft_Compatibility.rotateDinnerPlate(tile);
             }
-            if ((tile instanceof TileEntityGenericShelf))
-            {
+            if ((tile instanceof TileEntityGenericShelf)) {
                 returnValue = BiblioCraft_Compatibility.rotateGenericShelf(tile);
             }
-            if ((tile instanceof TileEntityLamp))
-            {
+            if ((tile instanceof TileEntityLamp)) {
                 returnValue = BiblioCraft_Compatibility.rotateLamp(tile);
             }
-            if ((tile instanceof TileEntityLantern))
-            {
+            if ((tile instanceof TileEntityLantern)) {
                 returnValue = BiblioCraft_Compatibility.rotateLantern(tile);
             }
-            if ((tile instanceof TileEntityMapFrame))
-            {
+            if ((tile instanceof TileEntityMapFrame)) {
                 returnValue = BiblioCraft_Compatibility.rotateMapFrame(tile);
             }
-            if ((tile instanceof TileEntityPotionShelf))
-            {
+            if ((tile instanceof TileEntityPotionShelf)) {
                 returnValue = BiblioCraft_Compatibility.rotatePotionShelf(tile);
             }
-            if ((tile instanceof TileEntityWeaponCase))
-            {
+            if ((tile instanceof TileEntityWeaponCase)) {
                 returnValue = BiblioCraft_Compatibility.rotateDisplayCase(tile);
             }
-            if ((tile instanceof TileEntityWeaponRack))
-            {
+            if ((tile instanceof TileEntityWeaponRack)) {
                 returnValue = BiblioCraft_Compatibility.rotateWeaponRack(tile);
             }
-            if ((tile instanceof TileEntityWritingDesk))
-            {
+            if ((tile instanceof TileEntityWritingDesk)) {
                 returnValue = BiblioCraft_Compatibility.rotateDesk(tile);
             }
-            if ((tile instanceof TileEntityTypeMachine))
-            {
+            if ((tile instanceof TileEntityTypeMachine)) {
                 returnValue = BiblioCraft_Compatibility.rotate4baseMeta(world, x, y, z);
                 world.markBlockForUpdate(x, y, z);
             }
-            if ((tile instanceof TileEntityPrintPress))
-            {
+            if ((tile instanceof TileEntityPrintPress)) {
                 returnValue = BiblioCraft_Compatibility.rotate4baseMeta(world, x, y, z);
                 world.markBlockForUpdate(x, y, z);
             }
-            if ((tile instanceof TileEntityArmorStand))
-            {
+            if ((tile instanceof TileEntityArmorStand)) {
                 returnValue = BiblioCraft_Compatibility.rotateArmorStand(world, x, y, z);
             }
-            if ((tile instanceof TileEntityTable))
-            {
+            if ((tile instanceof TileEntityTable)) {
                 returnValue = BiblioCraft_Compatibility.removeTableCarpet(world, tile, x, y, z);
             }
-        }
-        else
-        {
-            if ((tile instanceof TileEntityDiscRack))
-            {
+        } else {
+            if ((tile instanceof TileEntityDiscRack)) {
                 returnValue = BiblioCraft_Compatibility.discRackRotate(world, x, y, z);
             }
-            if ((tile instanceof TileEntityLamp))
-            {
+            if ((tile instanceof TileEntityLamp)) {
                 returnValue = BiblioCraft_Compatibility.setLampStyle(tile);
             }
-            if ((tile instanceof TileEntityLantern))
-            {
+            if ((tile instanceof TileEntityLantern)) {
                 returnValue = BiblioCraft_Compatibility.setLanternStyle(tile);
             }
-            if ((tile instanceof TileEntityWeaponCase))
-            {
+            if ((tile instanceof TileEntityWeaponCase)) {
                 returnValue = BiblioCraft_Compatibility.setDisplayCaseStyle(tile);
             }
 
@@ -234,11 +210,9 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         private static TileEntity tile1;
         private static TileEntity tile2;
 
-        public static boolean removeTableCarpet(World world, TileEntity tile, int i, int j, int k)
-        {
+        public static boolean removeTableCarpet(World world, TileEntity tile, int i, int j, int k) {
             TileEntityTable tableTile = (TileEntityTable) tile;
-            if (tableTile != null)
-            {
+            if (tableTile != null) {
                 dropCarpet(world, i, j, k, 2);
                 tableTile.setCarpet(null);
                 return true;
@@ -248,42 +222,30 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
         private static void dropCarpet(World world, int i, int j, int k, int slot) {
             TileEntity tileEntity = world.getBlockTileEntity(i, j, k);
-            if (!(tileEntity instanceof IInventory))
-            {
+            if (!(tileEntity instanceof IInventory)) {
                 return;
             }
 
             IInventory inventory = (IInventory)tileEntity;
             TileEntityTable tableTile = (TileEntityTable)tileEntity;
             ItemStack stuff;
-            if ((tableTile.isSlotFull()) && (slot == 0))
-            {
+            if ((tableTile.isSlotFull()) && (slot == 0)) {
                 stuff = inventory.getStackInSlot(0);
-            }
-            else
-            {
-                if ((tableTile.isClothSlotFull()) && (slot == 1))
-                {
+            } else {
+                if ((tableTile.isClothSlotFull()) && (slot == 1)) {
                     stuff = inventory.getStackInSlot(1);
-                }
-                else
-                {
-                    if ((tableTile.isCarpetFull()) && (slot == 2))
-                    {
+                } else {
+                    if ((tableTile.isCarpetFull()) && (slot == 2)) {
                         stuff = inventory.getStackInSlot(2);
-                    }
-                    else
-                    {
+                    } else {
                         stuff = null;
                     }
                 }
             }
-            if ((stuff != null) && (stuff.stackSize > 0))
-            {
+            if ((stuff != null) && (stuff.stackSize > 0)) {
                 EntityItem entityItem = new EntityItem(world, i + 0.5F, j + 1.4F, k + 0.5F, new ItemStack(stuff.itemID, stuff.stackSize, stuff.getItemDamage()));
 
-                if (stuff.hasTagCompound())
-                {
+                if (stuff.hasTagCompound()) {
                     entityItem.getEntityItem().setTagCompound((NBTTagCompound)stuff.getTagCompound().copy());
                 }
                 entityItem.motionX = 0.0D;
@@ -294,25 +256,18 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             }
         }
 
-        public static boolean rotateArmorStand(World world, int i, int j, int k)
-        {
+        public static boolean rotateArmorStand(World world, int i, int j, int k) {
             int currMeta = world.getBlockMetadata(i, j, k);
-            if (currMeta >= 3)
-            {
+            if (currMeta >= 3) {
                 currMeta = 0;
-            }
-            else
-            {
+            } else {
                 currMeta++;
             }
             world.setBlockMetadataWithNotify(i, j, k, currMeta, 0);
             currMeta = world.getBlockMetadata(i, j + 1, k);
-            if (currMeta >= 7)
-            {
+            if (currMeta >= 7) {
                 currMeta = 4;
-            }
-            else
-            {
+            } else {
                 currMeta++;
             }
             world.setBlockMetadataWithNotify(i, j + 1, k, currMeta, 0);
@@ -321,16 +276,12 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return true;
         }
 
-        public static boolean rotate4baseMeta(World world, int i, int j, int k)
-        {
+        public static boolean rotate4baseMeta(World world, int i, int j, int k) {
             int currMeta = world.getBlockMetadata(i, j, k);
 
-            if (currMeta >= 3)
-            {
+            if (currMeta >= 3) {
                 currMeta = 0;
-            }
-            else
-            {
+            } else {
                 currMeta++;
             }
 
@@ -339,18 +290,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return true;
         }
 
-        public static boolean rotateSeat(TileEntity tile)
-        {
-            if ((tile instanceof TileEntitySeat))
-            {
+        public static boolean rotateSeat(TileEntity tile) {
+            if ((tile instanceof TileEntitySeat)) {
                 TileEntitySeat seat = (TileEntitySeat)tile;
                 int angle = seat.getAngle();
-                if (angle >= 3)
-                {
+                if (angle >= 3) {
                     angle = 0;
-                }
-                else
-                {
+                } else {
                     angle++;
                 }
                 seat.setAngle(angle);
@@ -358,20 +304,14 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return false;
         }
 
-        public static boolean rotateBookcase(TileEntity tile)
-        {
-            if ((tile instanceof TileEntityBookcase))
-            {
+        public static boolean rotateBookcase(TileEntity tile) {
+            if ((tile instanceof TileEntityBookcase)) {
                 TileEntityBookcase te = (TileEntityBookcase)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -382,18 +322,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateDinnerPlate(TileEntity tile) {
-            if ((tile instanceof TileEntityDinnerPlate))
-            {
+            if ((tile instanceof TileEntityDinnerPlate)) {
                 TileEntityDinnerPlate te = (TileEntityDinnerPlate)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -404,18 +339,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateGenericShelf(TileEntity tile) {
-            if ((tile instanceof TileEntityGenericShelf))
-            {
+            if ((tile instanceof TileEntityGenericShelf)) {
                 TileEntityGenericShelf te = (TileEntityGenericShelf)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -426,18 +356,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateLamp(TileEntity tile) {
-            if ((tile instanceof TileEntityLamp))
-            {
+            if ((tile instanceof TileEntityLamp)) {
                 TileEntityLamp te = (TileEntityLamp)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -448,18 +373,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean setLampStyle(TileEntity tile) {
-            if ((tile instanceof TileEntityLamp))
-            {
+            if ((tile instanceof TileEntityLamp)) {
                 TileEntityLamp te = (TileEntityLamp)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getStyle();
-                    if (currAngle >= 2)
-                    {
+                    if (currAngle >= 2) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setStyle(currAngle);
@@ -470,18 +390,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateLantern(TileEntity tile) {
-            if ((tile instanceof TileEntityLantern))
-            {
+            if ((tile instanceof TileEntityLantern)) {
                 TileEntityLantern te = (TileEntityLantern)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -492,18 +407,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean setLanternStyle(TileEntity tile) {
-            if ((tile instanceof TileEntityLantern))
-            {
+            if ((tile instanceof TileEntityLantern)) {
                 TileEntityLantern te = (TileEntityLantern)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getStyle();
-                    if (currAngle >= 2)
-                    {
+                    if (currAngle >= 2) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setStyle(currAngle);
@@ -514,18 +424,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateMapFrame(TileEntity tile) {
-            if ((tile instanceof TileEntityMapFrame))
-            {
+            if ((tile instanceof TileEntityMapFrame)) {
                 TileEntityMapFrame te = (TileEntityMapFrame)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -536,18 +441,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotatePotionShelf(TileEntity tile) {
-            if ((tile instanceof TileEntityPotionShelf))
-            {
+            if ((tile instanceof TileEntityPotionShelf)) {
                 TileEntityPotionShelf te = (TileEntityPotionShelf)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -557,32 +457,21 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return false;
         }
 
-        public static boolean rotateDisplayCase(TileEntity tile)
-        {
-            if ((tile instanceof TileEntityWeaponCase))
-            {
+        public static boolean rotateDisplayCase(TileEntity tile) {
+            if ((tile instanceof TileEntityWeaponCase)) {
                 TileEntityWeaponCase te = (TileEntityWeaponCase)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle > 3)
-                    {
-                        if (currAngle >= 7)
-                        {
+                    if (currAngle > 3) {
+                        if (currAngle >= 7) {
                             currAngle = 4;
-                        }
-                        else
-                        {
+                        } else {
                             currAngle++;
                         }
 
-                    }
-                    else if (currAngle >= 3)
-                    {
+                    } else if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
 
@@ -594,18 +483,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean setDisplayCaseStyle(TileEntity tile) {
-            if ((tile instanceof TileEntityWeaponCase))
-            {
+            if ((tile instanceof TileEntityWeaponCase)) {
                 TileEntityWeaponCase te = (TileEntityWeaponCase)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle > 3)
-                    {
+                    if (currAngle > 3) {
                         currAngle -= 4;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle += 4;
                     }
                     te.setAngle(currAngle);
@@ -616,18 +500,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateWeaponRack(TileEntity tile) {
-            if ((tile instanceof TileEntityWeaponRack))
-            {
+            if ((tile instanceof TileEntityWeaponRack)) {
                 TileEntityWeaponRack te = (TileEntityWeaponRack)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -638,18 +517,13 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         }
 
         public static boolean rotateDesk(TileEntity tile) {
-            if ((tile instanceof TileEntityWritingDesk))
-            {
+            if ((tile instanceof TileEntityWritingDesk)) {
                 TileEntityWritingDesk te = (TileEntityWritingDesk)tile;
-                if (te != null)
-                {
+                if (te != null) {
                     int currAngle = te.getAngle();
-                    if (currAngle >= 3)
-                    {
+                    if (currAngle >= 3) {
                         currAngle = 0;
-                    }
-                    else
-                    {
+                    } else {
                         currAngle++;
                     }
                     te.setAngle(currAngle);
@@ -659,20 +533,15 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return false;
         }
 
-        public static boolean discRackAngle(World world, int i, int j, int k)
-        {
+        public static boolean discRackAngle(World world, int i, int j, int k) {
             TileEntity tile = world.getBlockTileEntity(i, j, k);
-            if ((tile != null) && ((tile instanceof TileEntityDiscRack)))
-            {
+            if ((tile != null) && ((tile instanceof TileEntityDiscRack))) {
                 TileEntityDiscRack discTile = (TileEntityDiscRack)tile;
                 int angle = discTile.getAngle();
 
-                if (angle >= 3)
-                {
+                if (angle >= 3) {
                     discTile.setAngle(0);
-                }
-                else
-                {
+                } else {
                     angle++;
                     discTile.setAngle(angle);
                 }
@@ -683,12 +552,10 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
         public static boolean discRackRotate(World world, int i, int j, int k) {
             TileEntity tile = world.getBlockTileEntity(i, j, k);
-            if ((tile != null) && ((tile instanceof TileEntityDiscRack)))
-            {
+            if ((tile != null) && ((tile instanceof TileEntityDiscRack))) {
                 TileEntityDiscRack discTile = (TileEntityDiscRack)tile;
                 int angle = discTile.getVertAngle();
-                if (angle == 1)
-                {
+                if (angle == 1) {
                     discTile.setWallRotation();
                     return true;
                 }
@@ -697,17 +564,12 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return false;
         }
 
-        public static boolean connectChairs(EntityPlayer player, World world, int i, int j, int k)
-        {
-            if (player.isSneaking())
-            {
-                if (tile1 == null)
-                {
+        public static boolean connectChairs(EntityPlayer player, World world, int i, int j, int k) {
+            if (player.isSneaking()) {
+                if (tile1 == null) {
                     tile1 = world.getBlockTileEntity(i, j, k);
-                    if (tile1 != null)
-                    {
-                        if ((tile1 instanceof TileEntitySeat))
-                        {
+                    if (tile1 != null) {
+                        if ((tile1 instanceof TileEntitySeat)) {
                             player.addChatMessage(StatCollector.translateToLocal("screwgun.firstSeat"));
                             return true;
                         }
@@ -718,15 +580,11 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
                     }
                 }
 
-                if ((tile1 != null) && ((tile1 instanceof TileEntitySeat)))
-                {
-                    if ((tile1.xCoord != i) || (tile1.yCoord != j) || (tile1.zCoord != k))
-                    {
+                if ((tile1 != null) && ((tile1 instanceof TileEntitySeat))) {
+                    if ((tile1.xCoord != i) || (tile1.yCoord != j) || (tile1.zCoord != k)) {
                         tile2 = world.getBlockTileEntity(i, j, k);
-                        if (tile2 != null)
-                        {
-                            if ((tile2 instanceof TileEntitySeat))
-                            {
+                        if (tile2 != null) {
+                            if ((tile2 instanceof TileEntitySeat)) {
                                 player.addChatMessage(StatCollector.translateToLocal("screwgun.secondSeat"));
 
                                 int diffX = tile1.xCoord - tile2.xCoord;
@@ -750,94 +608,62 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
             return false;
         }
 
-        public static void setChairConnects(TileEntitySeat seatTile1, TileEntitySeat seatTile2, int diffX, int diffY, int diffZ)
-        {
-            if (diffY != 0)
-            {
+        public static void setChairConnects(TileEntitySeat seatTile1, TileEntitySeat seatTile2, int diffX, int diffY, int diffZ) {
+            if (diffY != 0) {
                 return;
             }
-            if ((diffX == 1) && (diffZ == 0))
-            {
-                if (!seatTile1.getWestConnect())
-                {
+            if ((diffX == 1) && (diffZ == 0)) {
+                if (!seatTile1.getWestConnect()) {
                     seatTile1.setWestConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile1.setWestConnect(false);
                 }
-                if (!seatTile2.getEastConnect())
-                {
+                if (!seatTile2.getEastConnect()) {
                     seatTile2.setEastConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile2.setEastConnect(false);
                 }
-            }
-            else if ((diffX == -1) && (diffZ == 0))
-            {
-                if (!seatTile1.getEastConnect())
-                {
+            } else if ((diffX == -1) && (diffZ == 0)) {
+                if (!seatTile1.getEastConnect()) {
                     seatTile1.setEastConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile1.setEastConnect(false);
                 }
-                if (!seatTile2.getWestConnect())
-                {
+                if (!seatTile2.getWestConnect()) {
                     seatTile2.setWestConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile2.setWestConnect(false);
                 }
-            }
-            else if ((diffZ == 1) && (diffX == 0))
-            {
-                if (!seatTile1.getNorthConnect())
-                {
+            } else if ((diffZ == 1) && (diffX == 0)) {
+                if (!seatTile1.getNorthConnect()) {
                     seatTile1.setNorthConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile1.setNorthConnect(false);
                 }
-                if (!seatTile2.getSouthConnect())
-                {
+                if (!seatTile2.getSouthConnect()) {
                     seatTile2.setSouthConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile2.setSouthConnect(false);
                 }
-            }
-            else if ((diffZ == -1) && (diffX == 0))
-            {
-                if (!seatTile1.getSouthConnect())
-                {
+            } else if ((diffZ == -1) && (diffX == 0)) {
+                if (!seatTile1.getSouthConnect()) {
                     seatTile1.setSouthConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile1.setSouthConnect(false);
                 }
-                if (!seatTile2.getNorthConnect())
-                {
+                if (!seatTile2.getNorthConnect()) {
                     seatTile2.setNorthConnect(true);
-                }
-                else
-                {
+                } else {
                     seatTile2.setNorthConnect(false);
                 }
             }
         }
     }
 
-    public static void dropItemStackAsEntity(World world, int x, int y, int z, ItemStack itemStack)
-    {
-        if (itemStack == null) return;
+    public static void dropItemStackAsEntity(World world, int x, int y, int z, ItemStack itemStack) {
+        if (itemStack == null) {
+            return;
+        }
 
         Random random = new Random();
 
@@ -874,9 +700,9 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
 
                 ItemStack wrenchDrop = iWrenchable.getWrenchDrop(player);
                 if (wrenchDrop != null) {
-                    if (drops.isEmpty())
+                    if (drops.isEmpty()) {
                         drops.add(wrenchDrop);
-                    else {
+                    } else {
                         drops.set(0, wrenchDrop);
                     }
                 }
@@ -895,8 +721,7 @@ public class ItemAlternativeWrench extends AltEngItem implements ISpecialElectri
         return false;
     }
 
-    public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6)
-    {
+    public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6) {
         return true;
     }
 

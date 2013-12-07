@@ -18,11 +18,11 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
     private long mouseOverStart;
     private final List<ToolTipLine> delegate = Lists.newArrayList();
 
-    public ToolTip(long delay){
+    public ToolTip(long delay) {
         this.delay = delay;
     }
 
-    public ToolTip(){
+    public ToolTip() {
         this(0L);
     }
 
@@ -31,35 +31,43 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         return this.delegate;
     }
 
-    public boolean add(String line){
+    public boolean add(String line) {
         return this.add(new ToolTipLine(line));
     }
 
-    public void onTick(boolean mouseOver){
-        if(this.delay == 0L) return;
-        if(mouseOver && this.mouseOverStart == 0){
+    public void onTick(boolean mouseOver) {
+        if(this.delay == 0L) {
+            return;
+        }
+        if(mouseOver && this.mouseOverStart == 0) {
             this.mouseOverStart = System.currentTimeMillis();
-        }else{
+        } else {
             this.mouseOverStart = 0;
         }
     }
 
-    public boolean isReady(){
-        if(this.delay == 0) return true;
-        if(this.mouseOverStart == 0) return false;
+    public boolean isReady() {
+        if(this.delay == 0) {
+            return true;
+        }
+        if(this.mouseOverStart == 0) {
+            return false;
+        }
         return System.currentTimeMillis() - this.mouseOverStart >= this.delay;
     }
 
-    public List<String> toStringList(){
+    public List<String> toStringList() {
         List<String> ret = Lists.newArrayListWithCapacity(this.size());
-        for(ToolTipLine line : this) ret.add(line.getText());
+        for(ToolTipLine line : this) {
+            ret.add(line.getText());
+        }
         return ret;
     }
 
-    public void refresh(){}
+    public void refresh() {}
 
     public static ToolTip buildToolTip(String tipTag, String... vars) {
-        try{
+        try {
             ToolTip toolTip = new ToolTip(750);
             String text = StatCollector.translateToLocalFormatted(tipTag, vars);
             for (String var : vars) {
@@ -72,7 +80,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
                 toolTip.add(new ToolTipLine(tip));
             }
             return toolTip;
-        }catch(RuntimeException ex){
+        } catch(RuntimeException ex) {
             AltEngLog.severe(ex, "Failed to parse tooltip %s", tipTag);
             throw ex;
         }

@@ -24,7 +24,7 @@ public abstract class AbstractPacket {
     private static BiMap<Integer, Class<? extends AbstractPacket>> packets = HashBiMap.create();
     @Getter(AccessLevel.PROTECTED) private EntityPlayer sender;
 
-    private static void registerPacket(int id, Class<? extends AbstractPacket> cl){
+    private static void registerPacket(int id, Class<? extends AbstractPacket> cl) {
         packets.put(id, cl);
     }
 
@@ -40,44 +40,44 @@ public abstract class AbstractPacket {
         registerPacket(8, PacketGuiCloseSaveData.class);
     }
 
-    public final Packet250CustomPayload getPacket(){
+    public final Packet250CustomPayload getPacket() {
         Packet250CustomPayload ret = null;
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         try {
             output.write(this.getID());
             this.writePacket(output);
             ret = PacketDispatcher.getPacket("AltEng", output.toByteArray());
-        }catch(IOException e) {
+        } catch(IOException e) {
             AltEngLog.severe(e, "Error while writing packet data for packet " + this.getID());
         }
         return ret;
     }
 
-    public static AbstractPacket readPacket(Packet250CustomPayload packet, EntityPlayer player){
+    public static AbstractPacket readPacket(Packet250CustomPayload packet, EntityPlayer player) {
         AbstractPacket ret = null;
         ByteArrayInputStream arrayStream = null;
         DataInputStream stream = null;
-        try{
+        try {
             arrayStream = new ByteArrayInputStream(packet.data);
             stream = new DataInputStream(arrayStream);
 
             int packetID = stream.read();
             AbstractPacket nPacket = packets.get(packetID).newInstance();
             nPacket.sender = player;
-            if(nPacket != null){
+            if(nPacket != null) {
                 nPacket.readPacket(stream);
             }
             ret = nPacket;
-        }catch (Exception e){
+        } catch (Exception e) {
             AltEngLog.severe(e, "Error while reading packet");
-        }finally {
+        } finally {
             IOUtils.closeQuietly(arrayStream);
             IOUtils.closeQuietly(stream);
         }
         return ret;
     }
 
-    public final int getID(){
+    public final int getID() {
         return packets.inverse().get(this.getClass());
     }
 

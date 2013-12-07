@@ -30,7 +30,7 @@ public abstract class AltEngGuiButton extends GuiButton {
     @Setter
     private ToolTip toolTip;
 
-    public AltEngGuiButton(int id, int x, int y, String label){
+    public AltEngGuiButton(int id, int x, int y, String label) {
         this(id, x, y, 200, StandardButtonTextureSets.LARGE_BUTTON, label);
     }
 
@@ -52,8 +52,12 @@ public abstract class AltEngGuiButton extends GuiButton {
     }
 
     public int getTextColor(boolean mouseOver) {
-        if(!this.enabled) return 0xA0A0A0;
-        if(mouseOver) return 0xFFFFA0;
+        if(!this.enabled) {
+            return 0xA0A0A0;
+        }
+        if(mouseOver) {
+            return 0xFFFFA0;
+        }
         return 0xE0E0E0;
     }
 
@@ -66,8 +70,10 @@ public abstract class AltEngGuiButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft minecraft, int mouseX, int mouseY){
-        if (!this.drawButton) return;
+    public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
+        if (!this.drawButton) {
+            return;
+        }
         FontRenderer fontrenderer = minecraft.fontRenderer;
         bindButtonTextures(minecraft);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

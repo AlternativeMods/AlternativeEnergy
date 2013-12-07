@@ -19,8 +19,8 @@ public class PacketGuiString extends AbstractPacket {
     private byte dataId;
     private String str;
 
-    public PacketGuiString(){}
-    public PacketGuiString(int windowId, int dataId, String str){
+    public PacketGuiString() {}
+    public PacketGuiString(int windowId, int dataId, String str) {
         this.windowId = ((byte)windowId);
         this.dataId = ((byte)dataId);
         this.str = str;
@@ -40,7 +40,7 @@ public class PacketGuiString extends AbstractPacket {
         this.str = data.readUTF();
 
         EntityClientPlayerMP player = FMLClientHandler.instance().getClient().thePlayer;
-        if(player.openContainer instanceof AltEngContainer && player.openContainer.windowId == this.windowId){
+        if(player.openContainer instanceof AltEngContainer && player.openContainer.windowId == this.windowId) {
             ((AltEngContainer) player.openContainer).updateString(this.dataId, this.str);
         }
     }

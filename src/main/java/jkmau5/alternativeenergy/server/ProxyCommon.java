@@ -12,20 +12,20 @@ import net.minecraft.world.World;
  */
 public class ProxyCommon {
 
-    public void registerEventHandlers(){
+    public void registerEventHandlers() {
         NetworkRegistry.instance().registerChannel(new PacketHandler(), "AltEng");
         NetworkRegistry.instance().registerGuiHandler(AlternativeEnergy.getInstance(), new GuiHandler());
     }
 
-    public void initCompat(){
+    public void initCompat() {
 
     }
 
-    public void registerRenderers(){
+    public void registerRenderers() {
 
     }
 
-    public long getTicks(World world){
+    public long getTicks(World world) {
         return world.getTotalWorldTime();
     }
 }

@@ -46,7 +46,7 @@ import java.util.Random;
  *
  * @author jk-5
  */
-@Optional.InterfaceList({
+@Optional.InterfaceList( {
     @Optional.Interface(iface = "dan200.computer.api.IPeripheral", modid = "ComputerCraft"),
     @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
     @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
@@ -82,23 +82,27 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     @Override
-    public void onSynced(List<ISynchronized> changes){
-        for(ISynchronized sync : changes){
-            if(sync instanceof BlockOutputMode){
+    public void onSynced(List<ISynchronized> changes) {
+        for(ISynchronized sync : changes) {
+            if(sync instanceof BlockOutputMode) {
                 this.markBlockForUpdate();
             }
         }
     }
 
     public void setMode(ForgeDirection side, EnumOutputMode var) {
-        if(side == ForgeDirection.UNKNOWN) return;
+        if(side == ForgeDirection.UNKNOWN) {
+            return;
+        }
         this.outputMode.setMode(side, var);
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord));
     }
 
     public EnumOutputMode getMode(ForgeDirection side) {
-        if(side == ForgeDirection.UNKNOWN) return null;
+        if(side == ForgeDirection.UNKNOWN) {
+            return null;
+        }
         return this.outputMode.getMode(side);
     }
 
@@ -110,9 +114,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         return this.getMaxStoredPower() - this.storedPower.getValue();
     }
 
-    public void setPowerStored(int storage){
+    public void setPowerStored(int storage) {
         this.storedPower.setValue(storage);
-        if(storedPower.getValue() > this.maxStoredPower){
+        if(storedPower.getValue() > this.maxStoredPower) {
             storedPower.setValue(this.maxStoredPower);
         }
     }
@@ -121,9 +125,10 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         readFromNBT(itemStack.getTagCompound());
     }
 
-    public static void dropItemStackAsEntity(World world, int x, int y, int z, ItemStack itemStack)
-    {
-        if (itemStack == null) return;
+    public static void dropItemStackAsEntity(World world, int x, int y, int z, ItemStack itemStack) {
+        if (itemStack == null) {
+            return;
+        }
 
         Random random = new Random();
 
@@ -138,8 +143,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     public boolean removeBlockByPlayer(EntityPlayer player) {
-        if(worldObj.isRemote)
+        if(worldObj.isRemote) {
             return this.worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+        }
         ItemStack itemStack = new ItemStack(AltEngBlocks.blockPowerStorage, 1, getBlockMetadata());
         AltEngSupport.initiateNBTTag(itemStack);
         writeToNBT(itemStack.getTagCompound());
@@ -147,9 +153,11 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
     }
 
-    public EnumOutputMode getNextMode(EnumOutputMode mode){
+    public EnumOutputMode getNextMode(EnumOutputMode mode) {
         int ordinal = mode.ordinal() + 1;
-        if(ordinal > EnumOutputMode.values().length - 1) ordinal = 0;
+        if(ordinal > EnumOutputMode.values().length - 1) {
+            ordinal = 0;
+        }
         return EnumOutputMode.values()[ordinal];
     }
 
@@ -163,14 +171,17 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Override
     public boolean blockActivated(EntityPlayer player, int sideHit) {
         if(this instanceof TileEntityLinkBox)
-            if(((TileEntityLinkBox)this).isLocked() && !this.isOwner(player.username))
+            if(((TileEntityLinkBox)this).isLocked() && !this.isOwner(player.username)) {
                 return super.blockActivated(player, sideHit);
+            }
         if(player.getHeldItem() != null && AltEngCompat.isWrench(player.getHeldItem())) {
             ForgeDirection side = ForgeDirection.getOrientation(sideHit);
-            if(this.worldObj.isRemote) return true;
+            if(this.worldObj.isRemote) {
+                return true;
+            }
             if(player.isSneaking()) {
                 return false;
-            }else{
+            } else {
                 setNextMode(player, side);
                 return true;
             }
@@ -179,17 +190,21 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     @Override
-    public void invalidate(){
-        if(!this.worldObj.isRemote) this.onUnload();
+    public void invalidate() {
+        if(!this.worldObj.isRemote) {
+            this.onUnload();
+        }
     }
 
     @Override
-    public void onChunkUnload(){
-        if(!this.worldObj.isRemote) this.onUnload();
+    public void onChunkUnload() {
+        if(!this.worldObj.isRemote) {
+            this.onUnload();
+        }
     }
 
     private void onUnload() {
-        if(AltEngCompat.hasIC2){
+        if(AltEngCompat.hasIC2) {
             if(this.addedToEnet) {
                 MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
                 this.addedToEnet = false;
@@ -198,11 +213,11 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
         super.updateEntity();
-        if(!this.worldObj.isRemote){
-            if(AltEngCompat.hasIC2){
-                if(!this.addedToEnet){
+        if(!this.worldObj.isRemote) {
+            if(AltEngCompat.hasIC2) {
+                if(!this.addedToEnet) {
                     MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
                     this.addedToEnet = true;
                 }
@@ -214,7 +229,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
                 this.euToConvert = 0;
             }
 
-            if(AltEngCompat.hasBC){
+            if(AltEngCompat.hasBC) {
                 this.convertBC();
                 this.tryOutputtingEnergy();
             }
@@ -230,10 +245,12 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     }
 
     private void outputToPowerCables() {
-        if(this.storedPower.getValue() < 1) return;
+        if(this.storedPower.getValue() < 1) {
+            return;
+        }
 
         for(ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if(this.outputMode.getMode(side) == EnumOutputMode.OUTPUT){
+            if(this.outputMode.getMode(side) == EnumOutputMode.OUTPUT) {
                 TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
 
                 if(tmpTile != null && tmpTile instanceof TileEntityPowerCable) {
@@ -243,7 +260,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
                     if(network != null) {
                         if(this.storedPower.getValue() >= 0.0) {
                             int toSend = (int) Math.ceil(this.storedPower.getValue());
-                            if(this.storedPower.getValue() > 5.0){
+                            if(this.storedPower.getValue() > 5.0) {
                                 toSend = 5;
                             }
 
@@ -267,52 +284,53 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Override
     @Optional.Method(modid = "ComputerCraft")
     public String[] getMethodNames() {
-        return new String[]{"setMode", "getMode", "getEnergyStored", "getCapacity"};
+        return new String[] {"setMode", "getMode", "getEnergyStored", "getCapacity"};
     }
 
     @Override
     @Optional.Method(modid = "ComputerCraft")
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
-        if(worldObj.isRemote)
+        if(worldObj.isRemote) {
             return new Object[0];
+        }
 
         switch(method) {
             case 0: // setOutput
                 if(arguments[0] instanceof String) {
                     ForgeDirection output = ForgeDirection.valueOf((String) arguments[0]);
-                    if(output != null && output != ForgeDirection.UNKNOWN){
+                    if(output != null && output != ForgeDirection.UNKNOWN) {
                         if(arguments[1] instanceof String) {
                             EnumOutputMode mode = EnumOutputMode.valueOf((String) arguments[1]);
-                            if(mode == null){
+                            if(mode == null) {
                                 return new Object[] {"Invalid Mode"};
                             }
-                            if(this.outputMode.getMode(output) == mode){
-                                return new Object[]{false};
+                            if(this.outputMode.getMode(output) == mode) {
+                                return new Object[] {false};
                             }
                             this.outputMode.setMode(output, mode);
                             this.markBlockForUpdate();
                             this.notifyBlocksOfNeighborChange();
                             return new Object[] {true};
                         }
-                    }else{
+                    } else {
                         return new Object[] {"Invalid Side"};
                     }
                 }
             case 1: // getOutput
                 if(arguments[0] instanceof String) {
                     ForgeDirection side = ForgeDirection.valueOf((String) arguments[0]);
-                    if(side == null || side == ForgeDirection.UNKNOWN){
-                        return new Object[]{"Invalid Side"};
-                    }else{
-                        return new Object[]{this.outputMode.getMode(side)};
+                    if(side == null || side == ForgeDirection.UNKNOWN) {
+                        return new Object[] {"Invalid Side"};
+                    } else {
+                        return new Object[] {this.outputMode.getMode(side)};
                     }
                 }
             case 2: // getEnergyStored
-                return new Object[]{Math.floor(this.storedPower.getValue())};
+                return new Object[] {Math.floor(this.storedPower.getValue())};
             case 3: // getCapacity
-                return new Object[]{Math.floor(this.maxStoredPower)};
+                return new Object[] {Math.floor(this.maxStoredPower)};
         }
-        return new Object[]{"Invalid Method"};
+        return new Object[] {"Invalid Method"};
     }
 
     @Override
@@ -369,9 +387,15 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Override
     @Optional.Method(modid = "IC2")
     public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
-        if(tileEntity == null) return false;
-        if(tileEntity instanceof TileEntityPowerStorage) return false;
-        if(tileEntity instanceof TileEntityPowerCable) return false;
+        if(tileEntity == null) {
+            return false;
+        }
+        if(tileEntity instanceof TileEntityPowerStorage) {
+            return false;
+        }
+        if(tileEntity instanceof TileEntityPowerCable) {
+            return false;
+        }
         return this.outputMode.getMode(forgeDirection) == EnumOutputMode.INPUT;
     }
 
@@ -438,9 +462,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Optional.Method(modid = "IC2")
     public double getOfferedEnergy() {
         if(this.storedPower.getValue() > 0) {
-            if(getOutput() > (int) Math.ceil(this.storedPower.getValue() / Ratios.EU.conversion)){
+            if(getOutput() > (int) Math.ceil(this.storedPower.getValue() / Ratios.EU.conversion)) {
                 return (int) Math.ceil(this.storedPower.getValue() / Ratios.EU.conversion);
-            }else{
+            } else {
                 return getOutput();
             }
         }
@@ -459,9 +483,15 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Override
     @Optional.Method(modid = "IC2")
     public boolean emitsEnergyTo(TileEntity tileEntity, ForgeDirection forgeDirection) {
-        if(tileEntity == null) return false;
-        if(tileEntity instanceof TileEntityPowerStorage) return false;
-        if(tileEntity instanceof TileEntityPowerCable) return false;
+        if(tileEntity == null) {
+            return false;
+        }
+        if(tileEntity instanceof TileEntityPowerStorage) {
+            return false;
+        }
+        if(tileEntity instanceof TileEntityPowerCable) {
+            return false;
+        }
         return this.outputMode.getMode(forgeDirection) == EnumOutputMode.OUTPUT;
     }
 
@@ -471,26 +501,32 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
-        if(!AltEngCompat.hasBC) return;
+        if(!AltEngCompat.hasBC) {
+            return;
+        }
 
-        if(this.bcPowerHandler == null){
+        if(this.bcPowerHandler == null) {
             this.getPowerHandler();
         }
-        if(this.bcPowerHandler.getEnergyStored() <= 0) return;
+        if(this.bcPowerHandler.getEnergyStored() <= 0) {
+            return;
+        }
         this.setPowerStored(getPowerStored() + (int) Math.floor(this.bcPowerHandler.useEnergy(1, this.bcPowerHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
-    public int getOutputSpeedMultiplier(){
+    public int getOutputSpeedMultiplier() {
         return 1;
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
-        if(this.storedPower.getValue() <= 0) return;
+        if(this.storedPower.getValue() <= 0) {
+            return;
+        }
         boolean[] conSides = new boolean[ForgeDirection.VALID_DIRECTIONS.length];
         int connected = 0;
         for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-            if(this.outputMode.getMode(dir) == EnumOutputMode.OUTPUT){
+            if(this.outputMode.getMode(dir) == EnumOutputMode.OUTPUT) {
                 TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
                 if(tmpTile != null) {
                     if(tmpTile instanceof IPowerReceptor && !(tmpTile instanceof TileEntityPowerCable)) {
@@ -500,15 +536,19 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
                 }
             }
         }
-        if(connected == 0) return;
+        if(connected == 0) {
+            return;
+        }
 
         int xPower = 25 * this.getOutputSpeedMultiplier();
-        if(xPower > this.storedPower.getValue()){
+        if(xPower > this.storedPower.getValue()) {
             xPower = this.storedPower.getValue();
         }
 
         int equalPower = xPower / connected;
-        if(Math.floor(equalPower) < Ratios.MJ.conversion) return;
+        if(Math.floor(equalPower) < Ratios.MJ.conversion) {
+            return;
+        }
 
         int drainPower = 0;
         for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
@@ -519,10 +559,12 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
                     if(((IPowerReceptor) tmptile).getPowerReceiver(dr.getOpposite()) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(dr.getOpposite());
                         float neededPower = rec.powerRequest();
-                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= 5)
+                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= 5) {
                             continue;
-                        if(neededPower > equalPower)
+                        }
+                        if(neededPower > equalPower) {
                             neededPower = equalPower;
+                        }
 
                         float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, (float) Math.ceil(neededPower / Ratios.MJ.conversion), dr.getOpposite());
                         drainPower += (equalPower - restEnergy);
@@ -535,7 +577,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler getPowerHandler() {
-        if(this.bcPowerHandler == null){
+        if(this.bcPowerHandler == null) {
             this.bcPowerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
             this.bcPowerHandler.configure(25, 500, 1337, 1000);
             this.bcPowerHandler.configurePowerPerdition(0, 0);
@@ -547,8 +589,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-        if(this.outputMode.getMode(side) != EnumOutputMode.DISABLED && tmpTile != null && !AltEngCompat.isInvalidPowerTile(tmpTile))
+        if(this.outputMode.getMode(side) != EnumOutputMode.DISABLED && tmpTile != null && !AltEngCompat.isInvalidPowerTile(tmpTile)) {
             return getPowerHandler().getPowerReceiver();
+        }
         return null;
     }
 
@@ -564,7 +607,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity impl
         return this.worldObj;
     }
 
-    private class EnergyIndicatorController extends AbstractIndicatorController{
+    private class EnergyIndicatorController extends AbstractIndicatorController {
 
         @Override
         protected void refreshToolTip() {

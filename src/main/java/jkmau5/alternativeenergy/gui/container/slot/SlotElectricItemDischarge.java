@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotElectricItemDischarge extends AltEngSlot {
 
-    public SlotElectricItemDischarge(IInventory inventory, int slotIndex, int posX, int posY){
+    public SlotElectricItemDischarge(IInventory inventory, int slotIndex, int posX, int posY) {
         super(inventory, slotIndex, posX, posY);
     }
 
@@ -23,10 +23,12 @@ public class SlotElectricItemDischarge extends AltEngSlot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        if(stack == null) return false;
+        if(stack == null) {
+            return false;
+        }
 
         Item item = stack.getItem();
-        if(item instanceof IElectricItem){
+        if(item instanceof IElectricItem) {
             return ((IElectricItem) item).canProvideEnergy(stack) && ((IElectricItem) item).getTier(stack) <= 3;
         }
         return item == ic2.api.item.Items.getItem("suBattery").getItem();

@@ -16,7 +16,7 @@ public class SynchronizedString extends SynchronizedBase {
 
     protected String value = "";
 
-    public SynchronizedString(){}
+    public SynchronizedString() {}
     public SynchronizedString(String value) {
         this.value = value;
     }
@@ -24,12 +24,15 @@ public class SynchronizedString extends SynchronizedBase {
     @Override
     public void readFromStream(DataInput stream) throws IOException {
         boolean isNull = stream.readBoolean();
-        if(!isNull) value = stream.readUTF();
-        else value = null;
+        if(!isNull) {
+            value = stream.readUTF();
+        } else {
+            value = null;
+        }
     }
 
     public void setValue(String val) {
-        if(!val.equals(this.value)){
+        if(!val.equals(this.value)) {
             this.value = val;
             markDirty();
         }
@@ -42,18 +45,24 @@ public class SynchronizedString extends SynchronizedBase {
     @Override
     public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
         stream.writeBoolean(this.value == null);
-        if(this.value != null) stream.writeUTF(this.value);
+        if(this.value != null) {
+            stream.writeUTF(this.value);
+        }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag, String name) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         tag.setString(name, value);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag, String name) {
-        if(!this.saveToNBT) return;
+        if(!this.saveToNBT) {
+            return;
+        }
         if (tag.hasKey(name)) {
             value = tag.getString(name);
         }

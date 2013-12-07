@@ -16,8 +16,8 @@ public class PacketOutputspeedUpgrade extends AbstractPacket {
     private int numUpgrades;
     private int x, y, z;
 
-    public PacketOutputspeedUpgrade(){} //We need the empty constructor here!
-    public PacketOutputspeedUpgrade(TileEntityPowerBox tile, int numUpgrades){
+    public PacketOutputspeedUpgrade() {} //We need the empty constructor here!
+    public PacketOutputspeedUpgrade(TileEntityPowerBox tile, int numUpgrades) {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;

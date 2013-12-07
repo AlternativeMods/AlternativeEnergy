@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class RenderState {
 
-    public static void bindTexture(ResourceLocation resourceLocation){
+    public static void bindTexture(ResourceLocation resourceLocation) {
         Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
     }
 }

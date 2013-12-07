@@ -32,7 +32,9 @@ public class GuiLinkBox extends TileEntityGuiContainer {
     @Override
     public void initGui() {
         super.initGui();
-        if(this.tileEntity == null) return;
+        if(this.tileEntity == null) {
+            return;
+        }
         int w = (this.width - this.xSize) / 2;
         int h = (this.height - this.ySize) / 2;
         this.buttonList.clear();
@@ -44,7 +46,9 @@ public class GuiLinkBox extends TileEntityGuiContainer {
     @Override
     protected void actionPerformed(GuiButton par1GuiButton) {
         super.actionPerformed(par1GuiButton);
-        if(this.tileEntity == null) return;
+        if(this.tileEntity == null) {
+            return;
+        }
         this.updateButtons();
     }
 
@@ -54,10 +58,10 @@ public class GuiLinkBox extends TileEntityGuiContainer {
         this.updateButtons();
     }
 
-    private void updateButtons(){
+    private void updateButtons() {
         this.lockButton.enabled = ((ContainerLockable) this.getContainer()).isCanLock();
         String owner = ((ContainerLinkBox) this.getContainer()).getOwner();
-        if(!owner.equals(this.prevTickOwner)){
+        if(!owner.equals(this.prevTickOwner)) {
             this.prevTickOwner = owner;
             this.lockedToolTip = ToolTip.buildToolTip("gui.altEng.tooltip.lock.locked");
             this.unlockedToolTip = ToolTip.buildToolTip("gui.altEng.tooltip.lock.unlocked");

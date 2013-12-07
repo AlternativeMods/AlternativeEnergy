@@ -30,14 +30,18 @@ public class LinkBoxNetwork implements ISaveNBT {
     public Map<String, Boolean> initiatedNBTPower;
     public Map<String, Integer> networkPower;
 
-    public MapStorage getStorage(){
-        if(FMLCommonHandler.instance().getEffectiveSide().isClient()) return null;
+    public MapStorage getStorage() {
+        if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+            return null;
+        }
         return DimensionManager.getWorld(0).mapStorage;
     }
 
     public void loadNetworkData() {
         MinecraftServer server = MinecraftServer.getServer();
-        if(server == null) return;
+        if(server == null) {
+            return;
+        }
         LinkBoxWorldData data = (LinkBoxWorldData) this.getStorage().loadData(LinkBoxWorldData.class, "AltEng-LinkBoxData");
 
         linkBoxes = new HashMap<String, ArrayList<TileEntityLinkBox>>();
@@ -73,12 +77,14 @@ public class LinkBoxNetwork implements ISaveNBT {
 
     public void removeFromLink(TileEntityLinkBox linkBox, String oldLinkID) {
         ArrayList<TileEntityLinkBox> list = linkBoxes.get(oldLinkID);
-        if(list == null)
+        if(list == null) {
             return;
+        }
         list.remove(linkBox);
         linkBoxes.put(oldLinkID, list);
-        if(list.size() == 0)
+        if(list.size() == 0) {
             setNetworkPower(oldLinkID, 0);
+        }
     }
 
     public int neededPower(String linkId) {
@@ -87,14 +93,16 @@ public class LinkBoxNetwork implements ISaveNBT {
     }
 
     public void setNetworkPower(String linkId, int power) {
-        if(power > Config.powerBox_capacity)
+        if(power > Config.powerBox_capacity) {
             power = Config.powerBox_capacity;
+        }
         networkPower.put(linkId, power);
     }
 
     public int getNetworkPower(String linkId) {
-        if(networkPower.get(linkId) == null)
+        if(networkPower.get(linkId) == null) {
             return 0;
+        }
         return networkPower.get(linkId);
     }
 }

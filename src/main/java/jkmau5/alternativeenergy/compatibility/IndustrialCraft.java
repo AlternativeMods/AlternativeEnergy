@@ -21,8 +21,9 @@ public class IndustrialCraft {
 
         @Override
         public int charge(ItemStack itemStack, int amount, int tier, boolean ignoreTransferLimit, boolean simulate) {
-            if(itemStack.getItem() != AltEngItems.itemAlternativeWrench)
+            if(itemStack.getItem() != AltEngItems.itemAlternativeWrench) {
                 return 0;
+            }
 
             int storedPower = AltEngSupport.initiateOrGetNBTInteger(itemStack, "storedPower");
             storedPower += (int) Math.floor(amount / Ratios.EU.conversion);

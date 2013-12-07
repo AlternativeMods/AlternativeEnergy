@@ -19,8 +19,8 @@ public class PacketCapacityUpgrade extends AbstractPacket {
 
     private int x, y, z;
 
-    public PacketCapacityUpgrade(EntityPlayer sender){} //We need the empty constructor here!
-    public PacketCapacityUpgrade(TileEntityPowerBox tile, int numUpgrades){
+    public PacketCapacityUpgrade(EntityPlayer sender) {} //We need the empty constructor here!
+    public PacketCapacityUpgrade(TileEntityPowerBox tile, int numUpgrades) {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;

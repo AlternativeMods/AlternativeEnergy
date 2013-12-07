@@ -17,19 +17,19 @@ public abstract class AltEngSlot extends Slot {
     @Setter
     private ToolTip toolTip;
 
-    public AltEngSlot(IInventory inventory, int slotIndex, int posX, int posY){
+    public AltEngSlot(IInventory inventory, int slotIndex, int posX, int posY) {
         super(inventory, slotIndex, posX, posY);
     }
 
-    public boolean isFakeSlot(){
+    public boolean isFakeSlot() {
         return false;
     }
 
-    public boolean canAdjustFakeSlot(){
+    public boolean canAdjustFakeSlot() {
         return true;
     }
 
-    public boolean canShiftClick(){
+    public boolean canShiftClick() {
         return true;
     }
 }

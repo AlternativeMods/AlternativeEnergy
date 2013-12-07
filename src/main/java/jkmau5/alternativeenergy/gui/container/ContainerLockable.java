@@ -38,7 +38,7 @@ public abstract class ContainerLockable extends AltEngContainer {
         crafter.sendProgressBarUpdate(this, 0, this.lockable.getLockController().getCurrentState());
 
         this.canLock = Utils.isOwnerOrOp(this.lockable, this.playerInv.player.username);
-        crafter.sendProgressBarUpdate(this, 1, this.canLock? 1:0);
+        crafter.sendProgressBarUpdate(this, 1, this.canLock ? 1 : 0);
 
         PacketDispatcher.sendPacketToPlayer(new PacketGuiString(this.windowId, 0, this.lockable.getOwner()).getPacket(), (Player) crafter);
     }
@@ -47,11 +47,11 @@ public abstract class ContainerLockable extends AltEngContainer {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        for(int i = 0; i < this.crafters.size(); i++){
+        for(int i = 0; i < this.crafters.size(); i++) {
             ICrafting crafter = (ICrafting) this.crafters.get(i);
 
             int lockState = this.lockable.getLockController().getCurrentState();
-            if(this.lastLockState != lockState){
+            if(this.lastLockState != lockState) {
                 crafter.sendProgressBarUpdate(this, 0, lockState);
             }
         }
@@ -62,9 +62,9 @@ public abstract class ContainerLockable extends AltEngContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
-        if(id == 0){
+        if(id == 0) {
             this.lockable.getLockController().setCurrentState(data);
-        }else if(id == 1){
+        } else if(id == 1) {
             this.canLock = data == 1;
         }
     }
@@ -72,7 +72,7 @@ public abstract class ContainerLockable extends AltEngContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateString(byte id, String data) {
-        if(id == 0){
+        if(id == 0) {
             this.owner = data;
         }
     }

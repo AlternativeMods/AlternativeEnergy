@@ -49,36 +49,41 @@ public class BufferedTileEntity {
     }
 
     public int getBlockID() {
-        if (tile != null && !tile.isInvalid())
+        if (tile != null && !tile.isInvalid()) {
             return blockID;
+        }
 
         if (tracker.markTimeIfPassed(world, 20)) {
             refresh();
 
-            if (tile != null && !tile.isInvalid())
+            if (tile != null && !tile.isInvalid()) {
                 return blockID;
+            }
         }
 
         return 0;
     }
 
     public TileEntity getTile() {
-        if (tile != null && !tile.isInvalid())
+        if (tile != null && !tile.isInvalid()) {
             return tile;
+        }
 
         if (tracker.markTimeIfPassed(world, 20)) {
             refresh();
 
-            if (tile != null && !tile.isInvalid())
+            if (tile != null && !tile.isInvalid()) {
                 return tile;
+            }
         }
 
         return null;
     }
 
     public boolean exists() {
-        if(tile != null && !tile.isInvalid())
+        if(tile != null && !tile.isInvalid()) {
             return true;
+        }
         return world.blockExists(x, y, z);
     }
 

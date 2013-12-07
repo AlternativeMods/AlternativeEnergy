@@ -32,19 +32,19 @@ public abstract class AltEngContainer extends Container {
     private final IInventory inventory;
     @Getter private List<Element> elements = Lists.newArrayList();
 
-    public AltEngContainer(IInventory inventory){
+    public AltEngContainer(IInventory inventory) {
         this.inventory = inventory;
     }
 
-    public AltEngContainer(){
+    public AltEngContainer() {
         this.inventory = null;
     }
 
-    public void addSlot(Slot slot){
+    public void addSlot(Slot slot) {
         this.addSlotToContainer(slot);
     }
 
-    public void addElement(Element element){
+    public void addElement(Element element) {
         element.setContainer(this);
         this.elements.add(element);
     }
@@ -52,7 +52,7 @@ public abstract class AltEngContainer extends Container {
     @Override
     public void addCraftingToCrafters(ICrafting crafter) {
         super.addCraftingToCrafters(crafter);
-        for(Element element : this.elements){
+        for(Element element : this.elements) {
             element.initElement(crafter);
         }
     }
@@ -60,14 +60,14 @@ public abstract class AltEngContainer extends Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for(Element element : this.elements){
-            for(ICrafting crafter : (List<ICrafting>) this.crafters){
+        for(Element element : this.elements) {
+            for(ICrafting crafter : (List<ICrafting>) this.crafters) {
                 element.updateElement(crafter);
             }
         }
     }
 
-    public void sendElementDataToClient(Element element, ICrafting crafter, byte[] data){
+    public void sendElementDataToClient(Element element, ICrafting crafter, byte[] data) {
         PacketDispatcher.sendPacketToPlayer(new PacketElementUpdate(this.windowId, this.elements.indexOf(element), data).getPacket(), (Player) crafter);
     }
 
@@ -76,11 +76,13 @@ public abstract class AltEngContainer extends Container {
     }
 
     @SideOnly(Side.CLIENT)
-    public void updateString(byte id, String data){
+    public void updateString(byte id, String data) {
     }
 
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        if(this.inventory == null) return true;
+        if(this.inventory == null) {
+            return true;
+        }
         return this.inventory.isUseableByPlayer(entityplayer);
     }
 
@@ -95,9 +97,9 @@ public abstract class AltEngContainer extends Container {
         }
     }
 
-    public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player){
+    public ItemStack slotClick(int slotNum, int mouseButton, int modifier, EntityPlayer player) {
         Slot slot = slotNum < 0 ? null : (Slot)this.inventorySlots.get(slotNum);
-        if(slot instanceof AltEngSlot && ((AltEngSlot) slot).isFakeSlot()){
+        if(slot instanceof AltEngSlot && ((AltEngSlot) slot).isFakeSlot()) {
             return this.fakeSlotClick((AltEngSlot) slot, mouseButton, modifier, player);
         }
         return super.slotClick(slotNum, mouseButton, modifier, player);
@@ -106,11 +108,11 @@ public abstract class AltEngContainer extends Container {
     private ItemStack fakeSlotClick(AltEngSlot slot, int mouseButton, int modifier, EntityPlayer player) {
         ItemStack stack = null;
 
-        if(mouseButton == 2){
-            if(slot.canAdjustFakeSlot()){
+        if(mouseButton == 2) {
+            if(slot.canAdjustFakeSlot()) {
                 slot.putStack(null);
             }
-        }else if((mouseButton == 0) || (mouseButton == 1)){
+        } else if((mouseButton == 0) || (mouseButton == 1)) {
             InventoryPlayer playerInv = player.inventory;
             slot.onSlotChanged();
             ItemStack stackSlot = slot.getStack();
@@ -120,16 +122,16 @@ public abstract class AltEngContainer extends Container {
                 stack = stackSlot.copy();
             }
             if (stackSlot == null) {
-                if (stackHeld != null && slot.isItemValid(stackHeld)){
+                if (stackHeld != null && slot.isItemValid(stackHeld)) {
                     this.fillFakeSlot(slot, stackHeld, mouseButton, modifier);
                 }
-            }else if(stackHeld == null) {
+            } else if(stackHeld == null) {
                 adjustFakeSlot(slot, mouseButton, modifier);
                 slot.onPickupFromSlot(player, playerInv.getItemStack());
-            }else if(slot.isItemValid(stackHeld)) {
-                if(InventoryUtils.areItemsEqual(stackSlot, stackHeld)){
+            } else if(slot.isItemValid(stackHeld)) {
+                if(InventoryUtils.areItemsEqual(stackSlot, stackHeld)) {
                     this.adjustFakeSlot(slot, mouseButton, modifier);
-                }else{
+                } else {
                     this.fillFakeSlot(slot, stackHeld, mouseButton, modifier);
                 }
             }
@@ -138,28 +140,33 @@ public abstract class AltEngContainer extends Container {
     }
 
     protected void adjustFakeSlot(AltEngSlot slot, int mouseButton, int modifier) {
-        if(!slot.canAdjustFakeSlot()) return;
+        if(!slot.canAdjustFakeSlot()) {
+            return;
+        }
         ItemStack stackSlot = slot.getStack();
         int stackSize;
-        if (modifier == 1){
+        if (modifier == 1) {
             stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
-        }else{
+        } else {
             stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
         }
         if(stackSize > slot.getSlotStackLimit()) {
             stackSize = slot.getSlotStackLimit();
         }
         stackSlot.stackSize = stackSize;
-        if (stackSlot.stackSize <= 0){
+        if (stackSlot.stackSize <= 0) {
             slot.putStack(null);
         }
     }
 
     protected void fillFakeSlot(AltEngSlot slot, ItemStack stackHeld, int mouseButton, int modifier) {
-        if(!slot.canAdjustFakeSlot()) return;
+        if(!slot.canAdjustFakeSlot()) {
+            return;
+        }
         int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
-        if (stackSize > slot.getSlotStackLimit())
+        if (stackSize > slot.getSlotStackLimit()) {
             stackSize = slot.getSlotStackLimit();
+        }
         ItemStack phantomStack = stackHeld.copy();
         phantomStack.stackSize = stackSize;
         slot.putStack(phantomStack);
@@ -167,11 +174,11 @@ public abstract class AltEngContainer extends Container {
 
     protected boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
         boolean changed = false;
-        if (stackToShift.isStackable()){
+        if (stackToShift.isStackable()) {
             for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
                 Slot slot = (Slot) this.inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot != null && InventoryUtils.areItemsEqual(stackInSlot, stackToShift)){
+                if (stackInSlot != null && InventoryUtils.areItemsEqual(stackInSlot, stackToShift)) {
                     int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     if (resultingStackSize <= max) {
@@ -179,7 +186,7 @@ public abstract class AltEngContainer extends Container {
                         stackInSlot.stackSize = resultingStackSize;
                         slot.onSlotChanged();
                         changed = true;
-                    }else if(stackInSlot.stackSize < max){
+                    } else if(stackInSlot.stackSize < max) {
                         stackToShift.stackSize -= max - stackInSlot.stackSize;
                         stackInSlot.stackSize = max;
                         slot.onSlotChanged();
@@ -188,11 +195,11 @@ public abstract class AltEngContainer extends Container {
                 }
             }
         }
-        if(stackToShift.stackSize > 0){
-            for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++){
+        if(stackToShift.stackSize > 0) {
+            for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
                 Slot slot = (Slot) this.inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
-                if(stackInSlot == null){
+                if(stackInSlot == null) {
                     int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());
                     stackInSlot = stackToShift.copy();
                     stackInSlot.stackSize = Math.min(stackToShift.stackSize, max);
@@ -206,13 +213,13 @@ public abstract class AltEngContainer extends Container {
         return changed;
     }
 
-    private boolean tryShiftItem(ItemStack stackToShift, int numSlots){
-        for (int machineIndex = 0; machineIndex < numSlots - 36; machineIndex++){
+    private boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
+        for (int machineIndex = 0; machineIndex < numSlots - 36; machineIndex++) {
             Slot slot = (Slot) this.inventorySlots.get(machineIndex);
-            if (!(slot instanceof AltEngSlot) || ((AltEngSlot) slot).canShiftClick()){
-                if(!(slot instanceof AltEngSlot) || ((AltEngSlot) slot).isFakeSlot()){
-                    if (slot.isItemValid(stackToShift)){
-                        if (shiftItemStack(stackToShift, machineIndex, machineIndex + 1)){
+            if (!(slot instanceof AltEngSlot) || ((AltEngSlot) slot).canShiftClick()) {
+                if(!(slot instanceof AltEngSlot) || ((AltEngSlot) slot).isFakeSlot()) {
+                    if (slot.isItemValid(stackToShift)) {
+                        if (shiftItemStack(stackToShift, machineIndex, machineIndex + 1)) {
                             return true;
                         }
                     }
@@ -222,24 +229,35 @@ public abstract class AltEngContainer extends Container {
         return false;
     }
 
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex){
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
         ItemStack originalStack = null;
         Slot slot = (Slot) this.inventorySlots.get(slotIndex);
         int numSlots = this.inventorySlots.size();
-        if(slot != null && slot.getHasStack()){
+        if(slot != null && slot.getHasStack()) {
             ItemStack stackInSlot = slot.getStack();
             originalStack = stackInSlot.copy();
-            if (slotIndex < numSlots - 36 || !tryShiftItem(stackInSlot, numSlots)){
-                if(slotIndex >= numSlots - 36 && slotIndex < numSlots - 9){
-                    if(!shiftItemStack(stackInSlot, numSlots - 9, numSlots)) return null;
-                }else if(slotIndex >= numSlots - 9 && slotIndex < numSlots){
-                    if(!shiftItemStack(stackInSlot, numSlots - 36, numSlots - 9)) return null;
-                }else if(!shiftItemStack(stackInSlot, numSlots - 36, numSlots)) return null;
+            if (slotIndex < numSlots - 36 || !tryShiftItem(stackInSlot, numSlots)) {
+                if(slotIndex >= numSlots - 36 && slotIndex < numSlots - 9) {
+                    if(!shiftItemStack(stackInSlot, numSlots - 9, numSlots)) {
+                        return null;
+                    }
+                } else if(slotIndex >= numSlots - 9 && slotIndex < numSlots) {
+                    if(!shiftItemStack(stackInSlot, numSlots - 36, numSlots - 9)) {
+                        return null;
+                    }
+                } else if(!shiftItemStack(stackInSlot, numSlots - 36, numSlots)) {
+                    return null;
+                }
             }
             slot.onSlotChange(stackInSlot, originalStack);
-            if (stackInSlot.stackSize <= 0) slot.putStack(null);
-            else slot.onSlotChanged();
-            if (stackInSlot.stackSize == originalStack.stackSize) return null;
+            if (stackInSlot.stackSize <= 0) {
+                slot.putStack(null);
+            } else {
+                slot.onSlotChanged();
+            }
+            if (stackInSlot.stackSize == originalStack.stackSize) {
+                return null;
+            }
             slot.onPickupFromSlot(player, stackInSlot);
         }
         return originalStack;

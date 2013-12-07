@@ -27,8 +27,9 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
 
     @Override
     public void constructFromItemStack(ItemStack itemStack, EntityLivingBase entity) {
-        if(itemStack.getTagCompound() == null || !itemStack.getTagCompound().hasKey("capacityUpgrade"))
+        if(itemStack.getTagCompound() == null || !itemStack.getTagCompound().hasKey("capacityUpgrade")) {
             return;
+        }
 
         if(itemStack.getTagCompound().hasKey("capacityUpgrade")) {
             /*pBox.capacitySlot.put(new ItemStack(AltEngItems.itemUpgrade, itemStack.getTagCompound().getInteger("capacityUpgrade"), 0));
@@ -39,7 +40,7 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
         }
     }
 
-    public String getType(){
+    public String getType() {
         return "powerBox";
     }
 
@@ -58,11 +59,13 @@ public class TileEntityPowerBox extends TileEntityPowerStorage implements IInven
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
         super.updateEntity();
-        if(worldObj == null || worldObj.isRemote) return;
+        if(worldObj == null || worldObj.isRemote) {
+            return;
+        }
 
-        if(AltEngCompat.hasIC2){
+        if(AltEngCompat.hasIC2) {
             fill_chargeSlot();
             empty_dischargeSlot();
         }

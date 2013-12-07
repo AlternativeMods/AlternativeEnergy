@@ -17,8 +17,9 @@ public class TimeTracker {
      * successfully.
      */
     public boolean markTimeIfPassed(World world, long delay) {
-        if (world == null)
+        if (world == null) {
             return false;
+        }
 
         long currentTime = world.getTotalWorldTime();
 
@@ -29,8 +30,9 @@ public class TimeTracker {
             duration = currentTime - lastMark;
             lastMark = currentTime;
             return true;
-        } else
+        } else {
             return false;
+        }
 
     }
 

@@ -27,7 +27,7 @@ public class TileEntityGuiContainer extends AltEngGuiContainer {
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        if(this.tileEntity instanceof IGuiCloseSaveDataHandler){
+        if(this.tileEntity instanceof IGuiCloseSaveDataHandler) {
             PacketDispatcher.sendPacketToServer(new PacketGuiCloseSaveData((IGuiCloseSaveDataHandler) this.tileEntity).getPacket());
         }
     }

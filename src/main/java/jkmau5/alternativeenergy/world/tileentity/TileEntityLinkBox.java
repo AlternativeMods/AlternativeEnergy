@@ -48,7 +48,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     @Override
     public void readGuiCloseData(DataInput input, EntityPlayer player) throws IOException {
         byte lock = input.readByte();
-        if(player == null || !this.isLocked() || Utils.isOwnerOrOp(this, player.username)){
+        if(player == null || !this.isLocked() || Utils.isOwnerOrOp(this, player.username)) {
             this.lockController.setCurrentState(lock);
         }
     }
@@ -74,7 +74,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
         this.markBlockForUpdate();
     }
 
-    public String getType(){
+    public String getType() {
         return "linkBox";
     }
 
@@ -93,7 +93,7 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     }
 
     public void setLinkId(int linkId) {
-        if(!this.worldObj.isRemote){
+        if(!this.worldObj.isRemote) {
             LinkBoxNetwork.getInstance().removeFromLink(this, this.getLinkIdentifier());
             this.linkedID.setValue(linkId);
             LinkBoxNetwork.getInstance().addLinkBoxToNetwork(this, this.getLinkIdentifier());
@@ -102,9 +102,10 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
 
     @Override
     public boolean removeBlockByPlayer(EntityPlayer player) {
-        if(!this.isPrivate() && this.getEnergyOwner().equals(player.username)|| MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username) || this.isPrivate() && this.getEnergyOwner().equals(player.username))
+        if(!this.isPrivate() && this.getEnergyOwner().equals(player.username) || MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.username) || this.isPrivate() && this.getEnergyOwner().equals(player.username)) {
             return this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
-        if(!this.worldObj.isRemote){
+        }
+        if(!this.worldObj.isRemote) {
             player.addChatMessage("This Link Box belongs to " + this.getOwner() + "!"); //TODO: localize!
         }
         return false;
@@ -115,44 +116,46 @@ public class TileEntityLinkBox extends TileEntityPowerStorage implements ILockab
     }
 
     public int getPowerStored() {
-        if(this.linkedID.getValue() != 0){
+        if(this.linkedID.getValue() != 0) {
             return LinkBoxNetwork.getInstance().getNetworkPower(getLinkIdentifier());
-        }else{
+        } else {
             return super.getPowerStored();
         }
     }
 
     @Override
     public int getMaxStoredPower() {
-        if(this.linkedID.getValue() != 0){
+        if(this.linkedID.getValue() != 0) {
             return Config.powerBox_capacity;
-        }else{
+        } else {
             return super.getMaxStoredPower();
         }
     }
 
     @Override
     public void setPowerStored(int power) {
-        if(this.linkedID.getValue() != 0){
+        if(this.linkedID.getValue() != 0) {
             LinkBoxNetwork.getInstance().setNetworkPower(getLinkIdentifier(), power);
-        }else{
+        } else {
             super.setPowerStored(power);
         }
     }
 
     @Override
     public int getNeededPower() {
-        if(this.linkedID.getValue() != 0){
+        if(this.linkedID.getValue() != 0) {
             return LinkBoxNetwork.getInstance().neededPower(getLinkIdentifier());
-        }else{
+        } else {
             return super.getNeededPower();
         }
     }
 
     @Override
-    public void updateEntity(){
+    public void updateEntity() {
         super.updateEntity();
-        if(worldObj == null || worldObj.isRemote) return;
+        if(worldObj == null || worldObj.isRemote) {
+            return;
+        }
 
         if(needsToInit) {
             needsToInit = false;

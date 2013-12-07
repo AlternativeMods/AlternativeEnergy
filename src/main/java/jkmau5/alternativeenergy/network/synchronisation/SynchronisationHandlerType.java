@@ -25,7 +25,7 @@ public enum SynchronisationHandlerType {
             if (world != null) {
                 if (world.blockExists(x, y, z)) {
                     TileEntity tile = world.getBlockTileEntity(x, y, z);
-                    if (tile instanceof ISynchronisationHandler){
+                    if (tile instanceof ISynchronisationHandler) {
                         return (ISynchronisationHandler) tile;
                     }
                 }

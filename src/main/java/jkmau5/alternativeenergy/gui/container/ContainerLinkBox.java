@@ -29,8 +29,8 @@ public class ContainerLinkBox extends ContainerLockable {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        for(ICrafting crafter : (List <ICrafting>) this.crafters){
-            if(this.lastTickPower != this.tileEntity.getPowerStored()){
+        for(ICrafting crafter : (List <ICrafting>) this.crafters) {
+            if(this.lastTickPower != this.tileEntity.getPowerStored()) {
                 crafter.sendProgressBarUpdate(this, 2, this.tileEntity.getPowerStored());
             }
         }
@@ -46,7 +46,7 @@ public class ContainerLinkBox extends ContainerLockable {
     @Override
     public void updateProgressBar(int id, int data) {
         super.updateProgressBar(id, data);
-        if(id == 2){
+        if(id == 2) {
             this.tileEntity.guiPower = data;
         }
     }

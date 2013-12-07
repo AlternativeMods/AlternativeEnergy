@@ -42,8 +42,10 @@ public class InventoryObject implements IInventory, ISaveNBT {
 
     @Override
     public ItemStack decrStackSize(int slot, int count) {
-        if(this.contents[slot] == null) return null;
-        if(this.contents[slot].stackSize > count){
+        if(this.contents[slot] == null) {
+            return null;
+        }
+        if(this.contents[slot].stackSize > count) {
             ItemStack ret = this.contents[slot].copy();
             ret.stackSize = count;
             this.contents[slot].stackSize = this.contents[slot].stackSize - count;
@@ -56,7 +58,9 @@ public class InventoryObject implements IInventory, ISaveNBT {
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slot) {
-        if(this.contents[slot] == null) return null;
+        if(this.contents[slot] == null) {
+            return null;
+        }
         ItemStack ret = this.contents[slot].copy();
         this.contents[slot] = null;
         return ret;
@@ -85,7 +89,7 @@ public class InventoryObject implements IInventory, ISaveNBT {
 
     @Override
     public void onInventoryChanged() {
-        for(IInventoryObjectEventListener listener : this.listeners){
+        for(IInventoryObjectEventListener listener : this.listeners) {
             listener.onInventoryChanged(this);
         }
     }
@@ -122,7 +126,7 @@ public class InventoryObject implements IInventory, ISaveNBT {
             int index = nbttagcompound2.getInteger("index");
             if(index < this.contents.length) {
                 this.contents[index] = ItemStack.loadItemStackFromNBT(nbttagcompound2);
-            }else{
+            } else {
                 AltEngLog.severe("InventoryObject: java.lang.ArrayIndexOutOfBoundsException: " + index + " of " + this.contents.length);
             }
         }

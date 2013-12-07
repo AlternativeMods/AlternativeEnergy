@@ -18,20 +18,28 @@ import net.minecraft.world.World;
  */
 public class GuiFactory {
 
-    public static GuiScreen createGui(EnumGui gui, InventoryPlayer inventory, Object owner, World world, int x, int y, int z){
-        if(owner == null) return null;
-        switch (gui.ordinal()){
-            case 0: return new GuiPowerBox(inventory, (TileEntityPowerBox) owner);
-            case 1: return new GuiLinkBox(inventory, (TileEntityLinkBox) owner);
+    public static GuiScreen createGui(EnumGui gui, InventoryPlayer inventory, Object owner, World world, int x, int y, int z) {
+        if(owner == null) {
+            return null;
+        }
+        switch (gui.ordinal()) {
+            case 0:
+                return new GuiPowerBox(inventory, (TileEntityPowerBox) owner);
+            case 1:
+                return new GuiLinkBox(inventory, (TileEntityLinkBox) owner);
         }
         return null;
     }
 
-    public static Container createContainer(EnumGui gui, InventoryPlayer inventory, Object owner, World world, int x, int y, int z){
-        if(owner == null) return null;
-        switch (gui.ordinal()){
-            case 0: return new ContainerPowerBox(inventory, (TileEntityPowerBox) owner);
-            case 1: return new ContainerLinkBox(inventory, (TileEntityLinkBox) owner);
+    public static Container createContainer(EnumGui gui, InventoryPlayer inventory, Object owner, World world, int x, int y, int z) {
+        if(owner == null) {
+            return null;
+        }
+        switch (gui.ordinal()) {
+            case 0:
+                return new ContainerPowerBox(inventory, (TileEntityPowerBox) owner);
+            case 1:
+                return new ContainerLinkBox(inventory, (TileEntityLinkBox) owner);
         }
         return null;
     }

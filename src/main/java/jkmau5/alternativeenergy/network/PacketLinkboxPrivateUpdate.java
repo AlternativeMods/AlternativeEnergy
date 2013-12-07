@@ -18,8 +18,8 @@ public class PacketLinkboxPrivateUpdate extends AbstractPacket {
 
     private int x, y, z;
 
-    public PacketLinkboxPrivateUpdate(){} //We need the empty constructor here!
-    public PacketLinkboxPrivateUpdate(TileEntityLinkBox tile){
+    public PacketLinkboxPrivateUpdate() {} //We need the empty constructor here!
+    public PacketLinkboxPrivateUpdate(TileEntityLinkBox tile) {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;
@@ -38,7 +38,9 @@ public class PacketLinkboxPrivateUpdate extends AbstractPacket {
         this.y = data.readInt();
         this.z = data.readInt();
         TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
-        if(tile == null || !(tile instanceof TileEntityLinkBox)) return;
+        if(tile == null || !(tile instanceof TileEntityLinkBox)) {
+            return;
+        }
         TileEntityLinkBox linkBox = (TileEntityLinkBox) tile;
         linkBox.togglePrivate();
     }

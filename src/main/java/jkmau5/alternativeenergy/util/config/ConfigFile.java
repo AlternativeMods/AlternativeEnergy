@@ -51,10 +51,11 @@ public class ConfigFile extends ConfigTagParent {
                 reader.mark(2000);
                 String line = reader.readLine();
                 if (line != null && line.startsWith("#")) {
-                    if (comment == null || comment.equals(""))
+                    if (comment == null || comment.equals("")) {
                         comment = line.substring(1);
-                    else
+                    } else {
                         comment = comment + "\n" + line.substring(1);
+                    }
                 } else {
                     reader.reset();
                     break;
@@ -89,8 +90,9 @@ public class ConfigFile extends ConfigTagParent {
 
     public static String readLine(BufferedReader reader) throws IOException {
         String line = reader.readLine();
-        if (line != null)
+        if (line != null) {
             return line.replace("\t", "");
+        }
         return line;
     }
 
@@ -108,15 +110,17 @@ public class ConfigFile extends ConfigTagParent {
     }
 
     public static void writeLine(PrintWriter writer, String line, int tabs) {
-        for (int i = 0; i < tabs; i++)
+        for (int i = 0; i < tabs; i++) {
             writer.print('\t');
+        }
 
         writer.println(line);
     }
 
     public void saveConfig() {
-        if (loading)
+        if (loading) {
             return;
+        }
 
         PrintWriter writer;
         try {
@@ -139,5 +143,5 @@ public class ConfigFile extends ConfigTagParent {
     public File file;
     private boolean loading;
 
-    public static final byte[] lineend = new byte[]{0xD, 0xA};
+    public static final byte[] lineend = new byte[] {0xD, 0xA};
 }

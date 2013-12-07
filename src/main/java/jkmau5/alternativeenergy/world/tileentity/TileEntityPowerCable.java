@@ -26,9 +26,9 @@ import net.minecraftforge.common.MinecraftForge;
  * however, not to publish it without my permission.
  */
 @Optional.InterfaceList(value = {
-        @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
-        @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
-        @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")
+    @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
+    @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
+    @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")
 })
 public class TileEntityPowerCable extends AltEngTileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
     EnergyNetwork network;
@@ -63,7 +63,7 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     }
 
     public void onNeighborChange() {
-        for(int i=0; i<6; i++) {
+        for(int i = 0; i < 6; i++) {
             ForgeDirection dr = ForgeDirection.getOrientation(i);
             TileEntity tile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
@@ -72,13 +72,12 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                 if(tile instanceof TileEntityPowerCable) {
                     network = network.mergeNetworks(((TileEntityPowerCable)tile).network, network);
                     connect = true;
-                }else if(AltEngCompat.isValidPowerTile(tile)) {
+                } else if(AltEngCompat.isValidPowerTile(tile)) {
                     getEnergyNetwork().addInput(this, tile);
                     connect = true;
                 }
                 getConnectionMatrix().setConnected(dr, connect);
-            }
-            else {
+            } else {
                 getConnectionMatrix().setConnected(dr, false);
             }
         }
@@ -89,8 +88,9 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     }
 
     public void updateEntity() {
-        if(worldObj == null)
+        if(worldObj == null) {
             return;
+        }
         if(worldObj.isRemote) {
             if(getConnectionMatrix().shouldUpdate()) {
                 onNeighborChange();
@@ -120,8 +120,9 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
             tryOutputtingEnergy();
         }
 
-        if(AltEngCompat.hasIC2)
+        if(AltEngCompat.hasIC2) {
             tryOutputtingEU();
+        }
     }
 
     @Override
@@ -142,8 +143,9 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     public void invalidate() {
         super.invalidate();
 
-        if(worldObj == null || worldObj.isRemote)
+        if(worldObj == null || worldObj.isRemote) {
             return;
+        }
 
         unloadTile();
     }
@@ -152,8 +154,9 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     public void onChunkUnload() {
         super.onChunkUnload();
 
-        if(worldObj == null || worldObj.isRemote)
+        if(worldObj == null || worldObj.isRemote) {
             return;
+        }
 
         unloadTile();
     }
@@ -161,14 +164,14 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     //------------------------------------------------
 
     public void loadTile() {
-        if(AltEngCompat.hasIC2 && !this.addedToENet){
+        if(AltEngCompat.hasIC2 && !this.addedToENet) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             this.addedToENet = true;
         }
     }
 
     public void unloadTile() {
-        if(AltEngCompat.hasIC2 && this.addedToENet){
+        if(AltEngCompat.hasIC2 && this.addedToENet) {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
             this.addedToENet = false;
         }
@@ -224,23 +227,32 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
         for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
-            if(tmpTile == null)
+            if(tmpTile == null) {
                 continue;
+            }
 
             if(tmpTile instanceof TileEntityPowerStorage) {
                 TileEntityPowerStorage pBox = (TileEntityPowerStorage) tmpTile;
 
-                if(pBox.getMode(dr.getOpposite()) != EnumOutputMode.INPUT) continue;
+                if(pBox.getMode(dr.getOpposite()) != EnumOutputMode.INPUT) {
+                    continue;
+                }
 
-                if(network.getNetworkPower() < 1) return;
+                if(network.getNetworkPower() < 1) {
+                    return;
+                }
 
-                if(pBox.getNeededPower() < 1) continue;
+                if(pBox.getNeededPower() < 1) {
+                    continue;
+                }
 
                 int toInsert = 25;
-                if(toInsert > pBox.getMaxStoredPower() - pBox.getPowerStored())
+                if(toInsert > pBox.getMaxStoredPower() - pBox.getPowerStored()) {
                     toInsert = pBox.getMaxStoredPower() - pBox.getPowerStored();
-                if(toInsert > network.getNetworkPower())
+                }
+                if(toInsert > network.getNetworkPower()) {
                     toInsert = network.getNetworkPower();
+                }
 
                 pBox.setPowerStored(pBox.getPowerStored() + toInsert);
                 network.drainPower(toInsert);
@@ -251,16 +263,21 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     //-- IEnergySink
 
     public void tryOutputtingEU() {
-        if(!AltEngCompat.hasIC2) return;
-        if(network.getNetworkPower() < 1) return;
+        if(!AltEngCompat.hasIC2) {
+            return;
+        }
+        if(network.getNetworkPower() < 1) {
+            return;
+        }
 
-        for(int i=0; i<6; i++) {
+        for(int i = 0; i < 6; i++) {
             ForgeDirection dr = ForgeDirection.getOrientation(i);
             TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
 
             if(tmpTile != null) {
-                if(tmpTile instanceof TileEntityPowerCable)
+                if(tmpTile instanceof TileEntityPowerCable) {
                     continue;
+                }
 
                 if(tmpTile instanceof IEnergySink) {
                     IEnergySink sink = (IEnergySink) tmpTile;
@@ -268,13 +285,16 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                     if(sink.acceptsEnergyFrom(this, dr.getOpposite())) {
                         if(network.getNetworkPower() >= 1) {
                             int toDrain = Ratios.EU.conversion * 4;
-                            if(sink.getMaxSafeInput() > toDrain)
+                            if(sink.getMaxSafeInput() > toDrain) {
                                 toDrain = (int) Math.floor(sink.getMaxSafeInput() / 5);
-                            if(network.getNetworkPower() < toDrain)
+                            }
+                            if(network.getNetworkPower() < toDrain) {
                                 toDrain = network.getNetworkPower();
+                            }
                             toDrain -= sink.injectEnergyUnits(dr.getOpposite(), toDrain * Ratios.EU.conversion);
-                            if(toDrain < 0)
+                            if(toDrain < 0) {
                                 toDrain = 0;
+                            }
                             network.drainPower(toDrain);
                         }
                     }
@@ -307,12 +327,15 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
     @Optional.Method(modid = "IC2")
     public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
-        if(emitter instanceof TileEntityPowerCable)
+        if(emitter instanceof TileEntityPowerCable) {
             return false;
-        if(!AltEngCompat.isValidPowerTile(emitter))
+        }
+        if(!AltEngCompat.isValidPowerTile(emitter)) {
             return false;
-        if(!getEnergyNetwork().isAcceptor(this, emitter))
+        }
+        if(!getEnergyNetwork().isAcceptor(this, emitter)) {
             return true;
+        }
         return true;
     }
 
@@ -322,37 +345,47 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void convertBC() {
-        if(!AltEngCompat.hasBC) return;
-        if(this.bcPowerHandler == null){
+        if(!AltEngCompat.hasBC) {
+            return;
+        }
+        if(this.bcPowerHandler == null) {
             this.getPowerProvider();
         }
-        if(this.bcPowerHandler.getEnergyStored() <= 0) return;
+        if(this.bcPowerHandler.getEnergyStored() <= 0) {
+            return;
+        }
         network.addPower((int) Math.floor(this.bcPowerHandler.useEnergy(1, this.bcPowerHandler.getMaxEnergyStored(), true) / Ratios.MJ.conversion));
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public void tryOutputtingEnergy() {
-        if(!AltEngCompat.hasBC) return;
-
-        if(network.networkPower <= Ratios.MJ.conversion)
+        if(!AltEngCompat.hasBC) {
             return;
+        }
+
+        if(network.networkPower <= Ratios.MJ.conversion) {
+            return;
+        }
 
         boolean[] conSides = new boolean[6];
         int connected = 0;
         for(ForgeDirection dr : ForgeDirection.VALID_DIRECTIONS) {
-            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord +dr.offsetY, zCoord + dr.offsetZ);
+            TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ);
             if(tmpTile != null) {
                 if(!AltEngCompat.isInvalidPowerTile(tmpTile) && !(tmpTile instanceof TileEntityPowerCable)) {
                     if(tmpTile instanceof IPowerReceptor) {
-                        if(AltEngCompat.isICTile(tmpTile))
+                        if(AltEngCompat.isICTile(tmpTile)) {
                             continue;
+                        }
                         connected += 1;
                         conSides[dr.ordinal()] = true;
                     }
                 }
             }
         }
-        if(connected == 0) return;
+        if(connected == 0) {
+            return;
+        }
 
         int equalPower = (int) Math.floor(network.networkPower / connected);
 
@@ -365,10 +398,12 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                     if(((IPowerReceptor) tmptile).getPowerReceiver(dr.getOpposite()) != null) {
                         PowerHandler.PowerReceiver rec = ((IPowerReceptor)tmptile).getPowerReceiver(dr.getOpposite());
                         float neededPower = rec.powerRequest();
-                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= Ratios.MJ.conversion)
+                        if(neededPower <= 0 || rec.getMaxEnergyStored() - rec.getEnergyStored() <= Ratios.MJ.conversion) {
                             continue;
-                        if(neededPower > equalPower)
+                        }
+                        if(neededPower > equalPower) {
                             neededPower = equalPower;
+                        }
 
                         float restEnergy = rec.receiveEnergy(PowerHandler.Type.STORAGE, neededPower, dr.getOpposite());
                         drainPower += equalPower - restEnergy;
@@ -376,14 +411,15 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
                 }
             }
         }
-        if(drainPower < 0)
+        if(drainPower < 0) {
             return;
+        }
         network.drainPower((int) Math.floor(drainPower / Ratios.MJ.conversion));
     }
 
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler getPowerProvider() {
-        if(this.bcPowerHandler == null){
+        if(this.bcPowerHandler == null) {
             this.bcPowerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
             this.bcPowerHandler.configure(25, 500, 1337, 1000);
             this.bcPowerHandler.configurePowerPerdition(0, 0);
@@ -394,8 +430,9 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
     @Optional.Method(modid = "BuildCraft|Energy")
     public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side) {
         TileEntity tmpTile = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-        if(tmpTile != null && AltEngCompat.isValidPowerTile(tmpTile))
+        if(tmpTile != null && AltEngCompat.isValidPowerTile(tmpTile)) {
             return getPowerProvider().getPowerReceiver();
+        }
         return null;
     }
 

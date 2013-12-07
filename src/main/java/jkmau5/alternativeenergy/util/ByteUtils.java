@@ -16,7 +16,7 @@ public class ByteUtils {
 
     public static short set(short val, int slot, boolean bool) {
         if (get(val, slot) != bool) {
-            val += bool? (1 << slot) : -(1 << slot);
+            val += bool ? (1 << slot) : -(1 << slot);
         }
         return val;
     }
@@ -33,7 +33,7 @@ public class ByteUtils {
         return get(val, slot.ordinal());
     }
 
-    public static void writeVarint(DataOutput output, int value){
+    public static void writeVarint(DataOutput output, int value) {
         Preconditions.checkArgument(value >= 0, "Value cannot be negative");
         try {
             while (true) {
@@ -48,21 +48,21 @@ public class ByteUtils {
                     break;
                 }
             }
-        }catch(IOException e){
+        } catch(IOException e) {
             throw Throwables.propagate(e);
         }
     }
 
-    public static int readVarint(DataInput input){
+    public static int readVarint(DataInput input) {
         int result = 0;
         int shift = 0;
         int b;
-        try{
-            do{
+        try {
+            do {
                 b = input.readByte();
                 result = result | ((b & 0x7F) << shift);
                 shift += 7;
-            }while (b < 0);
+            } while (b < 0);
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }

@@ -17,8 +17,8 @@ public class PacketLinkboxFrequencyUpdate extends AbstractPacket {
     private int linkID;
     private int x, y, z;
 
-    public PacketLinkboxFrequencyUpdate(){} //We need the empty constructor here!
-    public PacketLinkboxFrequencyUpdate(TileEntityLinkBox tile, int linkID){
+    public PacketLinkboxFrequencyUpdate() {} //We need the empty constructor here!
+    public PacketLinkboxFrequencyUpdate(TileEntityLinkBox tile, int linkID) {
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;
@@ -40,7 +40,9 @@ public class PacketLinkboxFrequencyUpdate extends AbstractPacket {
         this.z = data.readInt();
 
         TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
-        if(tile == null || !(tile instanceof TileEntityLinkBox)) return;
+        if(tile == null || !(tile instanceof TileEntityLinkBox)) {
+            return;
+        }
         ((TileEntityLinkBox) tile).setLinkId(this.linkID);
     }
 }

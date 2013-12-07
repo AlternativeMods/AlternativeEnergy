@@ -35,7 +35,7 @@ public class AlternativeEnergy {
 
     @SuppressWarnings("unused")
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event){
+    public void preInit(FMLPreInitializationEvent event) {
         this.config = new ConfigFile(event.getSuggestedConfigurationFile()).setComment("AlternativeEnergy main config file");
 
         this.creativeTab = new AltEngCreativeTab();
@@ -56,7 +56,7 @@ public class AlternativeEnergy {
 
     @SuppressWarnings("unused")
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event){
+    public void postInit(FMLPostInitializationEvent event) {
         proxy.registerRenderers();
         AltEngCompat.checkCompat();
     }

@@ -60,7 +60,7 @@ public class BlockConveyor extends BlockTileEntity {
     public void registerIcons(IconRegister register) {
         this.textureBottom = register.registerIcon(Constants.TEXTURE_DOMAIN + ":conveyor/bottom");
         this.textureSides = register.registerIcon(Constants.TEXTURE_DOMAIN + ":conveyor/sides");
-        for(int i = 0; i < this.textureTop.length; i++){
+        for(int i = 0; i < this.textureTop.length; i++) {
             this.textureTop[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":conveyor/top_" + i);
             this.textureTopActive[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":conveyor/top_" + i + "_active");
         }
@@ -69,12 +69,40 @@ public class BlockConveyor extends BlockTileEntity {
     @Override
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int meta) {
-        if(side == 0) return this.textureBottom;
-        if(side == 1) return this.textureTopActive[meta];
-        if(meta == 0) if(side == 2) return this.textureTopActive[2]; else if(side == 3) return this.textureTopActive[0]; else return this.textureSides;
-        if(meta == 1) if(side == 5) return this.textureTopActive[2]; else if(side == 4) return this.textureTopActive[0]; else return this.textureSides;
-        if(meta == 2) if(side == 3) return this.textureTopActive[2]; else if(side == 2) return this.textureTopActive[0]; else return this.textureSides;
-        if(meta == 3) if(side == 4) return this.textureTopActive[2]; else if(side == 5) return this.textureTopActive[0]; else return this.textureSides;
+        if(side == 0) {
+            return this.textureBottom;
+        }
+        if(side == 1) {
+            return this.textureTopActive[meta];
+        }
+        if(meta == 0) if(side == 2) {
+                return this.textureTopActive[2];
+            } else if(side == 3) {
+                return this.textureTopActive[0];
+            } else {
+                return this.textureSides;
+            }
+        if(meta == 1) if(side == 5) {
+                return this.textureTopActive[2];
+            } else if(side == 4) {
+                return this.textureTopActive[0];
+            } else {
+                return this.textureSides;
+            }
+        if(meta == 2) if(side == 3) {
+                return this.textureTopActive[2];
+            } else if(side == 2) {
+                return this.textureTopActive[0];
+            } else {
+                return this.textureSides;
+            }
+        if(meta == 3) if(side == 4) {
+                return this.textureTopActive[2];
+            } else if(side == 5) {
+                return this.textureTopActive[0];
+            } else {
+                return this.textureSides;
+            }
         return this.textureSides;
     }
 
@@ -91,25 +119,41 @@ public class BlockConveyor extends BlockTileEntity {
         double xVel, yVel, zVel;
         int meta = world.getBlockMetadata(x, y, z);
         ForgeDirection direction = ForgeDirection.UNKNOWN;
-        if(meta == 0) direction = ForgeDirection.SOUTH;
-        if(meta == 1) direction = ForgeDirection.WEST;
-        if(meta == 2) direction = ForgeDirection.NORTH;
-        if(meta == 3) direction = ForgeDirection.EAST;
-        if(direction == ForgeDirection.UNKNOWN) return;
+        if(meta == 0) {
+            direction = ForgeDirection.SOUTH;
+        }
+        if(meta == 1) {
+            direction = ForgeDirection.WEST;
+        }
+        if(meta == 2) {
+            direction = ForgeDirection.NORTH;
+        }
+        if(meta == 3) {
+            direction = ForgeDirection.EAST;
+        }
+        if(direction == ForgeDirection.UNKNOWN) {
+            return;
+        }
 
         xVel = direction.offsetX * SPEED;
         yVel = direction.offsetY * SPEED;
         zVel = direction.offsetZ * SPEED;
 
-        if(direction.offsetX != 0){
-            if(entity.posZ > z + 0.6D) zVel = -0.1D;
-            else if(entity.posZ < z + 0.4D) zVel = 0.1D;
-        }else if(direction.offsetZ != 0){
-            if(entity.posX > x + 0.6D) xVel = -0.1D;
-            else if(entity.posX < x + 0.4D) xVel = 0.1D;
+        if(direction.offsetX != 0) {
+            if(entity.posZ > z + 0.6D) {
+                zVel = -0.1D;
+            } else if(entity.posZ < z + 0.4D) {
+                zVel = 0.1D;
+            }
+        } else if(direction.offsetZ != 0) {
+            if(entity.posX > x + 0.6D) {
+                xVel = -0.1D;
+            } else if(entity.posX < x + 0.4D) {
+                xVel = 0.1D;
+            }
         }
         entity.setVelocity(xVel, yVel, zVel);
-        if(entity instanceof EntityItem){
+        if(entity instanceof EntityItem) {
             ((EntityItem) entity).age = 0;
         }
     }

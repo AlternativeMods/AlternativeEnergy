@@ -12,13 +12,13 @@ import net.minecraft.item.ItemStack;
  */
 public class AltEngRecipes {
 
-    public static void init(){
-        if(AltEngCompat.hasIC2 && AltEngCompat.hasBC){
+    public static void init() {
+        if(AltEngCompat.hasIC2 && AltEngCompat.hasBC) {
             initIC2AndBCRecipes();
         }
     }
 
-    private static void initIC2AndBCRecipes(){
+    private static void initIC2AndBCRecipes() {
         Item goldKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowergold");
         Item woodKinesis = GameRegistry.findItem("BuildCraft|Transport", "item.buildcraftPipe.pipepowerwood");
         ItemStack diamondChipset = GameRegistry.findItemStack("BuildCraft|Silicon", "redstone_diamond_chipset", 1);

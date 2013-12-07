@@ -21,8 +21,8 @@ public class PacketSynchronisation extends AbstractPacket {
 
     private byte[] data;
 
-    public PacketSynchronisation(){} //We need the empty constructor here!
-    public PacketSynchronisation(byte[] data){
+    public PacketSynchronisation() {} //We need the empty constructor here!
+    public PacketSynchronisation(byte[] data) {
         this.data = data;
     }
 
@@ -35,9 +35,9 @@ public class PacketSynchronisation extends AbstractPacket {
     public void readPacket(DataInput data) throws IOException {
         boolean toServer = data.readBoolean();
         World world;
-        if(toServer){
+        if(toServer) {
             world = DimensionManager.getWorld(data.readInt());
-        }else{
+        } else {
             world = Minecraft.getMinecraft().theWorld;
         }
 

@@ -23,17 +23,17 @@ import net.minecraftforge.common.ForgeDirection;
  */
 public class BlockPowerStorage extends BlockTileEntity {
 
-    public static String[] iconNames = new String[]{"powerBox", "linkBox"};
+    public static String[] iconNames = new String[] {"powerBox", "linkBox"};
     @SideOnly(Side.CLIENT) public Icon[] icon_input = new Icon[iconNames.length];
     @SideOnly(Side.CLIENT) public Icon[] icon_output = new Icon[iconNames.length];
     @SideOnly(Side.CLIENT) public Icon[] icon_disabled = new Icon[iconNames.length];
 
-    public BlockPowerStorage(){
+    public BlockPowerStorage() {
         super("powerStorage", Material.iron);
         this.setHardness(5.0F);
-        if(Config.powerBoxExplosionResistant){
+        if(Config.powerBoxExplosionResistant) {
             this.setResistance(6000000.0F);
-        }else{
+        } else {
             this.setResistance(10.0F);
         }
         this.setStepSound(soundMetalFootstep);
@@ -47,8 +47,11 @@ public class BlockPowerStorage extends BlockTileEntity {
 
     @Override
     public TileEntity createTileEntity(World world, int metadata) {
-        if(metadata == 0) return new TileEntityPowerBox();
-        else if(metadata == 1) return new TileEntityLinkBox();
+        if(metadata == 0) {
+            return new TileEntityPowerBox();
+        } else if(metadata == 1) {
+            return new TileEntityLinkBox();
+        }
         return null;
     }
 
@@ -67,7 +70,7 @@ public class BlockPowerStorage extends BlockTileEntity {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister register) {
-        for(int i = 0; i < iconNames.length; i++){
+        for(int i = 0; i < iconNames.length; i++) {
             icon_input[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":" + iconNames[i] + "_input");
             icon_output[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":" + iconNames[i] + "_output");
             icon_disabled[i] = register.registerIcon(Constants.TEXTURE_DOMAIN + ":" + iconNames[i] + "_disabled");
@@ -78,13 +81,19 @@ public class BlockPowerStorage extends BlockTileEntity {
     @SideOnly(Side.CLIENT)
     public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
         TileEntity tile = world.getBlockTileEntity(x, y, z);
-        if(tile != null && tile instanceof TileEntityPowerStorage){
+        if(tile != null && tile instanceof TileEntityPowerStorage) {
             TileEntityPowerStorage storage = (TileEntityPowerStorage) tile;
             EnumOutputMode mode = storage.getMode(ForgeDirection.getOrientation(side));
             int meta = world.getBlockMetadata(x, y, z);
-            if(mode == EnumOutputMode.INPUT) return icon_input[meta];
-            if(mode == EnumOutputMode.OUTPUT) return icon_output[meta];
-            if(mode == EnumOutputMode.DISABLED) return icon_disabled[meta];
+            if(mode == EnumOutputMode.INPUT) {
+                return icon_input[meta];
+            }
+            if(mode == EnumOutputMode.OUTPUT) {
+                return icon_output[meta];
+            }
+            if(mode == EnumOutputMode.DISABLED) {
+                return icon_disabled[meta];
+            }
         }
         return icon_disabled[0];
     }

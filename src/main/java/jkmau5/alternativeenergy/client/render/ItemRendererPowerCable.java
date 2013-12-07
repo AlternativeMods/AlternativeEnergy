@@ -18,7 +18,9 @@ public class ItemRendererPowerCable implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack itemStack, ItemRenderType itemRenderType) {
-        if(itemStack == null) return false;
+        if(itemStack == null) {
+            return false;
+        }
         switch(itemRenderType) {
             case ENTITY:
             case INVENTORY:
@@ -56,7 +58,7 @@ public class ItemRendererPowerCable implements IItemRenderer {
         GL11.glPopMatrix();
     }
 
-    public void doRenderCable(RenderBlocks renderBlocks){
+    public void doRenderCable(RenderBlocks renderBlocks) {
         float min = 0.355F;
         float max = 0.645F;
         Tessellator tessellator = Tessellator.instance;

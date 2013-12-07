@@ -19,8 +19,7 @@ public class InvSlotCharge extends InvSlot {
         super(base, "charge", oldStartIndex, InvSlot.Access.IO, 1, InvSlot.InvSide.TOP, null);
     }
 
-    public boolean accepts(ItemStack itemStack)
-    {
+    public boolean accepts(ItemStack itemStack) {
         Item item = itemStack.getItem();
 
         if ((item instanceof IElectricItem)) {
@@ -32,14 +31,18 @@ public class InvSlotCharge extends InvSlot {
 
     public IElectricItem getItem() {
         ItemStack itemStack = get(0);
-        if (itemStack == null) return null;
+        if (itemStack == null) {
+            return null;
+        }
 
         return (IElectricItem)itemStack.getItem();
     }
 
     public int charge(int amount) {
         ItemStack itemStack = get(0);
-        if (itemStack == null) return 0;
+        if (itemStack == null) {
+            return 0;
+        }
 
         Item item = itemStack.getItem();
 

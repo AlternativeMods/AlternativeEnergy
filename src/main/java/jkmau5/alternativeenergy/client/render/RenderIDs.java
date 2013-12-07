@@ -15,7 +15,7 @@ public enum RenderIDs {
     @Getter
     private final int renderID;
 
-    private RenderIDs(){
+    private RenderIDs() {
         this.renderID = RenderingRegistry.getNextAvailableRenderId();
     }
 }
