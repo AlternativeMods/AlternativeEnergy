@@ -38,3 +38,15 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.6'
 }
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        include 'version.properties'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+        exclude 'version.properties'
+    }
+}
