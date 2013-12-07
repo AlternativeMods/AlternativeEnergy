@@ -75,9 +75,9 @@ public class ConfigTag extends ConfigTagParent {
         setValue(Boolean.toString(b));
     }
 
-    public void setHexValue(int i) {
-        setValue("0x" + Long.toString(((long) i) << 32 > >> 32, 16));
-    }
+    /*public void setHexValue(int i) {
+        setValue("0x" + Long.toString(((long) i) << 32 >>> 32, 16));
+    }*/
 
     public String getValue() {
         return value;
@@ -130,7 +130,7 @@ public class ConfigTag extends ConfigTagParent {
         return (int) Long.parseLong(getValue().replace("0x", ""), 16);
     }
 
-    public int getHexValue(int defaultvalue) {
+    /*public int getHexValue(int defaultvalue) {
         if (value == null) {
             setHexValue(defaultvalue);
         }
@@ -140,7 +140,7 @@ public class ConfigTag extends ConfigTagParent {
             setHexValue(defaultvalue);
             return getHexValue();
         }
-    }
+    }*/
 
     public void save(PrintWriter writer, int tabs, String bracequalifier, boolean first) {
         String vname;
