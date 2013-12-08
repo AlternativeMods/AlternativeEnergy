@@ -1,5 +1,8 @@
 package jkmau5.alternativeenergy;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  * No description given
  *
@@ -7,7 +10,7 @@ package jkmau5.alternativeenergy;
  */
 public class BaseTests {
 
-    /*@Test
+    @Test
     public void testConvertNumber(){
         Assert.assertEquals("5", Config.convertNumber(5));
         Assert.assertEquals("500", Config.convertNumber(500));
@@ -18,5 +21,5 @@ public class BaseTests {
     @Test
     public void testConstants(){
         Assert.assertEquals(Constants.MODID.toLowerCase(), Constants.TEXTURE_DOMAIN);
-    }*/
+    }
 }
