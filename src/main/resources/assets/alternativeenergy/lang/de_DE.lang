@@ -1,0 +1,12 @@
+itemGroup.altEng=AlternativeEnergy
+
+tile.altEng.powerCable.name=Energiekabel
+tile.altEng.powerBox.name=Energiebox
+tile.altEng.linkBox.name=Verbindungsbox
+
+
+item.altEng.upgrade.capacity.name=Kapazitäts-Upgrade
+item.altEng.upgrade.computerCraft.name=ComputerCraft-Upgrade
+item.altEng.alternativeWrench.name=Alternativer Schraubenschlüssel
+
+altEng.chatmessage.storageSideModeChanged=Seitenmodus zu %s geändert
