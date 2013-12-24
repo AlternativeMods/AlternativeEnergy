@@ -62,6 +62,8 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
 
     protected boolean addedToEnet = false;
     protected int euToConvert = 0;
+    protected int rfToConvert = 0;
+
     @SideOnly(Side.CLIENT)
     public int guiPower = 0; //The amount of energy to display in the gui
 
@@ -229,10 +231,19 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
                 }
             }
 
-            if(this.euToConvert % Ratios.EU.conversion == 0) {
-                this.storedPower.clampMin(0);
-                this.storedPower.add((int) Math.ceil(euToConvert / Ratios.EU.conversion));
-                this.euToConvert = 0;
+            if(this.euToConvert >= Ratios.EU.conversion) {
+                while(this.euToConvert >= Ratios.EU.conversion) {
+                    this.storedPower.clampMin(0);
+                    this.storedPower.add(1);
+                    this.euToConvert -= Ratios.EU.conversion;
+                }
+            }
+            if(this.rfToConvert >= Ratios.RF.conversion) {
+                while(this.rfToConvert >= Ratios.RF.conversion) {
+                    this.storedPower.clampMin(0);
+                    this.storedPower.add(1);
+                    this.rfToConvert -= Ratios.RF.conversion;
+                }
             }
 
             if(AltEngCompat.hasBC) {
@@ -625,16 +636,35 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
         }
     }
 
-    public int receiveEnergy(ForgeDirection paramForgeDirection, int paramInt, boolean paramBoolean) {
-        if(outputMode.getMode(paramForgeDirection) != EnumOutputMode.INPUT)
+    public int receiveEnergy(ForgeDirection dir, int maxReceive, boolean simulate) {
+        if(outputMode.getMode(dir) != EnumOutputMode.INPUT)
             return 0;
-        return 5;
+        if(worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof IPowerReceptor)
+            return 0;
+        if(maxReceive > Ratios.RF.conversion * 10)
+            maxReceive = Ratios.RF.conversion * 10;
+        rfToConvert += maxReceive;
+        if(rfToConvert > Ratios.RF.conversion * 100) {
+            maxReceive -= rfToConvert - (Ratios.RF.conversion * 100);
+            rfToConvert = Ratios.RF.conversion * 100;
+        }
+        return maxReceive;
     }
 
-    public int extractEnergy(ForgeDirection paramForgeDirection, int paramInt, boolean paramBoolean) {
-        if(outputMode.getMode(paramForgeDirection) != EnumOutputMode.OUTPUT)
+    public int extractEnergy(ForgeDirection dir, int maxExtract, boolean simulate) {
+        if(outputMode.getMode(dir.getOpposite()) != EnumOutputMode.OUTPUT)
             return 0;
-        return 0;
+        if(worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof IPowerReceptor)
+            return 0;
+        int tickExtract = 500;
+        if(tickExtract > (int) Math.floor(storedPower.getValue() / Ratios.RF.conversion))
+            tickExtract = (int) Math.floor(storedPower.getValue() / Ratios.RF.conversion);
+        if(tickExtract > maxExtract)
+            tickExtract = maxExtract;
+
+        storedPower.clampMin(0);
+        storedPower.subtract(tickExtract);
+        return tickExtract;
     }
 
     public int getEnergyStored(ForgeDirection paramForgeDirection) {
