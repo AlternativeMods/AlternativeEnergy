@@ -1,0 +1,12 @@
+itemGroup.altEng=可替代能源
+
+tile.altEng.powerCable.name=能源线缆
+tile.altEng.powerBox.name=能源盒
+tile.altEng.linkBox.name=链接盒
+
+
+item.altEng.upgrade.capacity.name=容量升级
+item.altEng.upgrade.computerCraft.name=电脑升级(ComputerCraft)
+item.altEng.alternativeWrench.name=可替代扳手
+
+altEng.chatmessage.storageSideModeChanged=将端口切换为 %s
