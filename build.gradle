@@ -37,6 +37,7 @@ dependencies {
     compile 'buildcraft:BuildCraftAPI:1.0'
     compile 'ic2:IC2Api:1.0'
     compile 'computercraft:ComputerCraftAPI:1.0'
+	compile 'com.teamcofh:CofhCore:b11b'
 
     testCompile 'junit:junit:4.11'
 }

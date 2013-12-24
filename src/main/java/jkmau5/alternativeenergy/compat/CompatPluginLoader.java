@@ -3,7 +3,6 @@ package jkmau5.alternativeenergy.compat;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Loader;
 import jkmau5.alternativeenergy.AltEngLog;
-import jkmau5.alternativeenergy.compat.waila.PluginWaila;
 import lombok.Getter;
 
 import java.util.List;
@@ -69,6 +68,6 @@ public class CompatPluginLoader {
     }
 
     public void registerBuiltInPlugins(){
-        this.registerPlugin(new PluginWaila());
+
     }
 }
