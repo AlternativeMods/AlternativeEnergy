@@ -2,6 +2,7 @@ package jkmau5.alternativeenergy.world.tileentity;
 
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
+import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Optional;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
@@ -28,9 +29,10 @@ import net.minecraftforge.common.MinecraftForge;
 @Optional.InterfaceList(value = {
     @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
     @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "IC2"),
-    @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy")
+    @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy"),
+    @Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "ThermalExpansion")
 })
-public class TileEntityPowerCable extends AltEngTileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor {
+public class TileEntityPowerCable extends AltEngTileEntity implements IEnergyStorage, IEnergySink, IPowerReceptor, IEnergyHandler {
     EnergyNetwork network;
     boolean initialized;
     boolean addedToENet;
@@ -446,4 +448,74 @@ public class TileEntityPowerCable extends AltEngTileEntity implements IEnergySto
         return worldObj;
     }
     //---------------------------------
+
+    @Optional.Method(modid = "ThermalExpansion")
+    public int receiveEnergy(ForgeDirection dir, int maxReceive, boolean simulate) {
+        if(worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof IPowerReceptor)
+            return 0;
+        if(maxReceive > Ratios.RF.conversion * 10)
+            maxReceive = Ratios.RF.conversion * 10;
+        int returning = network.addPower(maxReceive / Ratios.RF.conversion);
+        System.out.println(returning);
+        return network.addPower(maxReceive / Ratios.RF.conversion);
+        /*if(rfToConvert > Ratios.RF.conversion * 100) {
+            maxReceive -= rfToConvert - (Ratios.RF.conversion * 100);
+            rfToConvert = Ratios.RF.conversion * 100;
+        }*/
+        //return maxReceive;
+    }
+
+    @Optional.Method(modid = "ThermalExpansion")
+    public int extractEnergy(ForgeDirection dir, int maxExtract, boolean simulate) {
+        if(worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof IPowerReceptor)
+            return 0;
+        int tickExtract = 500;
+        if(tickExtract > (int) Math.floor(network.getNetworkPower() / Ratios.RF.conversion))
+            tickExtract = (int) Math.floor(network.getNetworkPower() / Ratios.RF.conversion);
+        if(tickExtract > maxExtract)
+            tickExtract = maxExtract;
+
+        network.drainPower(tickExtract / Ratios.RF.conversion);
+        return tickExtract;
+    }
+
+    @Optional.Method(modid = "ThermalExpansion")
+    public int getEnergyStored(ForgeDirection paramForgeDirection) {
+        return network.getNetworkPower();
+    }
+
+    @Optional.Method(modid = "ThermalExpansion")
+    public int getMaxEnergyStored(ForgeDirection paramForgeDirection) {
+        return network.maxNetworkPower;
+    }
+
+    @Optional.Method(modid = "ThermalExpansion")
+    public boolean canInterface(ForgeDirection dir) {
+        return true;
+    }
+
+    public void outputToRF() {
+        if(network.getNetworkPower() <= 0)
+            return;
+
+        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            TileEntity tile = worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+            if(tile == null || !(tile instanceof IEnergyHandler))
+                continue;
+
+            IEnergyHandler handler = (IEnergyHandler) tile;
+            if(!handler.canInterface(dir.getOpposite()))
+                continue;
+
+            int possible = 0;
+            int stored = network.getNetworkPower() * Ratios.RF.conversion;
+            while(stored > 0 && stored % Ratios.RF.conversion == 0) {
+                stored -= Ratios.RF.conversion;
+                possible += Ratios.RF.conversion;
+            }
+
+            int received = handler.receiveEnergy(dir.getOpposite(), possible, false);
+            network.drainPower((int) Math.ceil(received / Ratios.RF.conversion));
+        }
+    }
 }

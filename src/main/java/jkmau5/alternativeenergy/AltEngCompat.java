@@ -3,6 +3,7 @@ package jkmau5.alternativeenergy;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.tools.IToolWrench;
 import buildcraft.api.transport.IPipeTile;
+import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import ic2.api.energy.tile.IEnergyConductor;
@@ -28,6 +29,7 @@ public class AltEngCompat {
     public static boolean hasCC = Loader.isModLoaded("ComputerCraft");
     public static boolean hasBiblioCraft = Loader.isModLoaded("BiblioCraft");
     public static boolean hasCarpentersBlocks = Loader.isModLoaded("CarpentersBlocks");
+    public static boolean hasThermalExpansion = Loader.isModLoaded("ThermalExpansion");
 
     public static IndustrialCraft.AlternativeElectricItemManager alternativeElectricItemManager;
 
@@ -35,7 +37,7 @@ public class AltEngCompat {
         hasBC = Loader.isModLoaded("BuildCraft|Transport");
         hasIC2 = Loader.isModLoaded("IC2");
         hasCC = Loader.isModLoaded("ComputerCraft");
-        if(!hasIC2 && !hasBC) {
+        /*if(!hasIC2 && !hasBC) { //TODO: Do we need this still?
             if (FMLCommonHandler.instance().getSide().isClient()) {
                 JOptionPane optionPane = new JOptionPane();
                 optionPane.setMessage("AlternativeEnergy is useless without one of the corresponding mods (BuildCraft or IndustrialCraft2).\n" + "Install atleast one of them, and the mod will have features!");
@@ -44,7 +46,7 @@ public class AltEngCompat {
                 dialog.setAlwaysOnTop(true);
                 dialog.setVisible(true);
             }
-        }
+        }*/
 
         if(hasIC2) {
             alternativeElectricItemManager = new IndustrialCraft.AlternativeElectricItemManager();
@@ -91,6 +93,10 @@ public class AltEngCompat {
             if(tile instanceof IEnergySink || tile instanceof IEnergyStorage || tile instanceof IEnergySource) {
                 return true;
             }
+        }
+        if(AltEngCompat.hasThermalExpansion) {
+            if(tile instanceof IEnergyHandler)
+                return true;
         }
         return false;
     }

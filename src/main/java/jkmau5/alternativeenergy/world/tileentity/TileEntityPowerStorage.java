@@ -2,6 +2,7 @@ package jkmau5.alternativeenergy.world.tileentity;
 
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerHandler;
+import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -52,13 +53,13 @@ import java.util.Random;
     @Optional.Interface(iface = "ic2.api.tile.IEnergyStorage", modid = "IC2"),
     @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "IC2"),
     @Optional.Interface(iface = "buildcraft.api.power.IPowerReceptor", modid = "BuildCraft|Energy"),
-    @Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "CoFH|Core")
+    @Optional.Interface(iface = "cofh.api.energy.IEnergyHandler", modid = "ThermalExpansion")
 })
 public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
         implements IPeripheral,
         IEnergySink, IEnergyStorage, IEnergySource,
         IPowerReceptor,
-        cofh.api.energy.IEnergyHandler {
+        IEnergyHandler {
 
     protected boolean addedToEnet = false;
     protected int euToConvert = 0;
@@ -238,12 +239,15 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
                     this.euToConvert -= Ratios.EU.conversion;
                 }
             }
-            if(this.rfToConvert >= Ratios.RF.conversion) {
-                while(this.rfToConvert >= Ratios.RF.conversion) {
-                    this.storedPower.clampMin(0);
-                    this.storedPower.add(1);
-                    this.rfToConvert -= Ratios.RF.conversion;
+            if(AltEngCompat.hasThermalExpansion) {
+                if(this.rfToConvert >= Ratios.RF.conversion) {
+                    while(this.rfToConvert >= Ratios.RF.conversion) {
+                        this.storedPower.clampMin(0);
+                        this.storedPower.add(1);
+                        this.rfToConvert -= Ratios.RF.conversion;
+                    }
                 }
+                outputToRF();
             }
 
             if(AltEngCompat.hasBC) {
@@ -636,6 +640,7 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
         }
     }
 
+    @Optional.Method(modid = "ThermalExpansion")
     public int receiveEnergy(ForgeDirection dir, int maxReceive, boolean simulate) {
         if(outputMode.getMode(dir) != EnumOutputMode.INPUT)
             return 0;
@@ -651,8 +656,9 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
         return maxReceive;
     }
 
+    @Optional.Method(modid = "ThermalExpansion")
     public int extractEnergy(ForgeDirection dir, int maxExtract, boolean simulate) {
-        if(outputMode.getMode(dir.getOpposite()) != EnumOutputMode.OUTPUT)
+        if(outputMode.getMode(dir) != EnumOutputMode.OUTPUT)
             return 0;
         if(worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof IPowerReceptor)
             return 0;
@@ -667,15 +673,45 @@ public abstract class TileEntityPowerStorage extends SynchronizedTileEntity
         return tickExtract;
     }
 
+    @Optional.Method(modid = "ThermalExpansion")
     public int getEnergyStored(ForgeDirection paramForgeDirection) {
         return storedPower.getValue();
     }
 
+    @Optional.Method(modid = "ThermalExpansion")
     public int getMaxEnergyStored(ForgeDirection paramForgeDirection) {
         return maxStoredPower;
     }
 
-    public boolean canInterface(ForgeDirection paramForgeDirection) {
+    @Optional.Method(modid = "ThermalExpansion")
+    public boolean canInterface(ForgeDirection dir) {
+        if(outputMode.getMode(dir) == EnumOutputMode.DISABLED)
+            return false;
         return true;
+    }
+
+    public void outputToRF() {
+        if(storedPower.getValue() <= 0)
+            return;
+
+        for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+            TileEntity tile = worldObj.getBlockTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+            if(tile == null || !(tile instanceof IEnergyHandler))
+                continue;
+
+            IEnergyHandler handler = (IEnergyHandler) tile;
+            if(!handler.canInterface(dir.getOpposite()))
+                continue;
+
+            int possible = 0;
+            int stored = storedPower.getValue() * Ratios.RF.conversion;
+            while(stored > 0 && stored % Ratios.RF.conversion == 0) {
+                stored -= Ratios.RF.conversion;
+                possible += Ratios.RF.conversion;
+            }
+
+            int received = handler.receiveEnergy(dir.getOpposite(), possible, false);
+            storedPower.subtract((int) Math.ceil(received / Ratios.RF.conversion));
+        }
     }
 }
