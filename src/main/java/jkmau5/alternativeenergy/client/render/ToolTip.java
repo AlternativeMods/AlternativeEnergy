@@ -81,7 +81,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
             }
             return toolTip;
         } catch(RuntimeException ex) {
-            AltEngLog.severe(ex, "Failed to parse tooltip %s", tipTag);
+            AltEngLog.error(ex, "Failed to parse tooltip %s", tipTag);
             throw ex;
         }
     }

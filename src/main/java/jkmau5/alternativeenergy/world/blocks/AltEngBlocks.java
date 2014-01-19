@@ -19,7 +19,7 @@ public class AltEngBlocks {
     public static Block blockConveyor;
 
     public static void init() {
-        blockPowerCable = new BlockPowerCable(Material.iron);
+        blockPowerCable = new BlockPowerCable(Material.field_151573_f);
         blockPowerStorage = new BlockPowerStorage();
         blockConveyor = new BlockConveyor();
 

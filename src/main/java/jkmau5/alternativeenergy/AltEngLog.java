@@ -1,9 +1,8 @@
 package jkmau5.alternativeenergy;
 
-import cpw.mods.fml.relauncher.FMLRelaunchLog;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * No description given
@@ -13,11 +12,7 @@ import java.util.logging.Logger;
 @SuppressWarnings("unused")
 public class AltEngLog {
 
-    private static final Logger logger = Logger.getLogger("AlternativeEnergy");
-
-    static {
-        logger.setParent(FMLRelaunchLog.log.getLogger());
-    }
+    private static final Logger logger = LogManager.getLogger("AlternativeEnergy");
 
     public static void log(Level level, String format, Object... data) {
         logger.log(level, String.format(format, data));
@@ -27,20 +22,28 @@ public class AltEngLog {
         logger.log(level, String.format(format, data), ex);
     }
 
-    public static void severe(Throwable ex, String format, Object... data) {
-        log(Level.SEVERE, ex, format, data);
+    public static void fatal(Throwable ex, String format, Object... data) {
+        log(Level.FATAL, ex, format, data);
     }
 
-    public static void severe(String format, Object... data) {
-        log(Level.SEVERE, format, data);
+    public static void fatal(String format, Object... data) {
+        log(Level.FATAL, format, data);
+    }
+
+    public static void error(Throwable ex, String format, Object... data) {
+        log(Level.ERROR, ex, format, data);
+    }
+
+    public static void error(String format, Object... data) {
+        log(Level.ERROR, format, data);
     }
 
     public static void warning(Throwable ex, String format, Object... data) {
-        log(Level.WARNING, ex, format, data);
+        log(Level.WARN, ex, format, data);
     }
 
     public static void warning(String format, Object... data) {
-        log(Level.WARNING, format, data);
+        log(Level.WARN, format, data);
     }
 
     public static void info(String format, Object... data) {
@@ -48,15 +51,11 @@ public class AltEngLog {
     }
 
     public static void fine(String format, Object... data) {
-        log(Level.FINE, format, data);
+        log(Level.TRACE, format, data);
     }
 
     public static void finer(String format, Object... data) {
-        log(Level.FINER, format, data);
-    }
-
-    public static void finest(String format, Object... data) {
-        log(Level.FINEST, format, data);
+        log(Level.DEBUG, format, data);
     }
 
     public static Logger getLogger() {

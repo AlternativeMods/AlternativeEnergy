@@ -48,7 +48,7 @@ public abstract class AbstractPacket {
             this.writePacket(output);
             ret = PacketDispatcher.getPacket("AltEng", output.toByteArray());
         } catch(IOException e) {
-            AltEngLog.severe(e, "Error while writing packet data for packet " + this.getID());
+            AltEngLog.error(e, "Error while writing packet data for packet " + this.getID());
         }
         return ret;
     }
@@ -69,7 +69,7 @@ public abstract class AbstractPacket {
             }
             ret = nPacket;
         } catch (Exception e) {
-            AltEngLog.severe(e, "Error while reading packet");
+            AltEngLog.error(e, "Error while reading packet");
         } finally {
             IOUtils.closeQuietly(arrayStream);
             IOUtils.closeQuietly(stream);

@@ -67,7 +67,7 @@ public abstract class SynchronizedTileEntity extends AltEngTileEntity implements
             try {
                 addSyncedObject(field.getName(), (ISynchronized) field.get(this));
             } catch (Exception e) {
-                AltEngLog.severe(e, "Exception while registering synced field '%s'", field);
+                AltEngLog.error(e, "Exception while registering synced field '%s'", field);
             }
         }
     }
@@ -104,7 +104,7 @@ public abstract class SynchronizedTileEntity extends AltEngTileEntity implements
         try {
             return syncMap.createPacket(true, false);
         } catch (IOException e) {
-            AltEngLog.severe(e, "Error during description packet creation");
+            AltEngLog.error(e, "Error during description packet creation");
             return null;
         }
     }

@@ -127,7 +127,7 @@ public class InventoryObject implements IInventory, ISaveNBT {
             if(index < this.contents.length) {
                 this.contents[index] = ItemStack.loadItemStackFromNBT(nbttagcompound2);
             } else {
-                AltEngLog.severe("InventoryObject: java.lang.ArrayIndexOutOfBoundsException: " + index + " of " + this.contents.length);
+                AltEngLog.error("InventoryObject: java.lang.ArrayIndexOutOfBoundsException: " + index + " of " + this.contents.length);
             }
         }
     }

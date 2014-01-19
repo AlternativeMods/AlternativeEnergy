@@ -5,7 +5,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import jkmau5.alternativeenergy.compat.CompatPluginLoader;
 import jkmau5.alternativeenergy.server.ProxyCommon;
 import jkmau5.alternativeenergy.util.config.ConfigFile;
@@ -16,8 +15,7 @@ import jkmau5.alternativeenergy.world.item.AltEngItems;
 import jkmau5.alternativeenergy.world.tileentity.AltEngTileEntities;
 import lombok.Getter;
 
-@Mod(modid = "AlternativeEnergy", dependencies = "required-after:Forge@[9.11.1.942,);after:IC2;after:BuildCraft|Core;after:ComputerCraft;after:BiblioCraft;after:CarpentersBlocks")
-@NetworkMod
+@Mod(modid = "AlternativeEnergy", dependencies = "required-after:Forge@[10.12.0.997,);after:IC2;after:BuildCraft|Core;after:ComputerCraft;after:BiblioCraft;after:CarpentersBlocks")
 public class AlternativeEnergy {
 
     @Getter
@@ -43,9 +41,9 @@ public class AlternativeEnergy {
         this.creativeTab = new AltEngCreativeTab();
         proxy.registerEventHandlers();
 
-        AltEngBlocks.init(); //In 1.7, block registration should be in preInit. So, here we are!
-        AltEngItems.init(); //In 1.7, item registration should be in preInit. So, here we are!
-        AltEngTileEntities.init(); //In 1.7, tileEntity registration should be in preInit. So, here we are!
+        AltEngBlocks.init();
+        AltEngItems.init();
+        AltEngTileEntities.init();
         AltEngRecipes.init();
 
         //Config stuff
