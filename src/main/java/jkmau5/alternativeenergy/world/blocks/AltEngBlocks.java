@@ -23,6 +23,7 @@ public class AltEngBlocks {
         blockPowerStorage = new BlockPowerStorage();
         blockConveyor = new BlockConveyor();
 
+        //The names in here are the new blockIDs. Do not change them!
         GameRegistry.registerBlock(AltEngBlocks.blockPowerStorage, ItemBlockPowerStorage.class, "powerStorage");
         GameRegistry.registerBlock(AltEngBlocks.blockPowerCable, "powerCable");
         GameRegistry.registerBlock(AltEngBlocks.blockConveyor, "conveyor");

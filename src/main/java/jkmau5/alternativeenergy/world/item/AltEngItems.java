@@ -10,14 +10,14 @@ public class AltEngItems {
 
     public static void init() {
         itemUpgrade = new ItemUpgrade();
-        GameRegistry.registerItem(itemUpgrade, "upgrade");
-
         itemAlternativeWrench = new ItemAlternativeWrench();
-        GameRegistry.registerItem(itemAlternativeWrench, "alternativeWrench");
+        itemWrenchUpgrade = new ItemWrenchUpgrade();
         //GregTech_API.registerWrench(new ItemStack(itemAlternativeWrench));
         //GregTech_API.sWrenchList.add(Integer.valueOf(GT_Utility.stackToInt(new ItemStack(itemAlternativeWrench))));
 
-        itemWrenchUpgrade = new ItemWrenchUpgrade();
+        //The names in here are the new itemIDs. Do not change them!
+        GameRegistry.registerItem(itemUpgrade, "upgrade");
+        GameRegistry.registerItem(itemAlternativeWrench, "alternativeWrench");
         GameRegistry.registerItem(itemWrenchUpgrade, "wrenchUpgrade");
     }
 }
