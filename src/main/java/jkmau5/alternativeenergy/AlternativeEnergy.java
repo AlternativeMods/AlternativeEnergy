@@ -6,6 +6,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import jkmau5.alternativeenergy.compat.CompatPluginLoader;
+import jkmau5.alternativeenergy.network.AltEngNetworkHandler;
 import jkmau5.alternativeenergy.server.ProxyCommon;
 import jkmau5.alternativeenergy.util.config.ConfigFile;
 import jkmau5.alternativeenergy.util.config.ConfigTag;
@@ -45,6 +46,8 @@ public class AlternativeEnergy {
         AltEngItems.init();
         AltEngTileEntities.init();
         AltEngRecipes.init();
+
+        AltEngNetworkHandler.load(event.getSide());
 
         //Config stuff
         ConfigTag powerBoxTag = this.config.getTag("powerBox").useBraces().setComment("PowerBox settings");

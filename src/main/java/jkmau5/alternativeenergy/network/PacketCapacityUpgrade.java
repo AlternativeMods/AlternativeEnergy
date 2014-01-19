@@ -1,17 +1,15 @@
 package jkmau5.alternativeenergy.network;
 
+import io.netty.buffer.ByteBuf;
 import jkmau5.alternativeenergy.world.tileentity.TileEntityPowerBox;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import lombok.NoArgsConstructor;
 
 /**
  * No description given
  *
  * @author jk-5
  */
+@NoArgsConstructor
 public class PacketCapacityUpgrade extends AbstractPacket {
 
     private TileEntityPowerBox tile;
@@ -19,28 +17,28 @@ public class PacketCapacityUpgrade extends AbstractPacket {
 
     private int x, y, z;
 
-    public PacketCapacityUpgrade(EntityPlayer sender) {} //We need the empty constructor here!
     public PacketCapacityUpgrade(TileEntityPowerBox tile, int numUpgrades) {
-        this.x = tile.xCoord;
-        this.y = tile.yCoord;
-        this.z = tile.zCoord;
+        this.x = tile.field_145851_c;
+        this.y = tile.field_145848_d;
+        this.z = tile.field_145849_e;
         this.tile = tile;
         this.numUpgrades = numUpgrades;
     }
 
     @Override
-    public void writePacket(DataOutput data) throws IOException {
-        data.writeInt(this.x);
-        data.writeInt(this.y);
-        data.writeInt(this.z);
-        data.writeInt(this.numUpgrades);
+    public void encode(ByteBuf buffer){
+        buffer.writeInt(x);
+        buffer.writeInt(y);
+        buffer.writeInt(z);
+        buffer.writeInt(this.numUpgrades);
     }
 
     @Override
-    public void readPacket(DataInput data) throws IOException {
-        this.x = data.readInt();
-        this.y = data.readInt();
-        this.z = data.readInt();
+    public void decode(ByteBuf buffer){
+        this.x = buffer.readInt();
+        this.y = buffer.readInt();
+        this.z = buffer.readInt();
+        this.numUpgrades = buffer.readInt();
 
         /*TileEntity tile = this.getSender().worldObj.getBlockTileEntity(this.x, this.y, this.z);
         if(tile == null || !(tile instanceof TileEntityPowerBox)) return;
