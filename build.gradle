@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
 
@@ -31,27 +31,19 @@ archivesBaseName = 'AlternativeEnergy'
 
 minecraft{
     assetDir = "runtime/client/assets"
-    version = '1.7.2-10.12.0.1007'
+    version = '1.7.2-10.12.0.1048'
 }
 
 dependencies {
-    compile 'org.projectlombok:lombok:1.12.2'
+    /*compile 'org.projectlombok:lombok:1.12.2'
     compile 'jds.bibliocraft:BiblioCraft:1.5.3'
     compile 'gregtechmod:GregTechAPI:4.05j'
     compile 'buildcraft:BuildCraftAPI:1.0'
     compile 'ic2:IC2Api:1.0'
     compile 'computercraft:ComputerCraftAPI:1.0'
-	compile 'com.teamcofh:CofhCore:b11b'
+	compile 'com.teamcofh:CofhCore:b11b'*/
 
     testCompile 'junit:junit:4.11'
-}
-
-test {
-    ignoreFailures = true
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.6'
 }
 
 processResources {
