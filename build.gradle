@@ -15,23 +15,21 @@ buildscript {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "reening"
-        url = "http://maven.reening.nl"
-    }
-}
-
 apply plugin: 'forge'
+apply plugin: 'scala'
 
-group = 'jkmau5.alternativeenergy'
-version = '1.2.1-SNAPSHOT'
-archivesBaseName = 'AlternativeEnergy'
+group = 'alternativemods.alteng'
+version = '1.3-SNAPSHOT'
 
 minecraft{
     assetDir = "runtime/client/assets"
     version = '1.7.2-10.12.0.1048'
+}
+
+repositories {
+    maven{
+        url 'http://maven.reening.nl'
+    }
 }
 
 dependencies {
@@ -42,6 +40,8 @@ dependencies {
     compile 'ic2:IC2Api:1.0'
     compile 'computercraft:ComputerCraftAPI:1.0'
 	compile 'com.teamcofh:CofhCore:b11b'*/
+
+    compile 'jk_5.commons:CommonsConfig:0.1'
 
     testCompile 'junit:junit:4.11'
 }
