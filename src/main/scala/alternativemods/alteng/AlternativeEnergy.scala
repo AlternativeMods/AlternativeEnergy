@@ -5,6 +5,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.Mod.EventHandler
 import org.apache.logging.log4j.LogManager
 import jk_5.commons.config.ConfigFile
+import alternativemods.alteng.blocks.AltEngBlocks
+import alternativemods.alteng.tileentities.AltEngTileEntities
 
 /**
  * No description given
@@ -20,5 +22,7 @@ object AlternativeEnergy {
     this.logger.info("Loading AlternativeEnergy")
 
     val config = ConfigFile.fromFile(event.getSuggestedConfigurationFile).setComment("AlternativeEnergy main config file")
+    AltEngBlocks.load()
+    AltEngTileEntities.load()
   }
 }
