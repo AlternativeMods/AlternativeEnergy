@@ -8,8 +8,9 @@ import net.minecraft.util.{MathHelper, IIcon}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.ItemStack
+import net.minecraft.entity.item.EntityItem
 
 /**
  * Author: Lordmau5
@@ -58,6 +59,54 @@ class BlockConveyor(material: Material) extends Block(material) {
       else
         return icons(1)
     top(0)
+  }
+
+  override def onEntityCollidedWithBlock(world: World, x: Int, y: Int, z: Int, entity: Entity) {
+    super.onEntityCollidedWithBlock(world, x, y, z, entity)
+
+    entity match {
+      case item: EntityItem =>
+        item.age = 0
+      case _ => return
+    }
+
+    val tile = world.getTileEntity(x, y, z)
+    if(tile == null || !tile.isInstanceOf[TileEntityConveyor])
+      return
+    val facing = tile.asInstanceOf[TileEntityConveyor].facing
+    var dr = ForgeDirection.UNKNOWN
+    if(facing == 0) {
+      dr = ForgeDirection.SOUTH
+    }
+    if(facing == 1) {
+      dr = ForgeDirection.WEST
+    }
+    if(facing == 2) {
+      dr = ForgeDirection.NORTH
+    }
+    if(facing == 3) {
+      dr = ForgeDirection.EAST
+    }
+    if(dr == ForgeDirection.UNKNOWN) {
+      return
+    }
+
+    var vel = (dr.offsetX * 0.09D, dr.offsetY * 0.09D, dr.offsetZ * 0.09D)
+
+    if(dr.offsetX != 0) {
+      if(entity.posZ > z + 0.6D) {
+        vel = (vel._1, vel._2, -0.1D)
+      } else if(entity.posZ < z + 0.4D) {
+        vel = (vel._1, vel._2, 0.1D)
+      }
+    } else if(dr.offsetZ != 0) {
+      if(entity.posX > x + 0.6D) {
+        vel = (-0.1D, vel._2, vel._3)
+      } else if(entity.posX < x + 0.4D) {
+        vel = (0.1D, vel._2, vel._3)
+      }
+    }
+    entity.setVelocity(vel._1, vel._2, vel._3)
   }
 
   override def isOpaqueCube = false
