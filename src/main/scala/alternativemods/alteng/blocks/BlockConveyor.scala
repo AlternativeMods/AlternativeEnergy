@@ -59,4 +59,7 @@ class BlockConveyor(material: Material) extends Block(material) {
         return icons(1)
     top(0)
   }
+
+  override def isOpaqueCube = false
+  override def renderAsNormalBlock = false
 }

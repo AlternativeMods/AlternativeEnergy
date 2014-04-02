@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager
 import jk_5.commons.config.ConfigFile
 import alternativemods.alteng.blocks.AltEngBlocks
 import alternativemods.alteng.tileentities.AltEngTileEntities
+import alternativemods.alteng.network.NetworkHandler
 
 /**
  * No description given
@@ -24,5 +25,6 @@ object AlternativeEnergy {
     val config = ConfigFile.fromFile(event.getSuggestedConfigurationFile).setComment("AlternativeEnergy main config file")
     AltEngBlocks.load()
     AltEngTileEntities.load()
+    NetworkHandler.init(event.getSide)
   }
 }

@@ -3,21 +3,17 @@ package alternativemods.alteng.tileentities
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.network.{Packet, NetworkManager}
+import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity
+import alternativemods.alteng.network.SyncedTileEntity
+import io.netty.buffer.ByteBuf
 
 /**
  * Author: Lordmau5
  * Date: 02.04.14
  * Time: 17:00
  */
-class TileEntityConveyor extends TileEntity {
-  var facing: Int = 0
-
-  def this(facing: Int) {
-    this()
-    this.facing = facing
-  }
+class TileEntityConveyor(var facing: Int = 0) extends TileEntity with SyncedTileEntity {
 
   override def readFromNBT(tag: NBTTagCompound) = {
     super.readFromNBT(tag)
@@ -29,9 +25,11 @@ class TileEntityConveyor extends TileEntity {
     tag.setInteger("facing", facing)
   }
 
-  override def getDescriptionPacket: Packet = {
-    new S35PacketUpdateTileEntity()
+  override def readData(buffer: ByteBuf){
+    this.facing = buffer.readInt()
   }
 
-  override def onDataPacket(net: NetworkManager, pkt: S35PacketUpdateTileEntity) = readFromNBT(pkt.func_148857_g())
+  override def writeData(buffer: ByteBuf){
+    buffer.writeInt(this.facing)
+  }
 }
