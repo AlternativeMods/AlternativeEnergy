@@ -37,21 +37,18 @@ class BlockConveyor(material: Material) extends Block(material) {
   val top = Array.ofDim[IIcon](4)
   val icons = Array.ofDim[IIcon](2)
   override def registerBlockIcons(iR: IIconRegister) = {
-    for(meta <- 0 until top.length) {
-      top(meta) = iR.registerIcon("alternativeenergy:conveyor/top_" + facings(meta).name())
-    }
+    for(meta <- 0 until top.length) top(meta) = iR.registerIcon("alternativeenergy:conveyor/top_" + facings(meta).name())
+
     icons(0) = iR.registerIcon("alternativeenergy:conveyor/bottom")
     icons(1) = iR.registerIcon("alternativeenergy:conveyor/sides")
   }
 
   override def getIcon(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int): IIcon = {
     val worldTile = world.getTileEntity(x, y, z)
-    if(!worldTile.isInstanceOf[TileEntityConveyor])
-      return icons(1)
+    if(worldTile == null || !worldTile.isInstanceOf[TileEntityConveyor]) return icons(1)
     val tile = worldTile.asInstanceOf[TileEntityConveyor]
 
-    if(tile == null)
-      return icons(1)
+    if(tile == null) return icons(1)
 
     val dr = ForgeDirection.getOrientation(side)
     val adjDr = (facings(tile.facing), facings((tile.facing + 2) % 4))
@@ -61,10 +58,8 @@ class BlockConveyor(material: Material) extends Block(material) {
       case adjDr._2 => return top(facings(0).ordinal() - 2)
       case _ =>
     }
-    if(side == ForgeDirection.DOWN.ordinal())
-      return icons(0)
-    else
-      return icons(1)
+    if(side == ForgeDirection.DOWN.ordinal()) return icons(0)
+    else return icons(1)
     top(0)
   }
 
@@ -78,25 +73,19 @@ class BlockConveyor(material: Material) extends Block(material) {
     }
 
     val tile = world.getTileEntity(x, y, z)
-    if(tile == null || !tile.isInstanceOf[TileEntityConveyor])
-      return
+    if(tile == null || !tile.isInstanceOf[TileEntityConveyor]) return
     val facing = tile.asInstanceOf[TileEntityConveyor].facing
+
     var dr = ForgeDirection.UNKNOWN
-    if(facing == 0) {
-      dr = ForgeDirection.SOUTH
+    facing match {
+      case 0 => dr = ForgeDirection.SOUTH
+      case 1 => dr = ForgeDirection.EAST
+      case 2 => dr = ForgeDirection.NORTH
+      case 3 => dr = ForgeDirection.EAST
+      case _ =>
     }
-    if(facing == 1) {
-      dr = ForgeDirection.WEST
-    }
-    if(facing == 2) {
-      dr = ForgeDirection.NORTH
-    }
-    if(facing == 3) {
-      dr = ForgeDirection.EAST
-    }
-    if(dr == ForgeDirection.UNKNOWN) {
-      return
-    }
+
+    if(dr == ForgeDirection.UNKNOWN)return
 
     var vel = (dr.offsetX * 0.09D, dr.offsetY * 0.09D, dr.offsetZ * 0.09D)
 
