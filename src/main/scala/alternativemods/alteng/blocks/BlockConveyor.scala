@@ -11,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.ItemStack
 import net.minecraft.entity.item.EntityItem
+import net.minecraft.inventory.{ISidedInventory, IInventory}
 
 /**
  * Author: Lordmau5
@@ -49,15 +50,21 @@ class BlockConveyor(material: Material) extends Block(material) {
       return icons(1)
     val tile = worldTile.asInstanceOf[TileEntityConveyor]
 
-    if(side == ForgeDirection.UP.ordinal()) {
-      if(top(tile.facing) != null)
-        return top(tile.facing)
+    if(tile == null)
+      return icons(1)
+
+    val dr = ForgeDirection.getOrientation(side)
+    val adjDr = (facings(tile.facing), facings((tile.facing + 2) % 4))
+    dr match {
+      case ForgeDirection.UP => return top(tile.facing)
+      case adjDr._1 => return top(facings(3).ordinal() - 2)
+      case adjDr._2 => return top(facings(0).ordinal() - 2)
+      case _ =>
     }
+    if(side == ForgeDirection.DOWN.ordinal())
+      return icons(0)
     else
-      if(side == ForgeDirection.DOWN.ordinal())
-        return icons(0)
-      else
-        return icons(1)
+      return icons(1)
     top(0)
   }
 
