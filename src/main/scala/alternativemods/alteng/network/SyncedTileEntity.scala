@@ -15,7 +15,7 @@ trait SyncedTileEntity extends TileEntity {
 
   def sendData(){
     //TODO: Only send this to players watching the chunk
-    NetworkHandler.sendPacketToAllPlayersInDimension(this.getTileEntityPacket, this.worldObj.provider.dimensionId)
+    NetworkHandler.sendPacketToAllPlayersInDimension(this.getTileEntityPacket, this.getWorldObj.provider.dimensionId)
   }
 
   def getTileEntityPacket: PacketTileEntityData = {
