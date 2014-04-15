@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer
 import cpw.mods.fml.relauncher.{SideOnly, Side}
 import java.util.List
 import alternativemods.alteng.AlternativeEnergy
+import alternativemods.alteng.util.Ratios
 
 /**
  * @author: Lordmau5
@@ -62,16 +63,16 @@ with ISpecialElectricItem {
     var addToEnergy = 0
 
     buffer.addBuffer("EU", is, amount)
-    if(buffer.getBuffer("EU", is) > AlternativeEnergy.alternativeElectricItemManager.conversionRatio) {
-      val i = Math.floor(buffer.getBuffer("EU", is) / AlternativeEnergy.alternativeElectricItemManager.conversionRatio).toInt
+    if(buffer.getBuffer("EU", is) > Ratios.EU) {
+      val i = Math.floor(buffer.getBuffer("EU", is) / Ratios.EU).toInt
       addToEnergy += i
-      buffer.removeBuffer("EU", is, i * AlternativeEnergy.alternativeElectricItemManager.conversionRatio)
+      buffer.removeBuffer("EU", is, i * Ratios.EU)
     }
 
     val newStored = energy.getStoredEnergy(is) + addToEnergy
 
     if(newStored > energy.getMaxStoredEnergy(is)) {
-      inserted -= Math.floor((energy.getStoredEnergy(is) - energy.getMaxStoredEnergy(is)) / AlternativeEnergy.alternativeElectricItemManager.conversionRatio).toInt
+      inserted -= Math.floor((energy.getStoredEnergy(is) - energy.getMaxStoredEnergy(is)) / Ratios.EU).toInt
     }
     energy.addEnergy(is, addToEnergy)
 

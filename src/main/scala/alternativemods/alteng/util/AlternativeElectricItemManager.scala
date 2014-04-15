@@ -11,8 +11,6 @@ import alternativemods.alteng.items.energy.IEnergyItem
  */
 class AlternativeElectricItemManager extends IElectricItemManager {
 
-  val conversionRatio = 5
-
   def chargeFromArmor(is: ItemStack, entity: EntityLivingBase) = {}
 
   def charge(is: ItemStack, amount: Int, tier: Int, ignoreTransferLimit: Boolean, simulate: Boolean): Int = {
@@ -40,7 +38,7 @@ class AlternativeElectricItemManager extends IElectricItemManager {
     if(!is.getItem.isInstanceOf[IEnergyItem])
      0
 
-    Math.floor(is.getItem.asInstanceOf[IEnergyItem].energy.getMaxStoredEnergy(is) / conversionRatio).toInt
+    Math.floor(is.getItem.asInstanceOf[IEnergyItem].energy.getMaxStoredEnergy(is) / Ratios.EU).toInt
   }
 
   def canUse(is: ItemStack, amount: Int): Boolean = {
