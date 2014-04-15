@@ -8,6 +8,10 @@ import jk_5.commons.config.ConfigFile
 import alternativemods.alteng.blocks.AltEngBlocks
 import alternativemods.alteng.tileentities.AltEngTileEntities
 import alternativemods.alteng.network.NetworkHandler
+import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.item.{ItemStack, Item}
+import alternativemods.alteng.items.AltEngItems
+import alternativemods.alteng.util.AlternativeElectricItemManager
 
 /**
  * No description given
@@ -18,11 +22,16 @@ import alternativemods.alteng.network.NetworkHandler
 object AlternativeEnergy {
 
   val logger = LogManager.getLogger("AltEng")
+  val creativeTab = new CreativeTabs("AltEng") {
+    def getTabIconItem = new ItemStack(AltEngBlocks.blockConveyor, 1, 0).getItem
+  }
+  val alternativeElectricItemManager = new AlternativeElectricItemManager
 
   @EventHandler def preInit(event: FMLPreInitializationEvent){
     this.logger.info("Loading AlternativeEnergy")
 
     val config = ConfigFile.fromFile(event.getSuggestedConfigurationFile).setComment("AlternativeEnergy main config file")
+    AltEngItems.load()
     AltEngBlocks.load()
     AltEngTileEntities.load()
     NetworkHandler.init(event.getSide)
