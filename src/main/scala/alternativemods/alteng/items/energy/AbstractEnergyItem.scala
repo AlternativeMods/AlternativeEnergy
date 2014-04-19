@@ -1,7 +1,6 @@
 package alternativemods.alteng.items.energy
 
 import net.minecraft.item.{ItemStack, Item}
-import ic2.api.item.ISpecialElectricItem
 import net.minecraft.world.World
 import net.minecraft.entity.player.EntityPlayer
 import cpw.mods.fml.relauncher.{SideOnly, Side}
@@ -9,10 +8,6 @@ import java.util.List
 import alternativemods.alteng.AlternativeEnergy
 import alternativemods.alteng.util.Ratios
 
-/**
- * @author: Lordmau5
- * @date: 14.04.14 - 16:17
- */
 abstract class AbstractEnergyItem(maxCharge: Int, tier: Int, transferLimit: Int) extends Item
 with IEnergyItem
 with ISpecialElectricItem {

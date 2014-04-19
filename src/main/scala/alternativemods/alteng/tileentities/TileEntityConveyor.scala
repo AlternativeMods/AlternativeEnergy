@@ -5,11 +5,6 @@ import net.minecraft.nbt.NBTTagCompound
 import alternativemods.alteng.network.SyncedTileEntity
 import io.netty.buffer.ByteBuf
 
-/**
- * Author: Lordmau5
- * Date: 02.04.14
- * Time: 17:00
- */
 class TileEntityConveyor(var facing: Int = 0) extends TileEntity with SyncedTileEntity {
   def this(){this(0)}
 

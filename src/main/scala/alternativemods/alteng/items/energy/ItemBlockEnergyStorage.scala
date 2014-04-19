@@ -3,10 +3,6 @@ package alternativemods.alteng.items.energy
 import net.minecraft.item.{ItemStack, ItemBlock}
 import net.minecraft.block.Block
 
-/**
- * @author: Lordmau5
- * @date: 06.04.14 - 11:21
- */
 class ItemBlockEnergyStorage(block: Block) extends ItemBlock(block) {
 
   setUnlocalizedName("energyStorage")

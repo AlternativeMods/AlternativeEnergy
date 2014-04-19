@@ -3,10 +3,6 @@ package alternativemods.alteng.items.energy
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
-/**
- * @author: Lordmau5
- * @date: 15.04.14 - 17:26
- */
 class EnergyBuffer {
 
   def addBuffer(prefix: String, is: ItemStack, amount: Int) = {

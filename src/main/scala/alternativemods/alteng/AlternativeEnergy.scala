@@ -9,15 +9,10 @@ import alternativemods.alteng.blocks.AltEngBlocks
 import alternativemods.alteng.tileentities.AltEngTileEntities
 import alternativemods.alteng.network.NetworkHandler
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.{ItemStack, Item}
+import net.minecraft.item.ItemStack
 import alternativemods.alteng.items.AltEngItems
 import alternativemods.alteng.util.AlternativeElectricItemManager
 
-/**
- * No description given
- *
- * @author jk-5
- */
 @Mod(modid = "AltEng", name = "AlternativeEnergy", modLanguage = "scala")
 object AlternativeEnergy {
 

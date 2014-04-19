@@ -4,11 +4,6 @@ import net.minecraft.tileentity.TileEntity
 import io.netty.buffer.{Unpooled, ByteBuf}
 import cpw.mods.fml.relauncher.Side
 
-/**
- * No description given
- *
- * @author jk-5
- */
 trait SyncedTileEntity extends TileEntity {
   def writeData(buffer: ByteBuf)
   def readData(buffer: ByteBuf)

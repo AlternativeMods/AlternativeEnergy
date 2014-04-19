@@ -8,10 +8,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.common.util.ForgeDirection
 
-/**
- * @author: Lordmau5
- * @date: 03.04.14 - 10:24
- */
 class TileEntityConveyorInsertion(var facing: Int = 0) extends SyncedTileEntity with ISidedInventory {
   def this(){this(0)}
 

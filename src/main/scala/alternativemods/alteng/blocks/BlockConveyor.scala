@@ -3,9 +3,8 @@ package alternativemods.alteng.blocks
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.world.{IBlockAccess, World}
-import alternativemods.alteng.util.Util
 import alternativemods.alteng.tileentities.{TileEntityConveyorInsertion, TileEntityConveyor}
-import net.minecraft.util.{Vec3, MovingObjectPosition, MathHelper, IIcon}
+import net.minecraft.util.{MathHelper, IIcon}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.creativetab.CreativeTabs
@@ -15,11 +14,6 @@ import net.minecraft.entity.item.EntityItem
 import java.util
 import alternativemods.alteng.AlternativeEnergy
 
-/**
- * Author: Lordmau5
- * Date: 02.04.14
- * Time: 16:47
- */
 class BlockConveyor(material: Material) extends Block(material) {
 
   setCreativeTab(AlternativeEnergy.creativeTab)

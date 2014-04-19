@@ -14,10 +14,6 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.tileentity.TileEntity
 
-/**
- * @author: Lordmau5
- * @date: 06.04.14 - 11:23
- */
 class BlockEnergyStorage(material: Material) extends Block(material) {
   setCreativeTab(AlternativeEnergy.creativeTab)
 

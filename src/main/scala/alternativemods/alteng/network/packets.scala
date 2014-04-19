@@ -2,11 +2,6 @@ package alternativemods.alteng.network
 
 import io.netty.buffer.ByteBuf
 
-/**
- * No description given
- *
- * @author jk-5
- */
 trait Packet {
   def encode(buffer: ByteBuf)
   def decode(buffer: ByteBuf)

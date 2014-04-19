@@ -7,11 +7,6 @@ import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.{ChannelHandler, ChannelHandlerContext}
 import io.netty.buffer.ByteBuf
 
-/**
- * No description given
- *
- * @author jk-5
- */
 object NetworkHandler {
 
   private var channels: util.EnumMap[Side, FMLEmbeddedChannel] = _

@@ -1,14 +1,9 @@
 package alternativemods.alteng.util
 
-import ic2.api.item.IElectricItemManager
 import net.minecraft.item.ItemStack
 import net.minecraft.entity.EntityLivingBase
 import alternativemods.alteng.items.energy.IEnergyItem
 
-/**
- * @author: Lordmau5
- * @date: 15.04.14 - 10:17
- */
 class AlternativeElectricItemManager extends IElectricItemManager {
 
   def chargeFromArmor(is: ItemStack, entity: EntityLivingBase) = {}
