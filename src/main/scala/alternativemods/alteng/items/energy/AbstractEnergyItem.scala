@@ -4,9 +4,10 @@ import net.minecraft.item.{ItemStack, Item}
 import net.minecraft.world.World
 import net.minecraft.entity.player.EntityPlayer
 import cpw.mods.fml.relauncher.{SideOnly, Side}
-import java.util.List
 import alternativemods.alteng.AlternativeEnergy
 import alternativemods.alteng.util.Ratios
+import ic2.api.item.ISpecialElectricItem
+import java.util
 
 abstract class AbstractEnergyItem(maxCharge: Int, tier: Int, transferLimit: Int) extends Item
 with IEnergyItem
@@ -28,11 +29,11 @@ with ISpecialElectricItem {
   }
 
   @SideOnly(Side.CLIENT)
-  override def addInformation(is: ItemStack, player: EntityPlayer, list: List[_], par4: Boolean) = {
+  override def addInformation(is: ItemStack, player: EntityPlayer, list: util.List[_], par4: Boolean) = {
     if(is.getTagCompound == null || !is.getTagCompound.hasKey("stored"))
       setupEnergyItem(is)
 
-    list.asInstanceOf[List[String]].add("Energy: " + energy.getStoredEnergy(is) + " / " + energy.getMaxStoredEnergy(is))
+    list.asInstanceOf[util.List[String]].add("Energy: " + energy.getStoredEnergy(is) + " / " + energy.getMaxStoredEnergy(is))
   }
 
   override def canProvideEnergy(is: ItemStack) = false
