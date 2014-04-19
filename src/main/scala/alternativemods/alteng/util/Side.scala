@@ -7,7 +7,7 @@ import net.minecraft.world.World
  *
  * @author jk-5
  */
-private abstract class Side {
+abstract class Side {
   val isClient: Boolean
   val isServer: Boolean
 }
