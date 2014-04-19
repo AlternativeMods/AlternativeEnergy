@@ -42,6 +42,7 @@ dependencies {
 	compile 'com.teamcofh:CofhCore:b11b'*/
 
     compile 'jk_5.commons:CommonsConfig:0.1'
+    runtime 'com.googlecode.efficient-java-matrix-library:ejml:0.23' //For IC2 compat
 
     compile 'com.mod-buildcraft:buildcraft:5.0.4.+:dev'
 
