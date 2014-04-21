@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase
 import alternativemods.alteng.items.energy.IEnergyItem
 import ic2.api.item.IElectricItemManager
 
-class AlternativeElectricItemManager extends IElectricItemManager {
+object AlternativeElectricItemManager extends IElectricItemManager {
 
   def chargeFromArmor(is: ItemStack, entity: EntityLivingBase) = {}
 
@@ -27,14 +27,29 @@ class AlternativeElectricItemManager extends IElectricItemManager {
   }
 
   def discharge(is: ItemStack, amount: Int, tier: Int, ignoreTransferLimit: Boolean, simulate: Boolean): Int = {
-    0
+    if(!is.getItem.isInstanceOf[IEnergyItem])
+      return 0
+
+    if(simulate)
+      return 0
+
+    val eItem = is.getItem.asInstanceOf[IEnergyItem]
+    if(eItem.energy.getStoredEnergy(is) <= 0)
+      return 0
+
+    var realAmount = amount
+    if(realAmount > eItem.getTransferLimit && !ignoreTransferLimit)
+      realAmount = eItem.getTransferLimit
+    if(realAmount > Math.round(eItem.energy.getStoredEnergy(is)).toInt)
+      realAmount = Math.round(eItem.energy.getStoredEnergy(is)).toInt
+    eItem.removeEU(is, realAmount)
   }
 
   def getCharge(is: ItemStack) = {
     if(!is.getItem.isInstanceOf[IEnergyItem])
      0
 
-    Math.floor(is.getItem.asInstanceOf[IEnergyItem].energy.getMaxStoredEnergy(is) / Ratios.EU).toInt
+    Math.floor(is.getItem.asInstanceOf[IEnergyItem].energy.getStoredEnergy(is) * Ratios.EU).toInt
   }
 
   def canUse(is: ItemStack, amount: Int): Boolean = {

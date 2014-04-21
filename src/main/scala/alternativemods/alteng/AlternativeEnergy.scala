@@ -17,10 +17,9 @@ import alternativemods.alteng.util.AlternativeElectricItemManager
 object AlternativeEnergy {
 
   val logger = LogManager.getLogger("AltEng")
-  val creativeTab = new CreativeTabs("AltEng") {
+  val creativeTab = new CreativeTabs("altEng") {
     def getTabIconItem = new ItemStack(AltEngBlocks.blockConveyor, 1, 0).getItem
   }
-  val alternativeElectricItemManager = new AlternativeElectricItemManager
 
   @EventHandler def preInit(event: FMLPreInitializationEvent){
     this.logger.info("Loading AlternativeEnergy")

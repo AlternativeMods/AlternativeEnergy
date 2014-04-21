@@ -1,4 +1,4 @@
-package alternativemods.alteng.items.energy
+package alternativemods.alteng.items.itemblocks
 
 import net.minecraft.item.{ItemStack, ItemBlock}
 import net.minecraft.block.Block
@@ -11,6 +11,6 @@ class ItemBlockEnergyStorage(block: Block) extends ItemBlock(block) {
 
   override def getMetadata(metadata: Int) = metadata
 
-  override def getUnlocalizedName(is: ItemStack) = getUnlocalizedName() + "." + subNames(is.getItemDamage())
+  override def getUnlocalizedName(is: ItemStack) = getUnlocalizedName() + "." + subNames(is.getItemDamage)
 
 }

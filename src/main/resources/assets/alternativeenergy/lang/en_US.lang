@@ -1,12 +1,7 @@
 itemGroup.altEng=AlternativeEnergy
 
-tile.altEng.powerCable.name=Power Cable
-tile.altEng.powerBox.name=Power Box
-tile.altEng.linkBox.name=Link Box
+tile.energyPassthrough.name=Energy Passthrough Converter
 
-
-item.altEng.upgrade.capacity.name=Capacity Upgrade
-item.altEng.upgrade.computerCraft.name=ComputerCraft Upgrade
-item.altEng.alternativeWrench.name=Alternative Wrench
-
-altEng.chatmessage.storageSideModeChanged=Changed side mode to %s
+tile.energyStorage.small.name=Small Energy Storage
+tile.energyStorage.medium.name=Medium Energy Storage
+tile.energyStorage.high.name=High Energy Storage

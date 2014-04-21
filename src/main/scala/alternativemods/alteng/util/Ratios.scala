@@ -2,8 +2,8 @@ package alternativemods.alteng.util
 
 object Ratios {
 
-  val EU = 5
-  val MJ = 2
-  val RF = 20
+  val EU: Double = 5.0
+  val MJ: Double = 0.2
+  //val RF: Double = 20
 
 }

@@ -8,5 +8,6 @@ object AltEngTileEntities {
     GameRegistry.registerTileEntity(classOf[TileEntityConveyor], "alteng.conveyor")
     GameRegistry.registerTileEntity(classOf[TileEntityConveyorInsertion], "alteng.conveyorInsertion")
     GameRegistry.registerTileEntity(classOf[TileEntityPowerConsumer], "alteng.powerConsumer")
+    GameRegistry.registerTileEntity(classOf[TileEntityEnergyPassthrough], "alteng.energyPassthrough")
   }
 }
