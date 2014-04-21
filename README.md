@@ -1,7 +1,7 @@
 AlternativeEnergy
 =================
 
-[![Build Status](http://shadowcity.net:8080/buildStatus/icon?job=AlternativeEnergy)](http://shadowcity.net:8080/job/AlternativeEnergy/)
+[![Build Status](http://shadowcity.net:8080/job/AlternativeEnergy/badge/icon)](http://shadowcity.net:8080/job/AlternativeEnergy/)
 
 Universal Power Storage for Minecraft
 
