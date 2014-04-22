@@ -32,6 +32,11 @@ repositories {
     }
 }
 
+configurations {
+    packed
+    compile.extendsFrom packed
+}
+
 dependencies {
     /*compile 'org.projectlombok:lombok:1.12.2'
     compile 'jds.bibliocraft:BiblioCraft:1.5.3'
@@ -41,12 +46,23 @@ dependencies {
     compile 'computercraft:ComputerCraftAPI:1.0'
 	compile 'com.teamcofh:CofhCore:b11b'*/
 
-    compile 'jk_5.commons:CommonsConfig:0.1'
+    packed 'jk_5.commons:CommonsConfig:0.1'
     runtime 'com.googlecode.efficient-java-matrix-library:ejml:0.23' //For IC2 compat
 
     compile 'com.mod-buildcraft:buildcraft:5.0.4.+:dev'
 
     testCompile 'junit:junit:4.11'
+}
+
+jar {
+    from {
+        configurations.packed.collect {
+            it.isDirectory() ? it : zipTree(it).matching {
+                exclude "META-INF", "META-INF/**", "*META-INF*", "meta-inf"
+                exclude "**.jar", "**/*.jar", "*.jar"
+            }
+        }
+    }
 }
 
 processResources {
