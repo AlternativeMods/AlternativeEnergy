@@ -1,10 +1,9 @@
 package alternativemods.alteng.content
 
-import alternativemods.alteng.content.blocks.BlockConveyor
+import alternativemods.alteng.content.blocks.{BlockFluidEnergy, BlockConveyor}
 import alternativemods.alteng.content.blocks.energy.{BlockEnergyConsumer, BlockEnergyPassthrough}
 import net.minecraftforge.fluids._
 import net.minecraft.block.material.Material
-import alternativemods.alteng.AlternativeEnergy
 import cpw.mods.fml.common.registry.GameRegistry
 import alternativemods.alteng.content.items.itemblocks.ItemBlockConveyor
 import alternativemods.alteng.content.items.{ItemBlockMulti, ItemFluidBucket, ItemEnergyConsumer}
@@ -24,8 +23,8 @@ object AltEngContent {
   var blockEnergyStorage: BlockEnergyPassthrough = _
   var blockEnergyConsumer: BlockEnergyConsumer = _
 
-  var blockLiquidEnergy: BlockFluidBase = _
-  var blockTier1Machine: BlockTier1Machine = _
+  var blockFluidEnergy: BlockFluidEnergy = _
+  var blockFluidEnergyProducer: BlockTier1Machine = _
 
   var fluidLiquidEnergy: Fluid = _
 
@@ -50,22 +49,17 @@ object AltEngContent {
     this.fluidLiquidEnergy = new Fluid("altEng.fluidEnergy")
     FluidRegistry.registerFluid(this.fluidLiquidEnergy)
 
-    blockLiquidEnergy = new BlockFluidClassic(this.fluidLiquidEnergy, Material.water)
-    GameRegistry.registerBlock(blockLiquidEnergy, "fluidEnergy")
+    blockFluidEnergy = new BlockFluidEnergy(this.fluidLiquidEnergy)
+    GameRegistry.registerBlock(blockFluidEnergy, "fluidEnergy")
 
-    fluidLiquidEnergy.setBlock(blockLiquidEnergy)
-    blockLiquidEnergy.setCreativeTab(AlternativeEnergy.creativeTab)
-    blockLiquidEnergy.setBlockName("altEng.fluidEnergy")
+    fluidLiquidEnergy.setBlock(blockFluidEnergy)
 
-    bucketLiquidEnergy = new ItemFluidBucket(blockLiquidEnergy)
-    bucketLiquidEnergy.setUnlocalizedName("altEng.bucketLiquidEnergy").setTextureName("alteng:bucketLiquidEnergy")
-    GameRegistry.registerItem(bucketLiquidEnergy, "bucketLiquidEnergy")
+    bucketLiquidEnergy = new ItemFluidBucket(blockFluidEnergy)
+    bucketLiquidEnergy.setUnlocalizedName("altEng.bucketFluidEnergy").setTextureName("alteng:bucketFluidEnergy")
+    GameRegistry.registerItem(bucketLiquidEnergy, "bucketFluidEnergy")
     FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidLiquidEnergy, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLiquidEnergy), new ItemStack(Items.bucket))
 
     blockTier1Machine = new BlockTier1Machine
     GameRegistry.registerBlock(blockTier1Machine, classOf[ItemBlockMulti], "machineTier1")
-
-    //itemEnergyConsumer = new ItemEnergyConsumer()
-    //GameRegistry.registerItem(itemEnergyConsumer, "energyConsumer")
   }
 }
