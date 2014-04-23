@@ -10,7 +10,7 @@ import alternativemods.alteng.tileentities.TileEntityPowerConsumer
  *
  * @author jk-5
  */
-class BlockLiquidEnergy extends Block(Material.iron) {
+class BlockEnergyConsumer extends Block(Material.iron) {
   override def createTileEntity(world: World, metadata: Int) = new TileEntityPowerConsumer
   override def hasTileEntity(metadata: Int) = true
 }

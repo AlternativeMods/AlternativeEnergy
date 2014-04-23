@@ -11,7 +11,6 @@ import alternativemods.alteng.network.NetworkHandler
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import alternativemods.alteng.items.AltEngItems
-import alternativemods.alteng.util.AlternativeElectricItemManager
 
 @Mod(modid = "AltEng", name = "AlternativeEnergy", modLanguage = "scala")
 object AlternativeEnergy {
