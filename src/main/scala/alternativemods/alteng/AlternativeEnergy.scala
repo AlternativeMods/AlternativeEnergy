@@ -1,7 +1,7 @@
 package alternativemods.alteng
 
 import cpw.mods.fml.common.Mod
-import cpw.mods.fml.common.event.FMLPreInitializationEvent
+import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializationEvent}
 import cpw.mods.fml.common.Mod.EventHandler
 import org.apache.logging.log4j.LogManager
 import alternativemods.alteng.network.NetworkHandler
@@ -22,5 +22,9 @@ object AlternativeEnergy {
 
     AltEngContent.load()
     NetworkHandler.init(event.getSide)
+  }
+
+  @EventHandler def postInit(event: FMLPostInitializationEvent){
+    AltEngContent.postInit()
   }
 }
