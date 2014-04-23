@@ -7,11 +7,11 @@ import net.minecraft.block.material.Material
 import alternativemods.alteng.AlternativeEnergy
 import cpw.mods.fml.common.registry.GameRegistry
 import alternativemods.alteng.content.items.itemblocks.ItemBlockConveyor
-import alternativemods.alteng.content.items.{ItemFluidBucket, ItemEnergyConsumer}
+import alternativemods.alteng.content.items.{ItemBlockMulti, ItemFluidBucket, ItemEnergyConsumer}
 import alternativemods.alteng.content.tileentities.{TileEntityEnergyPassthrough, TileEntityPowerConsumer, TileEntityConveyorInsertion, TileEntityConveyor}
 import net.minecraft.item.ItemStack
 import net.minecraft.init.Items
-import alternativemods.alteng.content.blocks.tier1.BlockFluidEnergyProducer
+import alternativemods.alteng.content.blocks.tier1.BlockTier1Machine
 
 /**
  * No description given
@@ -25,7 +25,7 @@ object AltEngContent {
   var blockEnergyConsumer: BlockEnergyConsumer = _
 
   var blockLiquidEnergy: BlockFluidBase = _
-  var blockFluidEnergyProducer: BlockFluidEnergyProducer = _
+  var blockTier1Machine: BlockTier1Machine = _
 
   var fluidLiquidEnergy: Fluid = _
 
@@ -62,8 +62,8 @@ object AltEngContent {
     GameRegistry.registerItem(bucketLiquidEnergy, "bucketLiquidEnergy")
     FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidLiquidEnergy, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(bucketLiquidEnergy), new ItemStack(Items.bucket))
 
-    blockFluidEnergyProducer = new BlockFluidEnergyProducer
-    GameRegistry.registerBlock(blockFluidEnergyProducer, "fluidEnergyProducer")
+    blockTier1Machine = new BlockTier1Machine
+    GameRegistry.registerBlock(blockTier1Machine, classOf[ItemBlockMulti], "machineTier1")
 
     //itemEnergyConsumer = new ItemEnergyConsumer()
     //GameRegistry.registerItem(itemEnergyConsumer, "energyConsumer")
