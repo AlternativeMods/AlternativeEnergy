@@ -50,7 +50,7 @@ class Tank(final val name: String, _capacity: Int, _owner: TileEntity) extends F
       tooltip.add(fluidName)
       amount = getFluidAmount
     }
-    tooltip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, this.getCapacity)))
+    tooltip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount: Integer, this.getCapacity: Integer)))
   }
 
   protected final val tooltip = new ToolTip(){
