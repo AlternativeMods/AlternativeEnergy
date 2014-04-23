@@ -172,12 +172,6 @@ class BlockConveyor(material: Material) extends Block(material) with BlockMulti 
           }
         }
         entity.setVelocity(vel._1, vel._2, vel._3)
-      case insertion: TileEntityConveyorInsertion => {
-        val facing = insertion.facing
-        val dr = ForgeDirection.getOrientation(facing)
-        if(insertion.canInsertAnywhere(entity.getEntityItem, dr.ordinal()))
-          entity.setDead()
-      }
       case _ =>
     }
   }
