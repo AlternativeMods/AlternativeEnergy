@@ -22,8 +22,8 @@ import net.minecraft.entity.player.EntityPlayer
 class TileFluidEnergyProducer extends TileEntity with SingleTankTile with UniversalPowerConsumer with GuiTile with InventoryTile {
   var energy = 0d
   val maxEnergy = 1000d
-  val ic2Ratio = Ratios.MJ
-  val bcRatio = Ratios.EU
+  val ic2Ratio = Ratios.EU
+  val bcRatio = Ratios.MJ
   val tank = new RestrictedTank(AltEngContent.fluidLiquidEnergy, "energyTank", 16000, this)
   val inventory = new InventoryObject(5, "fluidEnergyProducer", 1)
 
