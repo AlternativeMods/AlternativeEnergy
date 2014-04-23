@@ -10,6 +10,7 @@ import net.minecraft.world.World
  * @author jk-5
  */
 object AltEngGuiHandler extends IGuiHandler {
+
   override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
     val tile = world.getTileEntity(x, y, z)
     tile match {
@@ -25,4 +26,5 @@ object AltEngGuiHandler extends IGuiHandler {
       case _ => null
     }
   }
+
 }
