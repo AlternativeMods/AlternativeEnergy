@@ -13,7 +13,7 @@ object AltEngGuiHandler extends IGuiHandler {
   override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
     val tile = world.getTileEntity(x, y, z)
     tile match {
-      case t: GuiTile => t.clientGui(ID)
+      case t: GuiTile => t.clientGui(ID, player)
       case _ => null
     }
   }
@@ -21,7 +21,7 @@ object AltEngGuiHandler extends IGuiHandler {
   override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
     val tile = world.getTileEntity(x, y, z)
     tile match {
-      case t: GuiTile => t.serverGui(ID)
+      case t: GuiTile => t.serverGui(ID, player)
       case _ => null
     }
   }

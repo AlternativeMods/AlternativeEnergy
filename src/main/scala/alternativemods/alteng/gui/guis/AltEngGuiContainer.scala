@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.Tessellator.{instance => tes}
 import alternativemods.alteng.gui.button.AltEngGuiButton
 import alternativemods.alteng.gui.containers.slot.AltEngSlot
 import net.minecraft.inventory.Slot
+import java.util
 
 /**
  * No description given
@@ -51,7 +52,7 @@ class AltEngGuiContainer(final val container: AltEngContainer, final val backgro
           }
         }
       })
-      this.buttonList.asInstanceOf[List[GuiButton]].filter(b => b.visible && b.isInstanceOf[AltEngGuiButton]).map(_.asInstanceOf[AltEngGuiButton]).foreach(b => {
+      this.buttonList.asInstanceOf[util.List[GuiButton]].filter(b => b.visible && b.isInstanceOf[AltEngGuiButton]).map(_.asInstanceOf[AltEngGuiButton]).foreach(b => {
         val tooltip = b.tooltip
         if(tooltip != null){
           val hover = b.isMouseOver(mouseX, mouseY)
@@ -62,7 +63,7 @@ class AltEngGuiContainer(final val container: AltEngContainer, final val backgro
           }
         }
       })
-      this.inventorySlots.inventorySlots.asInstanceOf[List[Slot]].filter(_.isInstanceOf[AltEngSlot]).map(_.asInstanceOf[AltEngSlot]).foreach(s => {
+      this.inventorySlots.inventorySlots.asInstanceOf[util.List[Slot]].filter(_.isInstanceOf[AltEngSlot]).map(_.asInstanceOf[AltEngSlot]).foreach(s => {
         val tooltip = s.tooltip
         if(tooltip != null){
           val hover = this.isMouseOverSlot(s, mouseX, mouseY)
@@ -112,7 +113,7 @@ class AltEngGuiContainer(final val container: AltEngContainer, final val backgro
   }
 
   private def getSlotAtPosition(x: Int, y: Int): Option[Slot] = {
-    this.inventorySlots.inventorySlots.asInstanceOf[List[Slot]].find(s => this.isMouseOverSlot(s, x, y))
+    this.inventorySlots.inventorySlots.asInstanceOf[util.List[Slot]].find(s => this.isMouseOverSlot(s, x, y))
   }
 
   private def isMouseOverSlot(slot: Slot, x: Int, y: Int): Boolean = {
