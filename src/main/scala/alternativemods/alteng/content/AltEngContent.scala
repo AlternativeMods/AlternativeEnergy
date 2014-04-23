@@ -24,7 +24,7 @@ object AltEngContent {
   var blockEnergyConsumer: BlockEnergyConsumer = _
 
   var blockFluidEnergy: BlockFluidEnergy = _
-  var blockFluidEnergyProducer: BlockTier1Machine = _
+  var blockTier1Machine: BlockTier1Machine = _
 
   var fluidLiquidEnergy: Fluid = _
 
