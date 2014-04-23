@@ -11,5 +11,5 @@ import alternativemods.alteng.gui.containers.AltEngContainer
  */
 @SideOnly(Side.CLIENT)
 class AltEngGuiContainer(_container: AltEngContainer) extends GuiContainer(_container) {
-
+  override def drawGuiContainerBackgroundLayer(delta: Float, mouseX: Int, mouseY: Int){}
 }
