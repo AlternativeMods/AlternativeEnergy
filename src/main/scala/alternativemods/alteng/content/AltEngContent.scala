@@ -11,6 +11,10 @@ import alternativemods.alteng.content.tileentities.{TileEntityEnergyPassthrough,
 import net.minecraft.item.ItemStack
 import net.minecraft.init.Items
 import alternativemods.alteng.content.blocks.tier1.BlockTier1Machine
+import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.client.event.TextureStitchEvent
+import cpw.mods.fml.relauncher.{SideOnly, Side}
+import net.minecraft.client.Minecraft
 
 /**
  * No description given
@@ -46,7 +50,7 @@ object AltEngContent {
     GameRegistry.registerBlock(blockEnergyConsumer, "energyConsumer")
     GameRegistry.registerTileEntity(classOf[TileEntityPowerConsumer], "alteng.powerConsumer")
 
-    this.fluidLiquidEnergy = new Fluid("altEng.fluidEnergy")
+    fluidLiquidEnergy = new Fluid("altEng.fluidEnergy")
     FluidRegistry.registerFluid(this.fluidLiquidEnergy)
 
     blockFluidEnergy = new BlockFluidEnergy(this.fluidLiquidEnergy)
@@ -62,4 +66,10 @@ object AltEngContent {
     blockTier1Machine = new BlockTier1Machine
     GameRegistry.registerBlock(blockTier1Machine, classOf[ItemBlockMulti], "machineTier1")
   }
+
+  def postInit(){
+    // Textures
+    fluidLiquidEnergy.setIcons(blockFluidEnergy.getIcon(0, 0))
+  }
+
 }
