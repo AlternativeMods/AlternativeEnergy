@@ -50,6 +50,7 @@ dependencies {
     runtime 'com.googlecode.efficient-java-matrix-library:ejml:0.23' //For IC2 compat
 
     compile 'com.mod-buildcraft:buildcraft:5.0.4.+:dev'
+    compile 'codechicken:ForgeMultipart:1.7.2-1.1.0.+:dev'
 
     testCompile 'junit:junit:4.11'
 }
