@@ -20,7 +20,7 @@ class BlockConveyor(material: Material) extends Block(material) with BlockMulti 
 
   val subNames = Array("conveyor", "conveyorInsertion")
 
-  override def getUnlocalizedName(stack: ItemStack): String = subNames(is.getItemDamage)
+  override def getUnlocalizedName(stack: ItemStack): String = subNames(stack.getItemDamage)
 
   override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
     val meta = world.getBlockMetadata(x, y, z)
