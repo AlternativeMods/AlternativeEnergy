@@ -5,11 +5,10 @@ import net.minecraft.nbt.NBTTagCompound
 import cpw.mods.fml.common.{Loader, Optional}
 import buildcraft.api.power.{PowerHandler, IPowerReceptor}
 import net.minecraftforge.common.util.ForgeDirection
-import ic2.api.energy.tile.{IEnergySource, IEnergySink}
+import ic2.api.energy.tile.IEnergySink
 import net.minecraftforge.common.MinecraftForge
 import ic2.api.energy.event.{EnergyTileUnloadEvent, EnergyTileLoadEvent}
 import alternativemods.alteng.util.Side
-import java.util
 
 /**
  * No description given
@@ -19,21 +18,19 @@ import java.util
 object Power {
   final val bcid = "BuildCraft|Energy"
   final val classIPowerReceptor = "buildcraft.api.power.IPowerReceptor"
-  final val classBCPowerHandler = "alternativemods.alteng.powertraits.tile.BCPowerHandler$class"
+  final val classIPowerEmitter = "buildcraft.api.power.IPowerEmitter"
 
   final val cofhid = "CoFHCore"
   final val classIEnergyHandler = "cofh.api.energy.IEnergyHandler"
-  final val classTEPowerHandler = "alternativemods.alteng.powertraits.tile.TEPowerHandler$class"
 
   final val icid = "IC2"
   final val classIEnergySink = "ic2.api.energy.tile.IEnergySink"
   final val classIEnergySource = "ic2.api.energy.tile.IEnergySource"
-  final val classICPowerHandler = "alternativemods.alteng.powertraits.tile.ICPowerHandler$class"
 }
 
 import Power._
 
-trait TilePowerHandler extends TileEntity {
+trait TilePowerConsumer extends TileEntity {
   def energy: Double
   protected[this] def energy_=(en: Double)
 
@@ -53,7 +50,7 @@ trait TilePowerHandler extends TileEntity {
 @Optional.InterfaceList(Array(
   new Optional.Interface(iface = classIPowerReceptor, modid = bcid)
 ))
-trait BCPowerHandler extends TilePowerHandler with IPowerReceptor {
+trait BCPowerConsumer extends TilePowerConsumer with IPowerReceptor {
 
   val bcRatio: Double
 
@@ -111,25 +108,23 @@ trait BCPowerHandler extends TilePowerHandler with IPowerReceptor {
     if(getWorldObj != null && Side(getWorldObj).isServer && Loader.isModLoaded(bcid)) {
       powerHandler.getPowerReceiver.update()
 
-      if(energy > bcRatio) {
+      /*if(energy > bcRatio) {
         val tiles = new java.util.ArrayList[IPowerReceptor]()
         for(dr <- ForgeDirection.VALID_DIRECTIONS) {
           if(!getWorldObj.isAirBlock(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ)) {
             val tile = getWorldObj.getTileEntity(xCoord + dr.offsetX, yCoord + dr.offsetY, zCoord + dr.offsetZ)
-            if(tile != null) {
-              if(tile.isInstanceOf[IPowerReceptor]) {
-                val rec = tile.asInstanceOf[IPowerReceptor]
+            if(tile != null)  tile match {
+              case rec: IPowerReceptor =>
                 val prec = rec.getPowerReceiver(ForgeDirection.UP)
                 if(prec.getEnergyStored < prec.getMaxEnergyStored) {
                   tiles.add(rec)
                 }
-              }
+              case _ =>
             }
           }
         }
 
-        if(tiles.isEmpty)
-          return
+        if(tiles.isEmpty) return
 
         var maxDrain = 1000
         if(maxDrain > energy)
@@ -146,16 +141,16 @@ trait BCPowerHandler extends TilePowerHandler with IPowerReceptor {
           energy -= possible / bcRatio
           rec.receiveEnergy(PowerHandler.Type.MACHINE, possible, ForgeDirection.UP)
         }
-      }
+      }*/
     }
   }
 }
 
 @Optional.InterfaceList(Array(
-  new Optional.Interface(iface = classIEnergySink, modid = icid),
-  new Optional.Interface(iface = classIEnergySource, modid = icid)
+  new Optional.Interface(iface = classIEnergySink, modid = icid)//,
+  //new Optional.Interface(iface = classIEnergySource, modid = icid)
 ))
-trait ICPowerHandler extends TilePowerHandler with IEnergySink with IEnergySource {
+trait ICPowerConsumer extends TilePowerConsumer with IEnergySink/* with IEnergySource*/ {
 
   val ic2Ratio: Double
 
@@ -178,7 +173,7 @@ trait ICPowerHandler extends TilePowerHandler with IEnergySink with IEnergySourc
 
   @Optional.Method(modid = icid)
   override def getMaxSafeInput: Int = Int.MaxValue //TODO have a reasonable amount here
-
+  /*
   @Optional.Method(modid = icid)
   override def emitsEnergyTo(receiver: TileEntity, direction: ForgeDirection): Boolean = true
 
@@ -192,7 +187,7 @@ trait ICPowerHandler extends TilePowerHandler with IEnergySink with IEnergySourc
       energy -= delta
     }
   }
-
+  */
   @Optional.Method(modid = icid)
   def load(): Unit = if(Side(getWorldObj).isServer){
     MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this))
@@ -228,13 +223,14 @@ trait ICPowerHandler extends TilePowerHandler with IEnergySink with IEnergySourc
   }
 }
 
-trait TEPowerHandler extends TilePowerHandler
+trait TEPowerConsumer extends TilePowerConsumer
 
 @Optional.InterfaceList(Array(
   new Optional.Interface(iface = classIPowerReceptor, modid = bcid),
-  new Optional.Interface(iface = classIEnergySink, modid = icid)
+  new Optional.Interface(iface = classIEnergySink, modid = icid)//,
+  //new Optional.Interface(iface = classIEnergySource, modid = icid)
 ))
-trait UniversalPowerTile extends TileEntity
-  with BCPowerHandler
-  with ICPowerHandler
+trait UniversalPowerConsumer extends TileEntity
+  with BCPowerConsumer
+  with ICPowerConsumer
   //with TETileConverter

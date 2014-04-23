@@ -5,9 +5,9 @@ import cpw.mods.fml.common.Loader
 import net.minecraftforge.common.util.ForgeDirection
 import cpw.mods.fml.common.Optional.Method
 import buildcraft.api.power.PowerHandler
-import alternativemods.alteng.powertraits.tile.{Power, UniversalPowerTile}
+import alternativemods.alteng.powertraits.tile.{Power, UniversalPowerConsumer}
 
-class TileEntityEnergyPassthrough extends TileEntity with UniversalPowerTile {
+class TileEntityEnergyPassthrough extends TileEntity with UniversalPowerConsumer {
 
   override def validate(): Unit = {
     if(getWorldObj != null && registered)
@@ -74,7 +74,7 @@ class TileEntityEnergyPassthrough extends TileEntity with UniversalPowerTile {
     super.demandedEnergyUnits
   }
 
-  @Method(modid = Power.icid)
+  /*@Method(modid = Power.icid)
   override def getOfferedEnergy: Double = {
     if(validConnections() < 2)
       return 0
@@ -90,7 +90,7 @@ class TileEntityEnergyPassthrough extends TileEntity with UniversalPowerTile {
 
     //TODO: Buffer or something?
     super.drawEnergy(amount)
-  }
+  }*/
 
   @Method(modid = Power.icid)
   override def injectEnergyUnits(from: ForgeDirection, amount: Double): Double = {

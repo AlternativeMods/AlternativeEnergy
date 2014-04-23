@@ -1,6 +1,6 @@
 package alternativemods.alteng.content.tileentities
 
-import alternativemods.alteng.powertraits.tile.UniversalPowerTile
+import alternativemods.alteng.powertraits.tile.UniversalPowerConsumer
 import net.minecraft.tileentity.TileEntity
 
 /**
@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity
  *
  * @author jk-5
  */
-class TileEntityPowerConsumer extends TileEntity with UniversalPowerTile {
+class TileEntityPowerConsumer extends TileEntity with UniversalPowerConsumer {
 
   var energy = 0d
   val maxEnergy = 5000d
