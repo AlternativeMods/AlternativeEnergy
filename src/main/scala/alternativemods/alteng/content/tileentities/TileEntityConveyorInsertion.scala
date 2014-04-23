@@ -1,4 +1,4 @@
-package alternativemods.alteng.tileentities
+package alternativemods.alteng.content.tileentities
 
 import net.minecraft.nbt.NBTTagCompound
 import io.netty.buffer.ByteBuf

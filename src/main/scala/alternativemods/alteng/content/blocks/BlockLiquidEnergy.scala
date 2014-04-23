@@ -1,4 +1,4 @@
-package alternativemods.alteng.blocks
+package alternativemods.alteng.content.blocks
 
 import net.minecraft.block.material.Material
 import alternativemods.alteng.AlternativeEnergy

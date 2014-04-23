@@ -1,18 +1,12 @@
-package alternativemods.alteng.blocks.energy
+package alternativemods.alteng.content.blocks.energy
 
 import net.minecraft.block.material.Material
 import net.minecraft.block.Block
 import alternativemods.alteng.AlternativeEnergy
 import net.minecraft.world.{World, IBlockAccess}
-import net.minecraft.item.{ItemStack, Item}
-import net.minecraft.creativetab.CreativeTabs
-import java.util
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.util.{ChatComponentText, IIcon, MathHelper}
-import alternativemods.alteng.tileentities._
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.tileentity.TileEntity
+import net.minecraft.item.Item
+import net.minecraft.util.ChatComponentText
+import alternativemods.alteng.content.tileentities._
 import net.minecraft.entity.player.EntityPlayer
 import alternativemods.alteng.util.Side
 

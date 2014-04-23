@@ -1,9 +1,9 @@
-package alternativemods.alteng.blocks.energy
+package alternativemods.alteng.content.blocks.energy
 
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.world.World
-import alternativemods.alteng.tileentities.TileEntityPowerConsumer
+import alternativemods.alteng.content.tileentities.TileEntityPowerConsumer
 
 /**
  * No description given

@@ -1,4 +1,4 @@
-package alternativemods.alteng.items.itemblocks
+package alternativemods.alteng.content.items.itemblocks
 
 import net.minecraft.item.{ItemStack, ItemBlock}
 import net.minecraft.block.Block

@@ -2,7 +2,7 @@ package alternativemods.alteng.util
 
 import net.minecraft.item.ItemStack
 import net.minecraft.entity.EntityLivingBase
-import alternativemods.alteng.items.energy.IEnergyItem
+import alternativemods.alteng.content.items.energy.IEnergyItem
 import ic2.api.item.IElectricItemManager
 
 object AlternativeElectricItemManager extends IElectricItemManager {

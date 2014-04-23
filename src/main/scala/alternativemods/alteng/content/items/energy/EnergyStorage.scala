@@ -1,4 +1,4 @@
-package alternativemods.alteng.items.energy
+package alternativemods.alteng.content.items.energy
 
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound

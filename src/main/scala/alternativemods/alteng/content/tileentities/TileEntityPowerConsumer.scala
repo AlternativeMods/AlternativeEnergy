@@ -1,4 +1,4 @@
-package alternativemods.alteng.tileentities
+package alternativemods.alteng.content.tileentities
 
 import alternativemods.alteng.powertraits.tile.UniversalPowerTile
 import net.minecraft.tileentity.TileEntity

@@ -1,9 +1,9 @@
-package alternativemods.alteng.blocks
+package alternativemods.alteng.content.blocks
 
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.world.{IBlockAccess, World}
-import alternativemods.alteng.tileentities.{TileEntityConveyorInsertion, TileEntityConveyor}
+import alternativemods.alteng.content.tileentities.{TileEntityConveyorInsertion, TileEntityConveyor}
 import net.minecraft.util.{MathHelper, IIcon}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraftforge.common.util.ForgeDirection
