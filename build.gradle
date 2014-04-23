@@ -34,7 +34,9 @@ repositories {
 
 configurations {
     packed
+    included
     compile.extendsFrom packed
+    compile.extendsFrom included
 }
 
 dependencies {
@@ -64,6 +66,16 @@ jar {
                 exclude "**.jar", "**/*.jar", "*.jar"
             }
         }
+        //Maybe a bit ugly, but meh
+        configurations.included.collect {
+            fileTree(it).matching {
+                include "**CommonsConfig-0.1.jar"
+            }
+        }
+    }
+    manifest {
+        //attributes "FMLCorePlugin": "alternativemods.alteng.coremod.AltEngCoremod"
+        //attributes "FMLCorePluginContainsFMLMod": "true"
     }
 }
 
