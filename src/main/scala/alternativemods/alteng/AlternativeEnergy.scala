@@ -8,6 +8,8 @@ import alternativemods.alteng.network.NetworkHandler
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import alternativemods.alteng.content.AltEngContent
+import cpw.mods.fml.common.network.NetworkRegistry
+import alternativemods.alteng.gui.AltEngGuiHandler
 
 @Mod(modid = "AltEng", name = "AlternativeEnergy", modLanguage = "scala")
 object AlternativeEnergy {
@@ -22,6 +24,7 @@ object AlternativeEnergy {
 
     AltEngContent.load()
     NetworkHandler.init(event.getSide)
+    NetworkRegistry.INSTANCE.registerGuiHandler(this, AltEngGuiHandler)
   }
 
   @EventHandler def postInit(event: FMLPostInitializationEvent){

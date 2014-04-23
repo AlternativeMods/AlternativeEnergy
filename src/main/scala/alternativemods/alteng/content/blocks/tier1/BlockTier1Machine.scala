@@ -8,13 +8,14 @@ import alternativemods.alteng.content.blocks.tier1.tile.TileFluidEnergyProducer
 import alternativemods.alteng.content.blocks.BlockMulti
 import net.minecraft.item.ItemStack
 import alternativemods.alteng.AlternativeEnergy
+import alternativemods.alteng.gui.GuiBlock
 
 /**
  * No description given
  *
  * @author jk-5
  */
-class BlockTier1Machine extends Block(Material.iron) with BlockMulti {
+class BlockTier1Machine extends Block(Material.iron) with BlockMulti with GuiBlock {
   this.setCreativeTab(AlternativeEnergy.creativeTab)
   override def hasTileEntity(metadata: Int) = true
   override def createTileEntity(world: World, meta: Int): TileEntity = meta match {
