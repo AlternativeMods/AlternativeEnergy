@@ -14,9 +14,13 @@ import net.minecraft.entity.item.EntityItem
 import java.util
 import alternativemods.alteng.AlternativeEnergy
 
-class BlockConveyor(material: Material) extends Block(material) {
+class BlockConveyor(material: Material) extends Block(material) with BlockMulti {
 
   setCreativeTab(AlternativeEnergy.creativeTab)
+
+  val subNames = Array("conveyor", "conveyorInsertion")
+
+  override def getUnlocalizedName(stack: ItemStack): String = subNames(is.getItemDamage)
 
   override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
     val meta = world.getBlockMetadata(x, y, z)

@@ -5,17 +5,12 @@ import alternativemods.alteng.content.blocks.energy.{BlockEnergyConsumer, BlockE
 import net.minecraftforge.fluids._
 import net.minecraft.block.material.Material
 import cpw.mods.fml.common.registry.GameRegistry
-import alternativemods.alteng.content.items.itemblocks.ItemBlockConveyor
 import alternativemods.alteng.content.items.{ItemBlockMulti, ItemFluidBucket, ItemEnergyConsumer}
 import alternativemods.alteng.content.tileentities.{TileEntityEnergyPassthrough, TileEntityPowerConsumer, TileEntityConveyorInsertion, TileEntityConveyor}
 import net.minecraft.item.ItemStack
 import net.minecraft.init.Items
 import alternativemods.alteng.content.blocks.tier1.BlockTier1Machine
 import alternativemods.alteng.content.blocks.tier1.tile.TileFluidEnergyProducer
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.client.event.TextureStitchEvent
-import cpw.mods.fml.relauncher.{SideOnly, Side}
-import net.minecraft.client.Minecraft
 
 /**
  * No description given
@@ -39,7 +34,7 @@ object AltEngContent {
 
   def load(){
     blockConveyor = new BlockConveyor(Material.iron)
-    GameRegistry.registerBlock(blockConveyor, classOf[ItemBlockConveyor], "conveyor")
+    GameRegistry.registerBlock(blockConveyor, classOf[ItemBlockMulti], "conveyor")
     GameRegistry.registerTileEntity(classOf[TileEntityConveyor], "alteng.conveyor")
     GameRegistry.registerTileEntity(classOf[TileEntityConveyorInsertion], "alteng.conveyorInsertion")
 
