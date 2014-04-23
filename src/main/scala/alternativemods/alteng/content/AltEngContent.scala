@@ -11,6 +11,7 @@ import alternativemods.alteng.content.tileentities.{TileEntityEnergyPassthrough,
 import net.minecraft.item.ItemStack
 import net.minecraft.init.Items
 import alternativemods.alteng.content.blocks.tier1.BlockTier1Machine
+import alternativemods.alteng.content.blocks.tier1.tile.TileFluidEnergyProducer
 
 /**
  * No description given
@@ -61,5 +62,6 @@ object AltEngContent {
 
     blockTier1Machine = new BlockTier1Machine
     GameRegistry.registerBlock(blockTier1Machine, classOf[ItemBlockMulti], "machineTier1")
+    GameRegistry.registerTileEntity(classOf[TileFluidEnergyProducer], "alteng.fluidEnergyProducer")
   }
 }
