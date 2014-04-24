@@ -11,7 +11,7 @@ import net.minecraft.util.{StatCollector, ResourceLocation}
  * @author jk-5
  */
 object GuiFluidEnergyProducer {
-  val background = new ResourceLocation("alteng", "textures/gui/fluidEnergyProducer.png")
+  val background = new ResourceLocation("alternativeenergy", "textures/gui/guiFluidEnergyProducer.png")
 }
 
 class GuiFluidEnergyProducer(inventoryPlayer: InventoryPlayer, te: TileFluidEnergyProducer) extends AltEngGuiContainer(new ContainerFluidEnergyProducer(inventoryPlayer, te), GuiFluidEnergyProducer.background) {

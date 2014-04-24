@@ -3,7 +3,7 @@ package alternativemods.alteng.gui.containers
 import net.minecraft.entity.player.InventoryPlayer
 import alternativemods.alteng.content.blocks.tier1.tile.TileFluidEnergyProducer
 import alternativemods.alteng.gui.element.ElementTank
-import net.minecraft.inventory.ICrafting
+import net.minecraft.inventory.{Slot, ICrafting}
 import java.util
 import cpw.mods.fml.relauncher.{SideOnly, Side}
 
@@ -14,7 +14,9 @@ import cpw.mods.fml.relauncher.{SideOnly, Side}
  */
 class ContainerFluidEnergyProducer(inventoryPlayer: InventoryPlayer, final val te: TileFluidEnergyProducer) extends AltEngContainer(Some(te)) {
   this.addPlayerInventory(inventoryPlayer)
-  this.addElement(new ElementTank(te.tanks.get(0), 35, 23, 176, 0, 48, 47))
+  this.addElement(new ElementTank(te.tanks.get(0), 152, 15, 176, 0, 16, 58))
+  this.addSlot(new Slot(te, 0, 127, 15)) //TODO: jk-5: custom slot for this
+  this.addSlot(new Slot(te, 1, 127, 57))
 
   override def detectAndSendChanges(){
     super.detectAndSendChanges()
