@@ -6,6 +6,7 @@ import java.util
 import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.{ChannelHandler, ChannelHandlerContext}
 import io.netty.buffer.ByteBuf
+import net.minecraft.entity.player.EntityPlayer
 
 object NetworkHandler {
 
@@ -21,6 +22,7 @@ object NetworkHandler {
     val pipe = this.channel(Side.CLIENT).pipeline()
     val name = this.channel(Side.CLIENT).findChannelHandlerNameForType(AltEngPacketCodec.getClass.asInstanceOf[Class[_ <: ChannelHandler]])
     pipe.addAfter(name, "TileDataHandler", TileEntityDataHandler)
+    pipe.addAfter(name, "GuiIntUpdateHandler", GuiIntUpdateHandler)
   }
 
   def channel(side: Side) = this.channels.get(side)
@@ -31,12 +33,20 @@ object NetworkHandler {
     channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(Int.box(dimension)) //Ugly hack for netty not following standards
     channel.writeOutbound(packet)
   }
+
+  def sendPacketToPlayer(packet: Packet, player: EntityPlayer){
+    val channel = this.channel(Side.SERVER)
+    channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER)
+    channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player)
+    channel.writeOutbound(packet)
+  }
 }
 
 @Sharable
 object AltEngPacketCodec extends FMLIndexedMessageToMessageCodec[Packet] {
 
   this.addDiscriminator(0, classOf[PacketTileEntityData])
+  this.addDiscriminator(1, classOf[PacketGuiIntUpdate])
 
   override def decodeInto(ctx: ChannelHandlerContext, in: ByteBuf, out: Packet) = out.decode(in)
   override def encodeInto(ctx: ChannelHandlerContext, in: Packet, out: ByteBuf) = in.encode(out)

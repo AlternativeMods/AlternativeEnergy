@@ -2,6 +2,7 @@ package alternativemods.alteng.util
 
 import com.google.common.collect.{Lists, ForwardingList}
 import java.util
+import net.minecraft.util.EnumChatFormatting
 
 /**
  * No description given
@@ -30,6 +31,6 @@ class ToolTip(private val delay: Long = 0) extends ForwardingList[ToolTipLine] {
   override def delegate(): util.List[ToolTipLine] = this.lines
 }
 
-case class ToolTipLine(var text: String = "", color: Int = -1) {
+case class ToolTipLine(var text: String = "", color: EnumChatFormatting = EnumChatFormatting.GRAY) {
   var spacing: Int = 0
 }

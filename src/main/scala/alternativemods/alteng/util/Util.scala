@@ -2,6 +2,10 @@ package alternativemods.alteng.util
 
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
+import net.minecraftforge.fluids.FluidStack
+import net.minecraft.util.{ResourceLocation, IIcon}
+import net.minecraft.client.renderer.texture.TextureMap
+import net.minecraft.client.Minecraft.{getMinecraft => mc}
 
 object Util {
   def diff(a: Double, b: Double) = if(a > b) a - b else b - a
@@ -19,5 +23,24 @@ object InventoryUtils {
       if(item1.getItemDamage != item2.getItemDamage) return false
     }
     true
+  }
+}
+
+object RenderUtils {
+  def getFluidTexture(fluidStack: FluidStack, flowing: Boolean): IIcon = {
+    if(fluidStack == null) return getIconSafe(null)
+    val fluid = fluidStack.getFluid
+    if(fluid == null) return getIconSafe(null)
+    val icon = if(flowing) fluid.getFlowingIcon else fluid.getStillIcon
+    getIconSafe(icon)
+  }
+
+  def getIconSafe(icon: IIcon): IIcon = {
+    if(icon == null) mc.getTextureManager.getTexture(TextureMap.locationBlocksTexture).asInstanceOf[TextureMap].getAtlasSprite("missingno")
+    else icon
+  }
+
+  implicit def bind(resourceLocation: ResourceLocation){
+    mc.getTextureManager.bindTexture(resourceLocation)
   }
 }

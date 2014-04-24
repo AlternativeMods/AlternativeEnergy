@@ -11,3 +11,11 @@ object TileEntityDataHandler extends SimpleChannelInboundHandler[PacketTileEntit
     }
   }
 }
+object GuiIntUpdateHandler extends SimpleChannelInboundHandler[PacketGuiIntUpdate] {
+  override def channelRead0(ctx: ChannelHandlerContext, msg: PacketGuiIntUpdate){
+    val player = mc.thePlayer
+    if(player.openContainer != null && player.openContainer.windowId == msg.windowId){
+      player.openContainer.updateProgressBar(msg.id, msg.data)
+    }
+  }
+}

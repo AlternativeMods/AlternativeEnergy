@@ -156,13 +156,7 @@ class AltEngGuiContainer(final val container: AltEngContainer, final val backgro
       this.drawGradientRect(x - 3, y + var14 + 2, x + length + 3, y + var14 + 3, var17, var17)
 
       toolTip.foreach(tip => {
-        var line = tip.text
-        if(tip.color == -1){
-          line = "§7" + line
-        }else{
-          line = "§" + Integer.toHexString(tip.color) + line
-        }
-        this.fontRendererObj.drawStringWithShadow(line, x, y, -1)
+        this.fontRendererObj.drawStringWithShadow(tip.color.toString + tip.text, x, y, -1)
         y += 10 + tip.spacing
       })
       this.zLevel = 0.0F

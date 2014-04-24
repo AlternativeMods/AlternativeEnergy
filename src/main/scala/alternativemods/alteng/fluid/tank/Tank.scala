@@ -13,6 +13,8 @@ import java.util.Locale
  */
 class Tank(final val name: String, _capacity: Int, _owner: TileEntity) extends FluidTank(_capacity) {
 
+  var index: Int = _
+
   this.tile = _owner
 
   def isEmpty: Boolean = this.getFluid == null || this.getFluid.amount <= 0
@@ -45,7 +47,7 @@ class Tank(final val name: String, _capacity: Int, _owner: TileEntity) extends F
     this.tooltip.clear()
     var amount = 0
     if(this.getFluid != null && this.getFluid.amount > 0){
-      val fluidName = new ToolTipLine(getFluidType.getLocalizedName)
+      val fluidName = new ToolTipLine(getFluidType.getLocalizedName, getFluidType.getRarity(this.getFluid).rarityColor)
       fluidName.spacing = 2
       tooltip.add(fluidName)
       amount = getFluidAmount

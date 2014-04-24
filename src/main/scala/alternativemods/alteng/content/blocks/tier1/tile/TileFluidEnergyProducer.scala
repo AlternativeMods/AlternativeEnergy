@@ -1,7 +1,7 @@
 package alternativemods.alteng.content.blocks.tier1.tile
 
 import net.minecraft.tileentity.TileEntity
-import alternativemods.alteng.content.tileentities.{InventoryTile, SingleTankTile}
+import alternativemods.alteng.content.tileentities.{TankTile, InventoryTile}
 import alternativemods.alteng.fluid.tank.RestrictedTank
 import alternativemods.alteng.content.AltEngContent
 import net.minecraftforge.common.util.ForgeDirection
@@ -19,13 +19,15 @@ import net.minecraft.entity.player.EntityPlayer
  *
  * @author jk-5
  */
-class TileFluidEnergyProducer extends TileEntity with SingleTankTile with UniversalPowerConsumer with GuiTile with InventoryTile {
+class TileFluidEnergyProducer extends TileEntity with TankTile with UniversalPowerConsumer with GuiTile with InventoryTile {
+
   var energy = 0d
   val maxEnergy = 1000d
   val ic2Ratio = Ratios.EU
   val bcRatio = Ratios.MJ
-  val tank = new RestrictedTank(AltEngContent.fluidLiquidEnergy, "energyTank", 16000, this)
   val inventory = new InventoryObject(5, "fluidEnergyProducer", 1)
+
+  this.addTank(new RestrictedTank(AltEngContent.fluidLiquidEnergy, "energyTank", 16000, this))
 
   override def canFill(from: ForgeDirection, fluid: Fluid) = false
   @SideOnly(Side.CLIENT) override def clientGui(id: Int, player: EntityPlayer): AnyRef = new GuiFluidEnergyProducer(player.inventory, this)
@@ -33,7 +35,7 @@ class TileFluidEnergyProducer extends TileEntity with SingleTankTile with Univer
 
   override def updateEntity(){
     if(this.energy > 10){
-      this.energy -= this.tank.fill(new FluidStack(AltEngContent.fluidLiquidEnergy, 10), doFill = true)
+      this.energy -= this.tanks.get(0).fill(new FluidStack(AltEngContent.fluidLiquidEnergy, 10), true)
     }
 
     super.updateEntity()
