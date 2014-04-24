@@ -25,7 +25,7 @@ class TileFluidEnergyProducer extends TileEntity with TankTile with UniversalPow
   val maxEnergy = 1000d
   val ic2Ratio = Ratios.EU
   val bcRatio = Ratios.MJ
-  val inventory = new InventoryObject(5, "fluidEnergyProducer", 1)
+  val inventory = new InventoryObject(5, "fluidEnergyProducer", 64)
 
   this.addTank(new RestrictedTank(AltEngContent.fluidLiquidEnergy, "energyTank", 16000, this))
 
