@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection
  */
 class TileFluidEnergyConsumer extends TileEntity with UniversalPowerEjector with TankTile with NeighborAwareTile {
   var energy = 0d
+  val maxEnergy = 1000d
   val maxPerTick = 100d
   val bcRatio = Ratios.MJ
   val ic2Ratio = Ratios.EU
@@ -25,7 +26,7 @@ class TileFluidEnergyConsumer extends TileEntity with UniversalPowerEjector with
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
     val drain = super.fill(from, resource, doFill = false) // Don't insert into the tank *yet* :3
     if(doFill){
-      this.energy += resource.amount //TODO: check max space
+      this.energy += resource.amount / 10 //TODO: check max space
     }
     drain
   }

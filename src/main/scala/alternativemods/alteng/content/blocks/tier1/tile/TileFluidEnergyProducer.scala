@@ -35,7 +35,7 @@ class TileFluidEnergyProducer extends TileEntity with TankTile with UniversalPow
 
   override def updateEntity(){
     if(this.energy > 10){
-      this.energy -= this.tanks.get(0).fill(new FluidStack(AltEngContent.fluidLiquidEnergy, 10), true)
+      this.energy -= this.tanks.get(0).fill(new FluidStack(AltEngContent.fluidLiquidEnergy, 1), true) * 10
     }
 
     super.updateEntity()

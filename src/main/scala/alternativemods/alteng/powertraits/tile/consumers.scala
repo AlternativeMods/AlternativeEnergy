@@ -30,11 +30,7 @@ object Power {
 
 import Power._
 
-trait TilePowerConsumer extends TileEntity {
-  def energy: Double
-  protected[this] def energy_=(en: Double)
-
-  def maxEnergy: Double
+trait TilePowerConsumer extends TileEntity with BasePowerTrait {
 
   abstract override def readFromNBT(cmp: NBTTagCompound) {
     super.readFromNBT(cmp)

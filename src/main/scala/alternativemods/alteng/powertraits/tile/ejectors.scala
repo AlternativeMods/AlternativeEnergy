@@ -21,9 +21,7 @@ import scala.collection.mutable
 import net.minecraftforge.common.MinecraftForge
 import ic2.api.energy.event.{EnergyTileUnloadEvent, EnergyTileLoadEvent}
 
-trait TilePowerEjector extends TileEntity with NeighborAwareTile {
-  def energy: Double
-  protected[this] def energy_=(en: Double)
+trait TilePowerEjector extends TileEntity with NeighborAwareTile with BasePowerTrait {
 
   abstract override def readFromNBT(cmp: NBTTagCompound) {
     super.readFromNBT(cmp)
