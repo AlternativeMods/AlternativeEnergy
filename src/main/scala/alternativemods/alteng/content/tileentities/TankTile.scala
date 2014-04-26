@@ -32,8 +32,7 @@ trait TankTile extends TileEntity with IFluidHandler {
 
   abstract override def readFromNBT(nbt: NBTTagCompound){
     if(nbt.hasKey("tanks")){
-      val data = nbt.getCompoundTag("tanks")
-      val taglist = data.getTagList("tanks", Constants.NBT.TAG_COMPOUND)
+      val taglist = nbt.getTagList("tanks", Constants.NBT.TAG_COMPOUND)
       for(i <- 0 until taglist.tagCount()){
         val tag = taglist.getCompoundTagAt(i)
         val slot = tag.getByte("tank")
