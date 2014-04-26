@@ -92,6 +92,7 @@ object AltEngContent {
         event.setResult(Event.Result.ALLOW)
         e.drain(event.world, x, y, z, true)
         event.result = new ItemStack(AltEngContent.bucketLiquidEnergy)
+      case e =>
     }
   }
 }
