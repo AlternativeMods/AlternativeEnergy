@@ -23,16 +23,16 @@ def baseVersion = "1.3.0"
 def jenkins = System.env.JENKINS_URL != null
 def buildNum = System.env.BUILD_NUMBER
 
-group = 'alternativemods.alteng'
-if(jenkins){
-    version = baseVersion + "." + buildNum
-}else{
-    version = baseVersion + "-SNAPSHOT"
-}
-
 minecraft{
     assetDir = "runtime/client/assets"
     version = '1.7.2-10.12.1.1060'
+}
+
+group = 'alternativemods.alteng'
+if(jenkins){
+    version = minecraft.version + "-" + baseVersion + "." + buildNum
+}else{
+    version = minecraft.version + "-" + baseVersion + "-SNAPSHOT"
 }
 
 repositories {
@@ -117,7 +117,7 @@ if(jenkins){
 }
 
 task(sign) << {
-    outputs.upToDateWhen{true} //Will finish this later
+    //Will finish this later
 }
 
 reobf.finalizedBy(sign)
