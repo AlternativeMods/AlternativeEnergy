@@ -18,6 +18,8 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'forge'
 
+def jenkins = System.env.JENKINS_URL != null
+
 group = 'alternativemods.alteng'
 version = '1.3-SNAPSHOT'
 
@@ -27,7 +29,7 @@ minecraft{
 }
 
 repositories {
-    maven{
+    maven {
         url 'http://maven.reening.nl'
     }
 }
@@ -91,4 +93,9 @@ processResources {
         exclude 'mcmod.info'
         exclude 'version.properties'
     }
+}
+
+if(jenkins){
+    //Don't fail the build on failed tests on jenkins. Jenkins will mark it as unstable then
+    test.ignoreFailures = true
 }

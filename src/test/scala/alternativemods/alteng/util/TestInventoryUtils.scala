@@ -40,4 +40,7 @@ class TestInventoryUtils {
     Assert.assertTrue(InventoryUtils.areItemsEqual(new ItemStack(item1, 10, 0), new ItemStack(item1, 11, 1), matchDamage = false))
     Assert.assertTrue(InventoryUtils.areItemsEqual(new ItemStack(subitem1, 10, 0), new ItemStack(subitem1, 11, 1), matchDamage = false))
   }
+
+  //This will fail the tests so i can test jenkins' test thing
+  @Test def testTest() = Assert.assertFalse(true)
 }
