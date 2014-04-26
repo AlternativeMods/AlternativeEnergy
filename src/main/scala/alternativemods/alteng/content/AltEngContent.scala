@@ -5,7 +5,7 @@ import alternativemods.alteng.content.blocks.energy.{BlockEnergyConsumer, BlockE
 import net.minecraftforge.fluids._
 import net.minecraft.block.material.Material
 import cpw.mods.fml.common.registry.GameRegistry
-import alternativemods.alteng.content.items.{ItemBlockMulti, ItemFluidBucket, ItemEnergyConsumer}
+import alternativemods.alteng.content.items.{ItemFluidEnergyBottle, ItemBlockMulti, ItemFluidBucket, ItemEnergyConsumer}
 import alternativemods.alteng.content.tileentities.{TileEntityEnergyPassthrough, TileEntityPowerConsumer, TileEntityConveyorInsertion, TileEntityConveyor}
 import net.minecraft.item.ItemStack
 import net.minecraft.init.Items
@@ -63,6 +63,9 @@ object AltEngContent {
     GameRegistry.registerBlock(blockTier1Machine, classOf[ItemBlockMulti], "machineTier1")
     GameRegistry.registerTileEntity(classOf[TileFluidEnergyProducer], "alteng.fluidEnergyProducer")
     GameRegistry.registerTileEntity(classOf[TileFluidEnergyConsumer], "alteng.fluidEnergyConsumer")
+
+    GameRegistry.registerItem(ItemFluidEnergyBottle, "fluidEnergyBottle")
+    FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidLiquidEnergy, FluidContainerRegistry.BUCKET_VOLUME / 3), new ItemStack(ItemFluidEnergyBottle), new ItemStack(Items.glass_bottle))
   }
 
   def postInit(){
