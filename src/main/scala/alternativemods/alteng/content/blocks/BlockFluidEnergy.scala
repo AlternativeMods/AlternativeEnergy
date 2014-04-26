@@ -2,9 +2,8 @@ package alternativemods.alteng.content.blocks
 
 import net.minecraft.block.material.Material
 import alternativemods.alteng.AlternativeEnergy
-import net.minecraftforge.fluids.{BlockFluidClassic, Fluid, BlockFluidFinite}
+import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}
 import cpw.mods.fml.relauncher.{SideOnly, Side}
-import javax.swing.Icon
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.util.IIcon
 
@@ -21,8 +20,8 @@ class BlockFluidEnergy(fluid: Fluid) extends BlockFluidClassic(fluid, Material.w
   var icons = new Array[IIcon](2)
 
   override def registerBlockIcons(register: IIconRegister): Unit = {
-    icons(0) = register.registerIcon("alternativeenergy:fluidEnergy")
-    icons(1) = register.registerIcon("alternativeenergy:fluidEnergy_Flowing")
+    icons(0) = register.registerIcon("alteng:fluidEnergy")
+    icons(1) = register.registerIcon("alteng:fluidEnergy_Flowing")
   }
 
   override def getIcon(side: Int, metadata: Int): IIcon = {

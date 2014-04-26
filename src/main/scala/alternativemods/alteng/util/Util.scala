@@ -2,10 +2,12 @@ package alternativemods.alteng.util
 
 import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.{FluidContainerRegistry, Fluid, FluidStack}
 import net.minecraft.util.{ResourceLocation, IIcon}
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.client.Minecraft.{getMinecraft => mc}
+import net.minecraft.inventory.IInventory
+import alternativemods.alteng.fluid.tank.Tank
 
 object Util {
   def diff(a: Double, b: Double) = if(a > b) a - b else b - a
@@ -42,5 +44,27 @@ object RenderUtils {
 
   implicit def bind(resourceLocation: ResourceLocation){
     mc.getTextureManager.bindTexture(resourceLocation)
+  }
+}
+
+object FluidUtils {
+  def fillContainer(tank: Tank, inv: IInventory, inputSlot: Int, outputSlot: Int, fluid: Fluid){
+    val input = inv.getStackInSlot(inputSlot)
+    val output = inv.getStackInSlot(outputSlot)
+    val filled = FluidContainerRegistry.fillFluidContainer(new FluidStack(fluid, Int.MaxValue), input)
+    if(filled == null) return
+    if(output == null || output.stackSize < output.getMaxStackSize && InventoryUtils.areItemsEqual(output, filled)){
+      val inContainer = FluidContainerRegistry.getFluidForFilledItem(filled)
+      val drained = tank.drain(inContainer.amount, false)
+      if(drained != null && drained.amount == inContainer.amount){
+        tank.drain(inContainer.amount, true)
+        if(output == null){
+          inv.setInventorySlotContents(outputSlot, filled)
+        }else{
+          output.stackSize += 1
+        }
+        inv.decrStackSize(inputSlot, 1)
+      }
+    }
   }
 }
