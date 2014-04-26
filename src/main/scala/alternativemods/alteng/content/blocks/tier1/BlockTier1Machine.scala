@@ -18,6 +18,8 @@ import alternativemods.alteng.gui.GuiBlock
 class BlockTier1Machine extends Block(Material.iron) with BlockMulti with GuiBlock with NeighborAwareBlock {
   this.setCreativeTab(AlternativeEnergy.creativeTab)
   this.setBlockName("tier1Machine")
+  this.setHardness(5f)
+  this.setResistance(8f)
   override def hasTileEntity(metadata: Int) = true
   override def createTileEntity(world: World, meta: Int): TileEntity = meta match {
     case 0 => new TileFluidEnergyProducer
