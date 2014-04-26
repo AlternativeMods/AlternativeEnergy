@@ -18,6 +18,7 @@ import alternativemods.alteng.AlternativeEnergy
 object ItemFluidEnergyBottle extends Item {
   this.setUnlocalizedName("AltEng.fluidEnergyBottle")
   this.setCreativeTab(AlternativeEnergy.creativeTab)
+  this.setMaxStackSize(16)
   override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
     player.setItemInUse(stack, this.getMaxItemUseDuration(stack))
     stack
