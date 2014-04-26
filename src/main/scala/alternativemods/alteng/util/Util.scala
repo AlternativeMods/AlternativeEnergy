@@ -15,10 +15,10 @@ object InventoryUtils {
 
   def isWildcardItem(stack: ItemStack) = stack.getItemDamage == OreDictionary.WILDCARD_VALUE
   def areItemsEqual(item1: ItemStack, item2: ItemStack, matchDamage: Boolean = true, matchNBT: Boolean = true): Boolean = {
-    if(item1 == null || item2 == null) false
-    if(item1.getItem != item2.getItem) false
-    if(matchNBT && !ItemStack.areItemStackTagsEqual(item1, item2)) false
-    if(matchDamage && !item1.getHasSubtypes){
+    if(item1 == null || item2 == null) return false
+    if(item1.getItem != item2.getItem) return false
+    if(matchNBT && !ItemStack.areItemStackTagsEqual(item1, item2)) return false
+    if(matchDamage && item1.getHasSubtypes){
       if(isWildcardItem(item1) || isWildcardItem(item2)) return true
       if(item1.getItemDamage != item2.getItemDamage) return false
     }

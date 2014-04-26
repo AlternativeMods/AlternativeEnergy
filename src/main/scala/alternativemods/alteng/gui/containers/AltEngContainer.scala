@@ -167,14 +167,13 @@ abstract class AltEngContainer(private final val inventory: Option[IInventory] =
   private def tryShiftItem(stackToShift: ItemStack, numSlots: Int): Boolean = {
     for(machineIndex <- 0 until numSlots - 36){
       val slot = this.inventorySlots.get(machineIndex).asInstanceOf[Slot]
-      if(!slot.isInstanceOf[AltEngSlot] || slot.asInstanceOf[AltEngSlot].canShiftClick){
-        if(!slot.isInstanceOf[AltEngSlot] || slot.asInstanceOf[AltEngSlot].isFakeSlot){
-          if(slot.isItemValid(stackToShift)){
-            if(shiftItemStack(stackToShift, machineIndex, machineIndex + 1)){
-              return true
-            }
+      slot match {
+        case s: AltEngSlot =>
+          if(s.isFakeSlot) s.canShiftClick //TODO: jk-5: is this correct?
+        case s =>
+          if(s.isItemValid(stackToShift)){
+            if(shiftItemStack(stackToShift, machineIndex, machineIndex + 1)) return true
           }
-        }
       }
     }
     false
