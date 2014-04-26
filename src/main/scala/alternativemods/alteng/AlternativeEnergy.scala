@@ -1,7 +1,7 @@
 package alternativemods.alteng
 
 import cpw.mods.fml.common.Mod
-import cpw.mods.fml.common.event.{FMLPostInitializationEvent, FMLPreInitializationEvent}
+import cpw.mods.fml.common.event.FMLPreInitializationEvent
 import cpw.mods.fml.common.Mod.EventHandler
 import org.apache.logging.log4j.LogManager
 import alternativemods.alteng.network.NetworkHandler
@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack
 import alternativemods.alteng.content.AltEngContent
 import cpw.mods.fml.common.network.NetworkRegistry
 import alternativemods.alteng.gui.AltEngGuiHandler
+import net.minecraftforge.common.MinecraftForge.{EVENT_BUS => bus}
 
 @Mod(modid = "AltEng", name = "AlternativeEnergy", modLanguage = "scala")
 object AlternativeEnergy {
@@ -25,9 +26,7 @@ object AlternativeEnergy {
     AltEngContent.load()
     NetworkHandler.init(event.getSide)
     NetworkRegistry.INSTANCE.registerGuiHandler(this, AltEngGuiHandler)
-  }
 
-  @EventHandler def postInit(event: FMLPostInitializationEvent){
-    AltEngContent.postInit()
+    bus.register(AltEngContent)
   }
 }
