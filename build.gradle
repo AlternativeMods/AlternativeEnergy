@@ -72,6 +72,11 @@ jar {
         }
     }
     manifest {
+        attributes "Created-By": jenkins ? "Jenkins" : "Gradle"
+        attributes "Implementation-Title": "AlternativeEnergy"
+        attributes "Implementation-Vendor": "AlternativeMods"
+        attributes "Implementation-Vendor-Id": "alternativemods"
+        attributes "Implementation-Version": simpleVersion
         //attributes "FMLCorePlugin": "alternativemods.alteng.coremod.AltEngCoremod"
         //attributes "FMLCorePluginContainsFMLMod": "true"
     }
@@ -80,6 +85,15 @@ jar {
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'dev'
+    manifest {
+        attributes "Created-By": jenkins ? "Jenkins" : "Gradle"
+        attributes "Implementation-Title": "AlternativeEnergy"
+        attributes "Implementation-Vendor": "AlternativeMods"
+        attributes "Implementation-Vendor-Id": "alternativemods"
+        attributes "Implementation-Version": simpleVersion
+        //attributes "FMLCorePlugin": "alternativemods.alteng.coremod.AltEngCoremod"
+        //attributes "FMLCorePluginContainsFMLMod": "true"
+    }
 }
 
 task sourceJar(type: Jar) {
