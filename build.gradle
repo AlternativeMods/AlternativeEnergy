@@ -28,12 +28,9 @@ minecraft{
     version = '1.7.2-10.12.1.1060'
 }
 
+def simpleVersion = jenkins ? baseVersion + "." + buildNum : baseVersion + "-SNAPSHOT"
 group = 'alternativemods.alteng'
-if(jenkins){
-    version = minecraft.version + "-" + baseVersion + "." + buildNum
-}else{
-    version = minecraft.version + "-" + baseVersion + "-SNAPSHOT"
-}
+version = minecraft.version + "-" + simpleVersion
 
 repositories {
     maven {
@@ -98,12 +95,12 @@ artifacts {
 build.dependsOn sourceJar, deobfJar
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", simpleVersion
     inputs.property "mcversion", project.minecraft.version
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         include 'version.properties'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':simpleVersion, 'mcversion':project.minecraft.version
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
