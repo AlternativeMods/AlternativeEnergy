@@ -5,6 +5,9 @@ tile.energyPassthrough.name=Energy Passthrough Converter
 tile.energyStorage.small.name=Small Energy Storage
 tile.energyStorage.medium.name=Medium Energy Storage
 tile.energyStorage.high.name=High Energy Storage
+tile.altEng.liquidEnergy.name=Liquid Energy
+tile.tier1Machine.fluidEnergyProducer.name=Tier 1 Fluid Energy Producer
 
 item.AltEng.fluidEnergyBottle.name=Fluid Energy Bottle
+item.AltEng.bucketFluidEnergy.name=Fluid Energy Bucket
 item.AltEng.fluidEnergyBottle.tooltip=You might get some energy from this when you drink it
